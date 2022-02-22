@@ -27,10 +27,11 @@ const activitiesController = {
             }
         } catch (error) {
             console.error(error);
-        } res.status(500).json({
-            msg: 'an error occurred',
-            data: error
-        })
+            res.status(500).json({
+                msg: 'an error occurred',
+                data: error
+            })
+        }
     }
 }
 
