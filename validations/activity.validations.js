@@ -4,7 +4,7 @@ const db = require("../models");
 module.exports = [
   body("name")
     .notEmpty()  // Valid that it is not empty
-    .withMessage()
+    .withMessage("Input required")
     .bail()
     .not()
     .isNumeric()  // Valid that it is a string (I place the .not())
