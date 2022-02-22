@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Activity extends Model {
     /**
@@ -16,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   Activity.init({
     name: DataTypes.STRING,
     image: DataTypes.STRING,
-    content: DataTypes.STRING,
+    content: DataTypes.TEXT,
     deletedAt: DataTypes.DATE
   }, {
     sequelize,
