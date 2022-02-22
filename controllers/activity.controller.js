@@ -23,9 +23,9 @@ module.exports = {
           delete data[key].updatedAt;
         }
 
-        res.status(200).json({
+        res.status(201).json({
           meta: {
-            status: 200,
+            status: 201,
             ok: true,
           },
           data,
@@ -39,10 +39,10 @@ module.exports = {
           delete errorsObjects[key].param;
           delete errorsObjects[key].location;
         }
-        // Api response with error code 400 (Existence of errors) 
-        res.status(400).json({
+        // Api response with error code 422 (Existence of errors) 
+        res.status(422).json({
           meta: {
-            status: 400,
+            status: 422,
             ok: false,
           },
           data: null,
@@ -51,14 +51,14 @@ module.exports = {
       }
     } catch (error) {
 
-      // Api response with error code 500 (Server Error)
-      res.status(500).json({
+      // Api response with error code 503 (Server Server no disponible)
+      res.status(503).json({
         meta: {
-          status: 500,
+          status: 503,
           ok: false,
         },
         data: null,
-        errors: error,
+        errors: {msg : 'Server no disponible'},
       });
     }
   },
