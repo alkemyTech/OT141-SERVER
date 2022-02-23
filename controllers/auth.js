@@ -4,13 +4,15 @@ const bcrypt = require("bcryptjs");
 
 const registerUser = async (req, res) => {
   try {
+    const { firstName, lastName, email } = req.body;
+    //I did not destruct password because it told me that line 18 was duplicated
     const resp = req.body.password;
     const salt = await bcrypt.genSalt(10);
-    const respHash = await bcrypt.hash(resp, salt);
+    const respHash = await bcrypt.hash(password, salt);
     const newUser = await db.User.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
+      firstName,
+      lastName,
+      email,
       password: respHash,
     });
     const { password, ...rest } = newUser.dataValues;
