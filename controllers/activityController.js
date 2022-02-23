@@ -1,14 +1,14 @@
 const db = require('../models');
 
-const activitiesController = {
+const activityController = {
     update: async (req, res) => {
+        // const variables
         const { id } = req.params
         const { name, content, image } = req.body;
         try {
             let activityFound = await db.Activity.findBypk(id)
             if (!activityFound) {
                 res.status(404).json({
-                    url: `api/activities/update/${id}`,
                     msg: `there is no activity matching the specified id`,
                 })
             } else {
@@ -19,8 +19,7 @@ const activitiesController = {
                 }, {
                     where: { id: id }
                 })
-                res.status(201).json({
-                    url: `api/activities/update/${id}`,
+                res.status(200).json({
                     msg: `activity updated successfully`,
                     data: activityUpdated
                 })
@@ -33,6 +32,6 @@ const activitiesController = {
             })
         }
     }
-}
+};
 
-module.exports = activitiesController;
+module.exports = activityController;
