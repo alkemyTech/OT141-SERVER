@@ -53,13 +53,13 @@ describe('POST /auth/login', () => {
     test('Login of user that not exist', async() => {
         const user = {
             email: 'test@test.com',
-            password: '12345678'
+            password: 'Test123**'
         }
 
         const res = await api
             .post('/auth/login')
             .send(user)
-            .expect(400)
+            .expect(404)
     });
 
     test('should return "User logged in" with valid user', async() => {
@@ -86,7 +86,7 @@ describe('POST /auth/login', () => {
             .post('/auth/login')
             .send(user)
             .expect(400)
-            .expect('Content-type', /application\/json/);   
+            .expect('Content-type', /application\/json/);
     })
 
     test('should return http code 400 if not send password', async() => { 
