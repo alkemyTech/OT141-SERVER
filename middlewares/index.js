@@ -1,7 +1,6 @@
 const validateErrors = require('./validateErrors');
-const ValidateInDB = require('./validateInDB');
-
+const validationAuth = require('./auth');
 module.exports = {
     ...validateErrors,
-    ...ValidateInDB
+    ...validationAuth
 }
