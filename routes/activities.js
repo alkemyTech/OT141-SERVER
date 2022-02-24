@@ -8,6 +8,6 @@ const { store,update } = require("../controllers/activity.controller");
 
 // Routes
 router.post("/", validationsActivities, indexValidation, store);
-router.put('/:id', activityController.update)
+router.put('/:id', update)
 
 module.exports = router;

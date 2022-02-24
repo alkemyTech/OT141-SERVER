@@ -18,9 +18,8 @@ router
   registerUser)
 
 // Login of user auth/login
-.post('/login', 
+router.post('/login', 
     validationLogin,
-    validateErrors,
     userLogin
 );
 

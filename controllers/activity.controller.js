@@ -44,13 +44,13 @@ module.exports = {
     const { id } = req.params
     const { name, content, image } = req.body;
     try {
-        let activityFound = await db.Activity.findBypk(id)
+        let activityFound = await db.Activity.findByPk(id)
         if (!activityFound) {
             res.status(404).json({
                 msg: `there is no activity matching the specified id`,
             })
         } else {
-            let activityUpdated = await db.Activity.Update({
+            await db.Activity.update({
                 name,
                 image,
                 content,
@@ -59,7 +59,7 @@ module.exports = {
             })
             res.status(200).json({
                 msg: `activity updated successfully`,
-                data: activityUpdated
+                data: activityFound
             })
         }
     } catch (error) {
