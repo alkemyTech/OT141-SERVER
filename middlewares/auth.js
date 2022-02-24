@@ -40,16 +40,23 @@ let validateInputsRegister = [
     ),
 ];
 
-function functionvalidateInputsRegister(req, res, next) {
+function functionValidateInputsRegister(req, res, next) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
   next();
 }
+let validationLogin = [
+    check('email', 'The value is required').not().isEmpty(),
+    check('password', 'The value is required').not().isEmpty(),
+    check('email', 'The value is invalid').isEmail(),
+    check('password', 'Requiered 8 min characters').isLength({ min: 8 })
+]
 
 module.exports = {
   validateInputsRegister,
-  functionvalidateInputsRegister,
+  functionValidateInputsRegister,
   isEmailValidDB,
+  validationLogin
 };

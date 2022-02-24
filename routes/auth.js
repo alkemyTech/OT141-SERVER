@@ -1,19 +1,27 @@
 var express = require("express");
 var router = express.Router();
-
-const { registerUser } = require("../controllers/auth");
+const { registerUser,userLogin } = require("../controllers/auth");
 const {
-  isEmailValidDB,
+    validationLogin,
+    validateErrors,
+    isEmailValidDB,
   validateInputsRegister,
-  functionvalidateInputsRegister,
-} = require("../middlewares/auth");
+  functionValidateInputsRegister,
+} = require('../middlewares/auth');
 
-router.post(
+router
+.post(
   "/register",
   validateInputsRegister,
-  functionvalidateInputsRegister,
+  functionValidateInputsRegister,
   isEmailValidDB,
-  registerUser
+  registerUser)
+
+// Login of user auth/login
+.post('/login', 
+    validationLogin,
+    validateErrors,
+    userLogin
 );
 
 module.exports = router;
