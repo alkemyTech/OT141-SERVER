@@ -1,4 +1,5 @@
 const verifyJwt = require('../helpers/verifyJWT')
+const { ROLE_ADMIN } = require('../constants/user.constants')
 
 const authOwnership = async (req, res, next) => {
     const authHeader = req.headers.authorization
@@ -7,7 +8,7 @@ const authOwnership = async (req, res, next) => {
         const bearerToken = authHeader.split(' ')[1]
         const payload = await verifyJwt(bearerToken)
         //verify user ownership or admin role
-        if (payload.email === email || payload.roleId === '1') 
+        if (payload.email === email || payload.roleId === ROLE_ADMIN) 
             return next()
             
         return res.status(403).json( msgAccessFobidden() )
