@@ -4,14 +4,14 @@ const router = require("express").Router();
 const {
   validationsActivities,
   indexValidation,
-  checkAuth
+  checkTokenAuthorization
 } = require("../middlewares/index.validations");
 
 // Controller Api required
 const { store, update } = require("../controllers/activity.controller");
 
 // Routes
-router.post("/", checkAuth, validationsActivities, indexValidation, store);
-router.put("/:id", checkAuth, update);
+router.post("/", checkTokenAuthorization, validationsActivities, indexValidation, store);
+router.put("/:id", checkTokenAuthorization, update);
 
 module.exports = router;

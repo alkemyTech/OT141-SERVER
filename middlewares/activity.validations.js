@@ -12,8 +12,6 @@ const validationsActivities = [
     .isLength({ min: 5 }) // Valido su longitud
     .withMessage("String must be more than 4 characters")
     .bail()
-    .isAlphanumeric() // Valid that it is Alphanumeric
-    .withMessage("Special characters are not accepted")
     .custom(async (value) => {
       // Function that detects if an activity with the same name exists
       const activity = await db.Activity.findOne({ where: { name: value } });
