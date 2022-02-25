@@ -5,12 +5,13 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "dev": "cross-env NODE_ENV=development nodemon app.js",
-    "test:db:migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate", 
-    "test:db:seed": "cross-env NODE_ENV=test npx sequelize-cli db:seed:all", 
+    "test:db:migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate",
+    "test:db:seed": "cross-env NODE_ENV=test npx sequelize-cli db:seed:all",
     "test": "cross-env NODE_ENV=test jest --verbose --silent",
     "test:watch": "npm run test -- --watch"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.6.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
@@ -27,8 +28,8 @@
     "sequelize": "^6.3.5"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15",
     "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
     "sequelize-cli": "^6.2.0",
     "supertest": "^6.2.2"
   }
