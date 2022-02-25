@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { update } = require("../controllers/user.controller"); 
+const userController = require("../controllers/user.controller"); 
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -8,6 +8,6 @@ router.get('/', function(req, res, next) {
 });
 
 /* PATCH user */
-router.patch('/:id', update)
+router.patch('/:id', userController.update)
 
 module.exports = router;
