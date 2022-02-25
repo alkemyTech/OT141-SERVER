@@ -7,7 +7,6 @@ const authOwnership = async (req, res, next) => {
         const bearerToken = authHeader.split(' ')[1]
         const payload = await verifyJwt(bearerToken)
         //verify user ownership or admin role
-        console.log(payload)
         if (payload.email === email || payload.roleId === '1') 
             return next()
             
