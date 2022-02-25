@@ -1,8 +1,8 @@
 const { validationResult } = require("express-validator");
-const { validationsActivities } = require("./activity.validations");
+const { validationsActivities, validationsActivitiesUpdate } = require("./activity.validations");
 
 const indexValidation = (req, res, next) => {
-// Constant variables
+  // Constant variables
   const errors = validationResult(req);
   const errorsObjects = errors.mapped();
 
@@ -28,4 +28,5 @@ const indexValidation = (req, res, next) => {
 module.exports = {
   validationsActivities,
   indexValidation,
+  validationsActivitiesUpdate
 };

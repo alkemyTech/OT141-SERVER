@@ -32,4 +32,27 @@ const validationsActivities = [
     .withMessage("The value cannot be numeric."),
 ];
 
-module.exports = { validationsActivities };
+const validationsActivitiesUpdate = [
+  body("name")
+    .notEmpty() // Valid that it is not empty
+    .withMessage("Input required")
+    .bail()
+    .not()
+    .isNumeric() // Valid that it is a string (I place the .not())
+    .withMessage("The value cannot be numeric.")
+    .isLength({ min: 5 }) // Valido su longitud
+    .withMessage("String must be more than 4 characters")
+    .bail()
+    .isAlphanumeric() // Valid that it is Alphanumeric
+    .withMessage("Special characters are not accepted"),
+
+  body("content")
+    .notEmpty() // Valid that it is not empty
+    .withMessage("Input required")
+    .bail()
+    .not()
+    .isNumeric() // Valid that it is a string (I place the .not())
+    .withMessage("The value cannot be numeric."),
+];
+
+module.exports = { validationsActivities, validationsActivitiesUpdate };
