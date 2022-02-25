@@ -18,9 +18,7 @@ module.exports = {
         user.email = email ? email : user.email
         user.password = password ? await passwordHelper.encrypt(password) : user.password
         user.image = image ? image : user.image
-        if (req.body.roleId === '1') {
-            user.roleId = roleId ? roleId : user.roleId
-        }
+
         await user.save()
         const { password: pass, ...rest } = user.dataValues
 
