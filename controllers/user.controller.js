@@ -1,5 +1,5 @@
 const db = require("../models");
-const {encrypt} = require('../helpers/password')
+const passwordHelper = require('../helpers/password')
 
 module.exports = {
     update: async (req, res) => {
@@ -16,20 +16,22 @@ module.exports = {
         user.firstName = firstName ? firstName : user.firstName
         user.lastName = lastName ? lastName : user.lastName
         user.email = email ? email : user.email
-        user.password = password ? await encrypt(password) : user.password
+        user.password = password ? await passwordHelper.encrypt(password) : user.password
         user.image = image ? image : user.image
-        if (req.body.roleId == '1') {
+        if (req.body.roleId === '1') {
             user.roleId = roleId ? roleId : user.roleId
         }
         await user.save()
+        const { password: pass, ...rest } = user.dataValues
 
         return res.status(200).json({
-            msg: 'user updated succesfully',
+            message: 'user updated succesfully',
+            user: rest,
         })
 
       } catch (error) {
           return res.status(500).json({
-              msg: 'internal server error',
+              message: 'internal server error',
           })
       }
   }
