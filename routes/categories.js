@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const {
   createCategory,
+  getAllCategories,
 } = require('../controllers');
 const {
   validateErrors,
@@ -11,10 +12,18 @@ const {
 // Create category
 router.post(
   '/',
-  // verifyToken,
+  verifyToken,
   validationCreateCategory,
   validateErrors,
   createCategory,
+);
+
+// Get all categories
+router.get(
+  '/',
+  verifyToken,
+  validateErrors,
+  getAllCategories,
 );
 
 module.exports = router;
