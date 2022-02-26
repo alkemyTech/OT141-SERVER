@@ -67,6 +67,44 @@ const createCategory = async (req, res) => {
   }
 };
 
+const getAllCategories = async (req, res) => {
+  try {
+    const { roleId } = req.user;
+
+    // validate if user is admin
+    if (roleId !== 1) {
+      res.status(401).json({
+        ok: false,
+        msg: 'You do not have privileges for this',
+      });
+    }
+
+    const categories = await db.category.findAll({
+      attributes: ['name'],
+    });
+
+    if (categories.length === 0 || !categories) {
+      return res.status(404).json({
+        ok: false,
+        msg: 'There are no categories created',
+      });
+    }
+
+    res.status(200).json({
+      ok: true,
+      count: categories.length,
+      categories,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      ok: false,
+      msg: 'Contact to administrator',
+    });
+  }
+};
+
 module.exports = {
   createCategory,
+  getAllCategories,
 };
