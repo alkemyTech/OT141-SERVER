@@ -1,0 +1,434 @@
+paths:
+  /auth/register:
+    post:
+      description: Request to create a resource in the user database
+      tags:
+        - Authentication
+      requestBody:
+        description: User register
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                firstName:
+                  type: string
+                  description: Enter name
+                  example: Emanuel
+                lastName:
+                  description: Enter last name
+                  type: string
+                  example: Arroyo
+                email:
+                  type: string
+                  description: Enter email
+                  example: email@email.com
+                password:
+                  description: Enter password
+                  type: string
+                  example: 12345678Password$
+                  format: password
+
+      responses:
+        200:
+          description: Email verification in database
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { message: Email already in use }
+                properties:
+                  message:
+                    type: string
+
+        201:
+          description: Successful registration
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    message:
+                      type: string
+                      example: User created successfully
+                    user:
+                      type: object
+                      example:
+                        {
+                          id: 5,
+                          firstName: Emanuel,
+                          lastName: Arroyo,
+                          email: ema@email.com,
+                          updatedAt: 2022-02-26T09:10:52.148Z,
+                          createdAt: 2022-02-26T09:10:52.148Z,
+                        }
+                      properties:
+                        id:
+                          type: integer
+                          example: 5
+                        firstName:
+                          type: string
+                          example: Emanuel
+                        lastName:
+                          type: string
+                          example: Arroyo
+                        email:
+                          type: string
+                          example: ema@email.com
+                        updatedAt:
+                          type: string
+                          format: date
+                          example: "2022-02-26T09:10:52.148Z"
+                        createdAt:
+                          type: string
+                          format: date
+                          example: "2022-02-26T09:10:52.148Z"
+
+        422:
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      properties:
+                        value:
+                          type: string
+                          example: ema
+                        msg:
+                          type: string
+                          example: FirstName must have more than 5 characters
+                        param:
+                          type: string
+                          example: firsName
+                        location:
+                          type: string
+                          example: body
+
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                example: { message: server failure }
+                properties:
+                  message:
+                    type: string
+  # USER LOGIN
+  /auth/login:
+    post:
+      description: Request to obtain user authentication
+      tags:
+        - Authentication
+      requestBody:
+        description: User login
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  description: Enter email
+                  example: email@email.com
+                  format: email
+                password:
+                  description: Enter password
+                  type: string
+                  example: "12345678Password$"
+                  format: password
+
+      responses:
+        200:
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  msg:
+                    type: string
+                    example: User logged in
+                  token:
+                    type: string
+                    format: base64
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBydWViYTEyMzQ1QGdtYWlsLmNvbSIsImlhdCI6MTY0NTg3MjM3MCwiZXhwIjoxNjQ1ODg2NzcwfQ.A73ENdrNz0uJlIZI6SW5D6uvB1Za5YKfo_XQrBdNPCA
+
+        400:
+          description: User not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: The password is wrong
+
+        404:
+          description: User not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: false
+                  msg:
+                    type: string
+                    example: The emanuel@gmail.com not exist
+
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: Contact to administrator
+                  error:
+                    type: object
+                    example: {}
+
+  /users/{id}:
+    delete:
+      tags:
+        - Authentication
+      description: User deletion
+      parameters:
+        - in: params
+          name: id
+          required: true
+          schema:
+            type: integer
+            example: 6
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            format: byte
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBydWViYTEyMzQ1QGdtYWlsLmNvbSIsImlhdCI6MTY0NTg3MjM3MCwiZXhwIjoxNjQ1ODg2NzcwfQ.A73ENdrNz0uJlIZI6SW5D6uvB1Za5YKfo_XQrBdNPCA
+
+      responses:
+        200:
+          description: Successful deletion
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  {
+                    del: true,
+                    message: "user with id 5 was deleted successfully",
+                  }
+                properties:
+                  del:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: user with id 6 was deleted successfully
+
+        404:
+          description: User not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  del:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: The emanuel@gmail.com not exist
+
+        500:
+          description: User not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  del:
+                    type: boolean
+                    example: false
+                  data:
+                    type: object
+
+  /users/{:id}:
+    patch:
+      tags:
+        - Authentication
+      parameters:
+        - in: params
+          name: id
+          description: Id user
+          required: true
+          schema:
+            type: integer
+            example: 5
+
+        - in: form-data
+          name: image
+          description: Avatar
+          schema:
+            type: file
+            format: binary
+
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBydWViYTEyMzQ1QGdtYWlsLmNvbSIsImlhdCI6MTY0NTg3MjM3MCwiZXhwIjoxNjQ1ODg2NzcwfQ.A73ENdrNz0uJlIZI6SW5D6uvB1Za5YKfo_XQrBdNPCA
+
+      requestBody:
+        description: User update
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                firstName:
+                  type: string
+                  example: Alberto
+
+                lastName:
+                  type: string
+                  example: Arroyo
+
+                email:
+                  type: string
+                  description: User email
+                  example: emanuel@email.com
+
+                password:
+                  description: User password
+                  type: string
+                  format: password
+                  example: 12345678Password$
+
+          multipart/form-data:
+            schema:
+              properties:
+                image:
+                  type: object
+                  example:
+                    {
+                      name: "img-prueba.jpg",
+                      data: <Buffer ff d8 ff e1 00 18 45 78 69 66 00 00 49 49 2a 00 08 00 00 00 00 00 00 00 00 00 00 00 ff ec 00 11 44 75 63 6b 79 00 01 00 04 00 00 00 2d 00 00 ff e1 03 ... 22995 more bytes>,
+                      size: 23045,
+                      encoding: "7bit",
+                      tempFilePath: "",
+                      truncated: false,
+                      mimetype: "image/jpeg",
+                      md5: "ec1a01e40eace9473675b08acb69cc56",
+                    }
+
+      responses:
+        200:
+          description: Successful deletion
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  {
+                    message: user updated successfully,
+                    user:
+                      {
+                        id: 5,
+                        firstName: Alberto,
+                        lastName: Arroyo,
+                        email: emanuel@gmail.com,
+                        image: default.jpg,
+                        roleId: 2,
+                        deletedAt: null,
+                        createdAt: 2022-02-26T09:10:52.000Z,
+                        updatedAt: 2022-02-26T14:32:03.070Z,
+                      },
+                  }
+                properties:
+                  message:
+                    type: string
+                    example: user updated successfully
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 5
+
+                  firstName:
+                    type: string
+                    example: Alberto
+
+                  lastName:
+                    type: string
+                    example: Arroyo
+
+                  email:
+                    type: integer
+                    example: emanuel@gmail.com
+
+                  image:
+                    type: integer
+                    format: byte
+
+                  roleId:
+                    type: integer
+                    example: 2
+
+                  deletedAt:
+                    type: string
+                    format: date
+                    example: "2022-02-26T09:10:52.000Z"
+
+                  createdAt:
+                    type: string
+                    format: date
+                    example: "2022-02-26T09:10:52.000Z"
+
+                  updatedAt:
+                    type: string
+                    format: date
+                    example: "2022-02-26T14:32:03.070Z"
+
+        404:
+          description: User not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: "user not found"
+
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: internal server error                  
