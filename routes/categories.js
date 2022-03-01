@@ -7,12 +7,14 @@ const {
   validateErrors,
   validationCreateCategory,
   verifyToken,
+  checkRole,
 } = require('../middlewares');
 
 // Create category
 router.post(
   '/',
   verifyToken,
+  checkRole,
   validationCreateCategory,
   validateErrors,
   createCategory,
@@ -22,6 +24,7 @@ router.post(
 router.get(
   '/',
   verifyToken,
+  checkRole,
   validateErrors,
   getAllCategories,
 );
