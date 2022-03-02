@@ -11,7 +11,6 @@ require('dotenv').config()
 const { serve, setup } = require("swagger-ui-express");
 const { configSwagger } = require("./documentation/config.swagger");
 const swaggerJSDocs = require("swagger-jsdoc")(configSwagger)
-console.log("Documentation" , "http://localhost:3000/api-doc")
 
 // routers
 const indexRouter = require('./routes/index');
