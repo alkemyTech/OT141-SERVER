@@ -1,6 +1,6 @@
 paths:
   # POST
-  /register:
+  /auth/register:
     post:
       description: Request to create a resource in the user database
       tags:
