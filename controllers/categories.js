@@ -30,8 +30,8 @@ const getAllCategories = async (req, res) => {
       attributes: ['name'],
     });
 
-    if (categories.length === 0 || !categories) {
-      return res.status(404).json({
+    if (categories.length === 0) {
+      return res.status(204).json({
         ok: false,
         msg: 'There are no categories created',
       });
