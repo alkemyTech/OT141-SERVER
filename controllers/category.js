@@ -14,6 +14,11 @@ const updateCategoryById = async (req, res) => {
         where: { id },
       }
     );
+    if (!category) {
+      return res.status(404).json({
+        message: "Category not found",
+      });
+    }
     res.status(200).json({
       message: "Category updated",
       category,
