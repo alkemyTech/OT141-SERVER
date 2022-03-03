@@ -11,13 +11,13 @@ module.exports = {
                     id
                 }
             })
-            if (userDeleted == 1) {
+            if (userDeleted === 1) {
                 res.status(200).json({
                     del: true,
                     message: `user with id ${id} was deleted successfully`,
                 })
             } else {
-                res.status(500).json({
+                res.status(404).json({
                     del: false,
                     message: `the id ${id} is no longer available in database`
                 })
