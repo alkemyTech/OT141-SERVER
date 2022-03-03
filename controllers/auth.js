@@ -1,6 +1,7 @@
 const db = require("../models");
 const bcrypt = require("bcryptjs");
 const { createJWT, resError } = require("../helpers");
+const { sendEmail } = require("../utils/sendEmail");
 
 const registerUser = async (req, res) => {
   try {
@@ -14,6 +15,16 @@ const registerUser = async (req, res) => {
       email,
       password: respHash,
     });
+
+    // Send welcome email
+    const from = 'ong.somos.mas1@gmail.com';
+    const to = email;
+    const subject = 'Bienvenido a somos más';
+    const text = `<h1>Bienvenido a Somos más</h1>
+                  <p>Se ha registrado tu usuario correctamente </p>`;
+
+    sendEmail(to, from, subject, text);
+
     const { password, ...rest } = newUser.dataValues;
     res.status(201).json({
       message: "User created successfully",
