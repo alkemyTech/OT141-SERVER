@@ -6,6 +6,12 @@ const getCategoryById = async (req, res) => {
     const category = await db.Category.findOne({
       where: { id },
     });
+    if (!category) {
+      return res.status(404).json({
+        ok: false,
+        msg: "The category does not exist",
+      });
+    }
     res.status(200).json({
       message: "Category found",
       data: category,
