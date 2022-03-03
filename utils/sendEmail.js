@@ -18,6 +18,24 @@ const sendEmail = async (to, from, subject, text) => {
 
 }
 
+const sendTemplate = async (to, from, templateId, dynamic_template_data) => {
+
+  const msg = {
+    to,
+    from: { name: 'Somos Más', email: from },
+    templateId,
+    dynamic_template_data
+  };
+
+  try {
+    await sgMail.send(msg);
+  } catch (error) {
+    console.error('send-grid-error: ', error.toString());
+  }
+
+};
+
 module.exports = {
-  sendEmail
+  sendEmail,
+  sendTemplate
 };

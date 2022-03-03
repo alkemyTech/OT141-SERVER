@@ -1,7 +1,7 @@
 const db = require("../models");
 const bcrypt = require("bcryptjs");
 const { createJWT, resError } = require("../helpers");
-const { sendEmail } = require("../utils/sendEmail");
+const { sendTemplate } = require("../utils/sendEmail");
 
 const registerUser = async (req, res) => {
   try {
@@ -16,15 +16,14 @@ const registerUser = async (req, res) => {
       password: respHash,
     });
 
-    // Send welcome email
+    // Send welcome email with template
     const from = 'ong.somos.mas1@gmail.com';
     const to = email;
-    const subject = 'Bienvenido a somos más';
-    const text = `<h1>Bienvenido a Somos más</h1>
-                  <p>Se ha registrado tu usuario correctamente </p>`;
-
-    sendEmail(to, from, subject, text);
-
+    const templateId = 'd-27e5f687bb4444628a0555643a9c9b5f'; // id provided by sendgrid
+    const dynamic_template_data = { firstName }; // variables used in the email tempalte
+    
+    sendTemplate (to, from, templateId, dynamic_template_data);
+    
     const { password, ...rest } = newUser.dataValues;
     res.status(201).json({
       message: "User created successfully",
