@@ -1,13 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const userController = require("../controllers/user.controller"); 
+const { deleteUser } = require("../controllers/users");
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
   res.send('respond with a resource');
 });
 
 /* PATCH user */
 router.patch('/:id', userController.update)
+
+// delete user
+router.delete('/:id', userController.deleteUser);
 
 module.exports = router;

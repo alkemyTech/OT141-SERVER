@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      User.belongsTo(models.Role, {as: 'role'});
+      User.belongsTo(models.Role, { as: 'role' });
     }
   };
   User.init({
@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'User',
+    timestamps: true,
+    // when told to delete a record, it will not truly delete it. Instead, a special column called deletedAt will have its value set to the timestamp of that deletion request.
+    paranoid: true
+
   });
   return User;
 };
