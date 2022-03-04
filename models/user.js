@@ -1,7 +1,7 @@
-'use strict';
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.belongsTo(models.Role, { as: 'role' });
     }
-  };
+  }
   User.init({
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
@@ -20,13 +20,15 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     password: DataTypes.STRING,
     roleId: DataTypes.INTEGER,
-    deletedAt: DataTypes.DATE
+    deletedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'User',
     timestamps: true,
-    // when told to delete a record, it will not truly delete it. Instead, a special column called deletedAt will have its value set to the timestamp of that deletion request.
-    paranoid: true
+    // when told to delete a record, it will not truly delete it.
+    // Instead, a special column called deletedAt will have its value
+    // set to the timestamp of that deletion request.
+    paranoid: true,
 
   });
   return User;

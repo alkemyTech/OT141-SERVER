@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require('../models');
 
 const createCategory = async (req, res) => {
   try {
@@ -11,13 +11,12 @@ const createCategory = async (req, res) => {
       image: image || null,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       ok: true,
       msg: `Created ${newCategory.name} category`,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({
+    return res.status(500).json({
       ok: false,
       msg: 'Contact to administrator',
     });
@@ -37,14 +36,13 @@ const getAllCategories = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       ok: true,
       count: categories.length,
       categories,
     });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({
+    return res.status(500).json({
       ok: false,
       msg: 'Contact to administrator',
     });
@@ -63,19 +61,19 @@ const updateCategoryById = async (req, res) => {
       },
       {
         where: { id },
-      }
+      },
     );
     if (!category) {
       return res.status(404).json({
-        message: "Category not found",
+        message: 'Category not found',
       });
     }
-    res.status(200).json({
-      message: "Category updated",
+    return res.status(200).json({
+      message: 'Category updated',
       category,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: error.message,
     });
   }
@@ -90,15 +88,15 @@ const getCategoryById = async (req, res) => {
     if (!category) {
       return res.status(404).json({
         ok: false,
-        msg: "The category does not exist",
+        msg: 'The category does not exist',
       });
     }
-    res.status(200).json({
-      message: "Category found",
+    return res.status(200).json({
+      message: 'Category found',
       data: category,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       message: error.message,
     });
   }

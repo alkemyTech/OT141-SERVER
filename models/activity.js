@@ -1,6 +1,6 @@
-'use strict';
+/* eslint-disable */
 const {
-  Model
+  Model,
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
@@ -13,16 +13,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
+  }
   Activity.init({
     name: DataTypes.STRING,
     image: DataTypes.STRING,
     content: DataTypes.TEXT,
-    deletedAt: DataTypes.DATE
+    deletedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Activity',
-    timestamps:false
+    timestamps: false,
   });
   return Activity;
 };

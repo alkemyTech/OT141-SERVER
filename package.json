@@ -8,7 +8,9 @@
     "test:db:migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate",
     "test:db:seed": "cross-env NODE_ENV=test npx sequelize-cli db:seed:all",
     "test": "cross-env NODE_ENV=test jest --verbose --silent",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "lint": "eslint . --ext .js",
+    "lint-fix": "eslint . --ext .js --fix"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.1",

@@ -9,9 +9,9 @@ const cors = require('cors');
 require('dotenv').config();
 
 // Documentation Swagger Interface
-const { serve, setup } = require("swagger-ui-express");
-const { configSwagger } = require("./documentation/config.swagger");
-const swaggerJSDocs = require("swagger-jsdoc")(configSwagger)
+const { serve, setup } = require('swagger-ui-express');
+const swaggerJSDocs = require('swagger-jsdoc')(configSwagger); // eslint-disable-line
+const { configSwagger } = require('./documentation/config.swagger');
 
 // routers
 const indexRouter = require('./routes/index');
@@ -36,7 +36,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/activities', activitiesRouter);
 app.use('/auth', authRouter);
-app.use("/api-doc", serve, setup(swaggerJSDocs));
+app.use('/api-doc', serve, setup(swaggerJSDocs));
 app.use('/categories', categoriesRouter);
 
 // catch 404 and forward to error handler
@@ -45,7 +45,7 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

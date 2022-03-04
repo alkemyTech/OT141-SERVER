@@ -3,7 +3,7 @@ const {
   createCategory,
   getAllCategories,
   updateCategoryById,
-  getCategoryById
+  getCategoryById,
 } = require('../controllers/category');
 const {
   validateErrors,
@@ -11,7 +11,6 @@ const {
   verifyToken,
   checkRole,
 } = require('../middlewares');
-
 
 // Get all categories
 router.get(
@@ -23,7 +22,7 @@ router.get(
 );
 
 // Get category by id
-router.get("/:id", checkRole, getCategoryById);
+router.get('/:id', checkRole, getCategoryById);
 
 // Create category
 router.post(
@@ -36,6 +35,6 @@ router.post(
 );
 
 // Update category
-router.put("/:id", checkRole, updateCategoryById);
+router.put('/:id', checkRole, updateCategoryById);
 
 module.exports = router;
