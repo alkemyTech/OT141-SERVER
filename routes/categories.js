@@ -2,7 +2,8 @@ const router = require('express').Router();
 const {
   createCategory,
   getAllCategories,
-  updateCategoryById
+  updateCategoryById,
+  getCategoryById
 } = require('../controllers/category');
 const {
   validateErrors,
@@ -20,6 +21,9 @@ router.get(
   validateErrors,
   getAllCategories,
 );
+
+// Get category by id
+router.get("/:id", checkRole, getCategoryById);
 
 // Create category
 router.post(
