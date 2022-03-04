@@ -10,8 +10,8 @@ require('dotenv').config();
 
 // Documentation Swagger Interface
 const { serve, setup } = require('swagger-ui-express');
-const swaggerJSDocs = require('swagger-jsdoc')(configSwagger); // eslint-disable-line
 const { configSwagger } = require('./documentation/config.swagger');
+const swaggerJSDocs = require('swagger-jsdoc')(configSwagger);  // eslint-disable-line
 
 // routers
 const indexRouter = require('./routes/index');
