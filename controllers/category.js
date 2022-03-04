@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require("../models");
 
 const createCategory = async (req, res) => {
   try {
@@ -51,7 +51,38 @@ const getAllCategories = async (req, res) => {
   }
 };
 
+const updateCategoryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, image } = req.body;
+    const category = await db.Category.update(
+      {
+        name,
+        description,
+        image,
+      },
+      {
+        where: { id },
+      }
+    );
+    if (!category) {
+      return res.status(404).json({
+        message: "Category not found",
+      });
+    }
+    res.status(200).json({
+      message: "Category updated",
+      category,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createCategory,
   getAllCategories,
+  updateCategoryById,
 };

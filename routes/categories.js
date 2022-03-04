@@ -2,13 +2,24 @@ const router = require('express').Router();
 const {
   createCategory,
   getAllCategories,
-} = require('../controllers');
+  updateCategoryById
+} = require('../controllers/category');
 const {
   validateErrors,
   validationCreateCategory,
   verifyToken,
   checkRole,
 } = require('../middlewares');
+
+
+// Get all categories
+router.get(
+  '/',
+  verifyToken,
+  checkRole,
+  validateErrors,
+  getAllCategories,
+);
 
 // Create category
 router.post(
@@ -20,13 +31,7 @@ router.post(
   createCategory,
 );
 
-// Get all categories
-router.get(
-  '/',
-  verifyToken,
-  checkRole,
-  validateErrors,
-  getAllCategories,
-);
+// Update category
+router.put("/:id", checkRole, updateCategoryById);
 
 module.exports = router;
