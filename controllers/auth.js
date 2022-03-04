@@ -1,11 +1,13 @@
-const db = require("../models");
-const bcrypt = require("bcryptjs");
-const { createJWT, resError } = require("../helpers");
+const bcrypt = require('bcryptjs');
+const db = require('../models');
+const { createJWT, resError } = require('../helpers');
 
 const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password: pass } = req.body;
-    //I did not destruct password because it told me that line 18 was duplicated
+    const {
+      firstName, lastName, email, password: pass,
+    } = req.body;
+    // I did not destruct password because it told me that line 18 was duplicated
     const salt = await bcrypt.genSalt(10);
     const respHash = await bcrypt.hash(pass, salt);
     const newUser = await db.User.create({
@@ -14,10 +16,19 @@ const registerUser = async (req, res) => {
       email,
       password: respHash,
     });
+
+    // Create JWT
+    const token = await createJWT({
+      roleId: newUser.roleId,
+      email: newUser.email,
+      id: newUser.id,
+    });
+
     const { password, ...rest } = newUser.dataValues;
     res.status(201).json({
-      message: "User created successfully",
+      message: 'User created successfully',
       user: rest,
+      token
     });
   } catch (error) {
     res.status(500).json({
@@ -46,16 +57,16 @@ const userLogin = async (req, res) => {
     if (!validPass) {
       return res.status(400).json({
         ok: false,
-        msg: "The passsword is wrong",
+        msg: 'The passsword is wrong',
       });
     }
 
-    //Create JWT
+    // Create JWT
     const token = await createJWT(user.email);
 
     res.status(200).json({
       ok: true,
-      msg: "User logged in",
+      msg: 'User logged in',
       token,
     });
   } catch (err) {
