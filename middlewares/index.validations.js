@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator");
 const { validationsActivities } = require("./activity.validations");
 const { checkRole } = require("./check.role");
+const { checkTokenAuthorization } = require("./check.tokenAuthorization");
 
 const indexValidation = (req, res, next) => {
 // Constant variables
@@ -29,5 +30,6 @@ const indexValidation = (req, res, next) => {
 module.exports = {
   validationsActivities,
   indexValidation,
-  checkRole
+  checkRole,
+  checkTokenAuthorization
 };
