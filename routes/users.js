@@ -4,9 +4,7 @@ const router = express.Router();
 const userController = require('../controllers/user.controller');
 
 /* GET users listing. */
-router.get('/', (req, res) => {
-  res.send('respond with a resource');
-});
+router.get('/', userController.list);
 
 /* PATCH user */
 router.patch('/:id', userController.update);
