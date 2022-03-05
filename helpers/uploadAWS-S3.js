@@ -17,7 +17,8 @@ const storage = new S3({
 // Receives a file and a string with the name of a directory that
 // represents the environment where the function will be used
 const uploadInBucket = (file, directoryNameInBucket) => {
-  if (Array.isArray(file)) throw new Error('The function receives an object');
+  if (typeof file !== 'object' || Array.isArray(file)) throw new Error('The first parameter has to be an object');
+  if (typeof directoryNameInBucket !== 'string') throw new Error('The second parameter has to be a string');
 
   // Using the library that is with this code we look for the file that we
   // need to send to the Body parameter
