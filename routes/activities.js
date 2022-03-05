@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { checkRole } = require('../middlewares');
 
 // Middleware validations required
 const {
@@ -10,7 +11,21 @@ const {
 const { store, update } = require('../controllers/activity.controller');
 
 // Routes
-router.post('/', validationsActivities, indexValidation, store);
-router.put('/:id', update);
+// Create activity
+router.post(
+  '/',
+  checkRole,
+  validationsActivities,
+  indexValidation,
+  store,
+);
+
+// Update activity
+router.put(
+  '/:id',
+  checkRole,
+  indexValidation,
+  update,
+);
 
 module.exports = router;
