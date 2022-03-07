@@ -1,0 +1,249 @@
+paths:
+  /categories:
+    post:
+      tags:
+        - Categories
+      summary: "add a new category to DB"
+      requestBody:
+      description: "a new category is created"
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/categoryPost"
+      responses:
+        201:
+          $ref: "#/components/responses/categoryCreatedSuccessfully"
+
+        422:
+          $ref: "#/components/responses/categoryCreateValidationError"
+
+        500:
+          $ref: "#/components/responses/categoryServerError"
+  # dot is here because keys must be unique.
+  ./categories:
+    get:
+      tags:
+        - Categories
+      summary: "will return a list of existing categories"
+      description: "service to retrive all registered caterogies"
+      responses:
+        200:
+          $ref: "#/components/responses/getAllCategories"
+        204:
+          $ref: "#/components/responses/categoryCreateValidationError"
+        500:
+          $ref: "#/components/responses/categoryServerError"
+  # PUT
+  /categories/:id:
+    put:
+      tags:
+        - Categories
+      summary: "update an existing category by provinding the correct id"
+      description: "this endpoint is in charge of making an update of the selected category"
+      parameters:
+        name: id
+        description: "the id of the category that needs to be updated"
+        required: true
+        schema:
+          type: integer
+          example: 5
+      requestBody:
+        description: "category update"
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/categoryUpdate"
+      responses:
+        200:
+          $ref: "#/components/responses/updatedSuccessfully"
+
+        404:
+          $ref: "#/components/responses/updateCategoryNotFound"
+
+        500:
+          $ref: "#/components/responses/updateServerError"
+
+  components:
+    # SCHEMAS
+    schemas:
+      categoryPost:
+        type: object
+        properties:
+          name:
+            description: "name of the category"
+            type: string
+            example: "recreation"
+          description:
+            description: "description of the category"
+            type: string
+            example: "playing games at the park"
+          image:
+            description: "image that represent the category"
+            type: string
+            example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-ecologiaverde-1.jpg"
+      categoryUpdate:
+        type: object
+        properties:
+          name:
+            description: "name of the category"
+            type: string
+            example: category one
+          description:
+            description: "description of the category"
+            type: string
+            example: "help others by teaching what you know"
+          image:
+            description: "image that represent the category"
+            type: string
+            example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+
+    # Responses
+
+    responses:
+      # Verb POST ( Category - responses )
+      categoryCreatedSuccessfully:
+        description: "category created succesfully"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Created recreation category"
+                category:
+                  type: object
+                  example:
+                    $ref: "#/components/examples/categoryCreated"
+
+      categoryCreateValidationError:
+        description: "Validation errors"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                errors:
+                  type: array
+                  items:
+                    properties:
+                      value:
+                        type: string
+                        example: "12345"
+                      msg:
+                        type: string
+                        example: "The value should be type string"
+                      param:
+                        type: string
+                        example: "name"
+                      location:
+                        type: string
+                        example: "body"
+
+      categoryServerError:
+        description: "Server error"
+        example: { messege: ...error }
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "...error"
+
+      # Verb get ( Category - responses )
+      getAllCategories:
+        description: "it shows a list with all the categories"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ok:
+                  type: boolean
+                  example: true
+                count:
+                  type: integer
+                  example: "3"
+                categories:
+                  type: array
+                  example:
+                    $ref: "#/components/examples/getAllCategories"
+                    items:
+                      properties:
+                        name:
+                          type: string
+                          example: "recreation"
+      # Verb put ( Category - responses )
+      updatedSuccessfully:
+        description: updated succesfully
+        example:
+          $ref: "#/components/examples/categoryUpdated"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Category updated"
+                category:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 5
+                    name:
+                      type: string
+                      example: "recreation"
+                    description:
+                      type: string
+                      example: "come and play with the kids"
+                    image:
+                      type: string
+                      example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+      updateCategoryNotFoundd:
+        description: "Category not found"
+        content:
+          application/json:
+            chema:
+              type: object
+              properties:
+                messege:
+                  type: string
+                  example: "Category not found"
+      updateServerError:
+        description: "Server error"
+        example: { messege: ...error }
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "...error"
+
+        # Examples responses
+        examples:
+          categoryCreated:
+            { "ok": "true", "msg": "Created recreation category" }
+          getAllCategories:
+            {
+              "ok": "true",
+              "count": "2",
+              "categories": [{ "name": "recreation" }, { "name": "donations" }],
+            }
+          categoryUpdated:
+            {
+              "message": "Category updated",
+              "category":
+                {
+                  "name": "art time",
+                  "description": "collaborate with our art program",
+                  "image": "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png ",
+                },
+            }
