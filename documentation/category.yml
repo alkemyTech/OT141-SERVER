@@ -154,7 +154,7 @@ paths:
                   type: string
                   example: "...error"
 
-      # Verb get ( Category - responses )
+        # Verb get ( Category - responses )
       getAllCategories:
         description: "it shows a list with all the categories"
         content:
@@ -205,7 +205,7 @@ paths:
                     image:
                       type: string
                       example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
-      updateCategoryNotFoundd:
+      updateCategoryNotFound:
         description: "Category not found"
         content:
           application/json:
@@ -226,24 +226,22 @@ paths:
                 message:
                   type: string
                   example: "...error"
-
-        # Examples responses
-        examples:
-          categoryCreated:
-            { "ok": "true", "msg": "Created recreation category" }
-          getAllCategories:
-            {
-              "ok": "true",
-              "count": "2",
-              "categories": [{ "name": "recreation" }, { "name": "donations" }],
-            }
-          categoryUpdated:
-            {
-              "message": "Category updated",
-              "category":
-                {
-                  "name": "art time",
-                  "description": "collaborate with our art program",
-                  "image": "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png ",
-                },
-            }
+    # Examples responses
+  examples:
+    categoryCreated: { "ok": "true", "msg": "Created recreation category" }
+    getAllCategories:
+      {
+        "ok": "true",
+        "count": "2",
+        "categories": [{ "name": "recreation" }, { "name": "donations" }],
+      }
+    categoryUpdated:
+      {
+        "message": "Category updated",
+        "category":
+          {
+            "name": "art time",
+            "description": "collaborate with our art program",
+            "image": "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png ",
+          },
+      }
