@@ -6,21 +6,21 @@ paths:
         - Categories
       summary: "add a new category to DB"
       requestBody:
-      description: "a new category is created"
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/CategoryPost"
-      responses:
-        201:
-          $ref: "#/components/responses/categoryCreatedSuccessfully"
+        description: "a new category is created"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CategoryPost"
+        responses:
+          201:
+            $ref: "#/components/responses/categoryCreatedSuccessfully"
 
-        422:
-          $ref: "#/components/responses/categoryCreateValidationError"
+          422:
+            $ref: "#/components/responses/categoryCreateValidationError"
 
-        500:
-          $ref: "#/components/responses/categoryServerError"
+          500:
+            $ref: "#/components/responses/categoryServerError"
   # GET
   # dot is here because keys must be unique.
   ./categories:
@@ -207,6 +207,8 @@ components:
     # Verb POST ( Category - responses )
     categoryCreatedSuccessfully:
       description: "category created succesfully"
+      example:
+        $ref: "#/components/examples/categoryCreated"
       content:
         application/json:
           schema:
@@ -217,11 +219,11 @@ components:
                 example: "Created recreation category"
               category:
                 type: object
-                example:
-                  $ref: "#/components/examples/categoryCreated"
 
     categoryCreateValidationError:
       description: "Validation errors"
+      example:
+        $ref: "#/components/examples/categoryCreateValidationError"
       content:
         application/json:
           schema:
@@ -259,6 +261,8 @@ components:
       # Verb get ( Category - responses )
     getAllCategories:
       description: "it shows a list with all the categories"
+      example:
+        $ref: "#/components/examples/getAllCategories"
       content:
         application/json:
           schema:
@@ -272,13 +276,11 @@ components:
                 example: "3"
               categories:
                 type: array
-                example:
-                  $ref: "#/components/examples/getAllCategories"
-                  items:
-                    properties:
-                      name:
-                        type: string
-                        example: "recreation"
+                items:
+                  properties:
+                    name:
+                      type: string
+                      example: "recreation"
     # Verb put ( Category - responses )
     updatedSuccessfully:
       description: updated succesfully
@@ -357,6 +359,8 @@ components:
     # Verb DELETE ( Category deleted - responses )
     deletedSuccessfully:
       description: "deleted succesfully"
+      example:
+        $ref: "#/components/examples/categoryDeleted"
       content:
         application/json:
           schema:
@@ -368,8 +372,8 @@ components:
               example: true
             message:
               type: string
-              example:
-                $ref: "#/components/examples/categoryDeleted"
+              example: 6
+
     deletedCategoryNotFound:
       description: "category not found"
       content:
@@ -416,3 +420,4 @@ components:
       }
     categoryDeleted:
       { "del": "true", "message": "user with id 3 was deleted successfully" }
+    categoryCreateValidationError: { "hola": "hola" }
