@@ -93,15 +93,23 @@ paths:
     delete:
       tags:
         - Categories
+      summary: "Delete category"
       description: "This endpoing will delete the category that corresponds with the choosen id"
       parameters:
-        name: id
+        name: :id
+        in: path
         description: "the id of the category you want to delete"
         required: true
         schema:
           type: integer
           example: 6
-
+      requestBody:
+        description: "category deleted"
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/CategoryDeleted"
       responses:
         200:
           $ref: "#/components/responses/deletedSuccessfully"
@@ -169,24 +177,25 @@ components:
           description: "date the category was updated"
           type: date
           example: "2021-11-11"
-    RequestError:
-      type: object
-      properties:
-        code:
-          description: "error code"
-          type: integer
-          example: "Validation Errors: Invalid id"
-    ErrorDB:
-      type: object,
-      properties:
-        code:
-          description: "error code"
-          type: integer
-          example: 500
-        message:
-          description: "error message"
-          type: string
-          example: "Internal Server Error"
+
+    # RequestError:
+    #   type: object
+    #   properties:
+    #     code:
+    #       description: "error code"
+    #       type: integer
+    #       example: "Validation Errors: Invalid id"
+    # ErrorDB:
+    #   type: object,
+    #   properties:
+    #     code:
+    #       description: "error code"
+    #       type: integer
+    #       example: 500
+    #     message:
+    #       description: "error message"
+    #       type: string
+    #       example: "Internal Server Error"
 
   # Responses
 
@@ -224,7 +233,7 @@ components:
                     msg:
                       type: string
                       example: "The value should be type string"
-                    param:
+                    parameters:
                       type: string
                       example: "name"
                     location:
@@ -355,7 +364,8 @@ components:
               example: true
             message:
               type: string
-              example: "category with id 3, was deleted successfully"
+              example:
+                $ref: "#/components/examples/categoryDeleted"
     deletedCategoryNotFound:
       description: "category not found"
       content:
@@ -392,7 +402,7 @@ components:
       }
     categoryUpdated:
       {
-        "message": "Category updated",
+        "messege": "Category updated",
         "category":
           {
             "name": "art time",
@@ -400,3 +410,5 @@ components:
             "image": "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png ",
           },
       }
+    categoryDeleted:
+      { "del": "true", "message": "user with id 3 was deleted successfully" }
