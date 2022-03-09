@@ -44,19 +44,29 @@ paths:
       summary: "update an existing category by provinding the correct id"
       description: "this endpoint is in charge of making an update of the selected category"
       parameters:
-        name: id
-        description: "the id of the category that needs to be updated"
-        required: true
-        schema:
-          type: integer
-          example: 5
+        - in: path
+          name: id
+          description: "the id of the category that needs to be updated"
+          required: true
+          schema:
+            type: integer
+            example: 5
       requestBody:
         description: "category update"
         required: true
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/CategoryUpdate"
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
+
+            multipart/form-data:
+              schema:
+                type: object
+                $ref: "#/components/schemas/CategoryUpdate"
       responses:
         200:
           $ref: "#/components/responses/updatedSuccessfully"
@@ -89,27 +99,21 @@ paths:
           $ref: "#/components/responses/categoryByIdServerError"
   # DELETE
   # dot is here because keys must be unique.
-  ./categories/:id:
+  ./categories/{:id}:
     delete:
       tags:
         - Categories
       summary: "Delete category"
       description: "This endpoing will delete the category that corresponds with the choosen id"
       parameters:
-        name: :id
-        in: path
-        description: "the id of the category you want to delete"
-        required: true
-        schema:
-          type: integer
-          example: 6
-      requestBody:
-        description: "category deleted"
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: "#/components/schemas/CategoryDeleted"
+        - in: path
+          name: :id
+          description: "the id of the category you want to delete"
+          required: true
+          schema:
+            type: integer
+            example: 6
+
       responses:
         200:
           $ref: "#/components/responses/deletedSuccessfully"
