@@ -62,4 +62,20 @@ module.exports = {
       });
     }
   },
+  list: async (req, res) => {
+    try {
+      const users = await db.User.findAll({
+        attributes: { exclude: ['password'] },
+      });
+      return res.status(200).json({
+        message: 'list of users',
+        count: users.length,
+        users,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        message: 'internal server error',
+      });
+    }
+  },
 };
