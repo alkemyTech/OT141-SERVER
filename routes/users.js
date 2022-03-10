@@ -6,6 +6,8 @@ const userController = require('../controllers/user.controller');
 const {
   verifyToken,
   checkAdminRole,
+  checkOwnership, // TODO: Borrar. No es requerimiento por ahora (es solo para probar el middleware)
+  validateErrors,
 } = require('../middlewares');
 
 /* GET users listing. */
@@ -13,12 +15,16 @@ router.get(
   '/',
   verifyToken,
   checkAdminRole,
+  validateErrors,
   userController.list,
 );
 
 /* PATCH user */
 router.patch(
   '/:id',
+  verifyToken,
+  checkOwnership, // TODO: Borrar esta linea (es solo para probar el middleware)
+  validateErrors,
   userController.update,
 );
 

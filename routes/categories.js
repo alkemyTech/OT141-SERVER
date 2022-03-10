@@ -52,6 +52,7 @@ router.put(
 // Delete category
 router.delete(
   '/:id',
+  verifyToken,
   checkAdminRole,
   validateErrors,
   deleteCategory,
