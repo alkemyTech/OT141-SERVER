@@ -1,3 +1,5 @@
+const { LIMIT_PAGE } = require('../constants/limit-page.constants');
+const { paginated } = require('../helpers/paginated');
 const db = require('../models');
 
 const createCategory = async (req, res) => {
@@ -25,22 +27,20 @@ const createCategory = async (req, res) => {
 
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await db.Category.findAll({
-      attributes: ['name'],
-    });
+    const { page = 1 } = req.query;
+    const categories = await db.category.findAll();
 
-    if (categories.length === 0) {
+    // parameters  (array,limit,page,request)
+    const { results, next, prev } = paginated(categories, LIMIT_PAGE, +page, req);
+
+    
+    if (results.length === 0) {
       return res.status(204).json({
         ok: false,
         msg: 'There are no categories created',
       });
     }
-
-    return res.status(200).json({
-      ok: true,
-      count: categories.length,
-      categories,
-    });
+    res.status(200).json({ prev, next, results });
   } catch (err) {
     return res.status(500).json({
       ok: false,
