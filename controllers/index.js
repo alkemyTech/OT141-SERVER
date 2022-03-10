@@ -3,7 +3,7 @@ const categoryControllers = require('./category');
 const rolesControllers = require('./roles');
 
 module.exports = {
-    ...authControllers,
-    ...categoryControllers,
-    ...rolesControllers,
-}
+  ...authControllers,
+  ...categoryControllers,
+  ...rolesControllers,
+};

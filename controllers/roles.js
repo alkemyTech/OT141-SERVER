@@ -1,3 +1,3 @@
-const db = require("../models");
+const db = require("../models"); // eslint-disable-line
 
 module.exports = {};
