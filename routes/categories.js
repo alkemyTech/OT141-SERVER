@@ -4,6 +4,7 @@ const {
   getAllCategories,
   updateCategoryById,
   getCategoryById,
+  deleteCategory
 } = require('../controllers/category');
 const {
   validateErrors,
@@ -36,5 +37,8 @@ router.post(
 
 // Update category
 router.put('/:id', checkRole, updateCategoryById);
+
+// Delete category
+router.delete('/:id', checkRole, deleteCategory)
 
 module.exports = router;
