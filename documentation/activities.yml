@@ -1,0 +1,355 @@
+paths:
+  # POST
+
+  /activities:
+    post:
+      security:
+      - bearerAuth: []  
+      description: Request to create a resource in the activity table
+      tags:
+        - Activities
+      requestBody:
+        description: Create activity
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Create-activity"
+      responses:
+
+        201:
+          $ref: "#/components/responses/createActivitySuccessfully"
+
+        403:
+          $ref: "#/components/responses/UnauthorizedError"
+
+        422:
+          $ref: "#/components/responses/createActivityValidationsErrors"
+
+        503:
+          $ref: "#/components/responses/createActivityServerError"
+
+  # DELETE
+  /activities/{id}:
+    delete:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Activities
+      description: Activity deletion
+      parameters:
+        $ref: "#/components/parameters/activityIdDelete"
+
+      responses:
+        200:
+          $ref: "#/components/responses/activityDeletionSuccessfully"
+
+        404:
+          $ref: "#/components/responses/deleteActivityNotFound"
+
+        500:
+          $ref: "#/components/responses/deleteActivityServerError"
+
+  # PUT 
+  /activities/{Id}:
+    put:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Activities
+      parameters:
+        - $ref: "#/components/parameters/activityIdPut"
+
+      requestBody:
+        description: Update activity
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/activity-updated"
+
+      responses:
+        200:
+          $ref: "#/components/responses/putActivityUpdateSuccessfully"
+
+        404:
+          $ref: "#/components/responses/putActivityNotFound"
+
+        500:
+          $ref: "#/components/responses/putActivityServerError"
+
+  # COMPONENTS
+components:
+  # Schemas request body
+  schemas:
+    Create-activity:
+      properties:
+        name:
+          type: string
+          description: the activity name
+          example: Apoyo  escolar
+        content:
+          type: string
+          description: the activity description
+          example: Acompañamiento para los alumnos
+        image:
+          type: string
+          required: false
+          description: the activity image url
+          example: link.com
+      
+    activity-updated:
+      properties:
+        name:
+          type: string
+          description: the activity name
+          example: Apoyo  escolar
+        content:
+          type: string
+          description: the activity description
+          example: Acompañamiento para los alumnos
+        image:
+          type: string
+          required: false
+          description: the activity image url
+          example: link.com
+
+  securitySchemes:
+    bearerAuth:   
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    # Verb DELETE ( Activity deleted - parameters )
+    activityIdDelete:
+        in: path
+        name: Id
+        description: activity id
+        required: true
+        schema:
+          type: integer
+          example: 5
+
+    # Verb PUT ( Activity updated - parameters )
+    activityIdPut:
+      in: path
+      name: Id
+      description: activity id
+      required: true
+      schema:
+        type: integer
+        example: 5
+
+  responses:
+    # Verb POST ( create activity - responses )
+    activityDbValidation:
+      description: Activity already exists in the database
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              $ref: "#/components/examples/activityCreated"
+
+
+    createActivitySuccessfully:
+      description: Activity created Successfully
+      content:
+        application/json:
+          schema:
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  ok:
+                    type: boolean
+                    example: true
+              data:
+                example:
+                  $ref: "#/components/examples/activityCreated"
+
+              errors:
+                example: null
+
+
+    createActivityValidationsErrors:
+      description: Validation errors
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 422
+                  ok:
+                    example: false
+              data:
+                example: null
+              errors:
+                type: object
+                properties:
+                  name: 
+                    type: object
+                    properties:
+                      value:
+                        type: string
+                        example: Tut
+                      msg:
+                        type: string
+                        example: String must be more than 4 characters
+                  content:
+                    msg:
+                      type: string
+                      example: Input required
+
+    createActivityServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            type: object
+            example: 
+              {
+                meta: {
+                  status: 503,
+                  ok: false,
+                },
+                data: null,
+                errors: { msg: 'Server failure' },
+              }
+
+    # Verb DELETE ( Activity deleted - responses )
+    activityDeletionSuccessfully:
+      description: Successful deletion
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              { del: true, message: "activity with id 6 was deleted successfully" }
+            properties:
+              del:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: activity with id 6 was deleted successfully
+
+    deleteActivityNotFound:
+      description: Activity not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              del:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: activity with id 6 not exists
+
+    deleteActivityServerError:
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                example: an error occurred
+              data:
+                type: object
+
+    # Verb PUT ( Activity updated - responses )
+    putActivityUpdateSuccessfully:
+      description: Updated successfully
+      example:
+        $ref: "#/components/examples/activityUpdated"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                example: activity updated successfully
+              data:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 5
+                  name:
+                    type: string
+                    example: Tutorias
+                  image:
+                    type: string
+                    example: https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png
+                  content:
+                    type: string
+                    example: Apoyo escolar
+                  deletedAt:
+                    example: null
+
+    putActivityNotFound:
+      description: Activity not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                example: "there is no activity matching the specified id"
+
+    putActivityServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: an error occurred
+              data:
+                type: object
+
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            example: A token is required for authentication
+
+  # Examples responses
+  examples:
+    activityCreated:
+      {
+        "id": 35,
+        "name": "apoyo escolar",
+        "content": "tutorias personalizadas",
+      }
+
+    activityUpdated:
+      {
+        "msg": "activity updated successfully",
+        "data": {
+        "id": 5,
+        "name": "Tutorias",
+        "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png",
+        "content": "Apoyo escolar",
+        "deletedAt": null
+        }
+      }

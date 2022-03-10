@@ -10,17 +10,21 @@ module.exports = {
       },
       firstName: {
         type: Sequelize.STRING,
+        allowNull: false
       },
       lastName: {
         type: Sequelize.STRING,
+        allowNull: false
       },
       email: {
         type: Sequelize.STRING,
+        allowNull: false
       },
       password: {
         type: Sequelize.STRING,
+        allowNull: false
       },
-      image: {
+      photo: {
         type: Sequelize.STRING,
       },
       roleId: {

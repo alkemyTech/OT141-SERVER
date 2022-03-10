@@ -7,7 +7,7 @@ const createCategory = async (req, res) => {
     const { name, description, image } = req.body;
     const nameUpperCase = name.toUpperCase();
 
-    const newCategory = await db.category.create({
+    const newCategory = await db.Category.create({
       name: nameUpperCase,
       description: description || null,
       image: image || null,
@@ -33,6 +33,7 @@ const getAllCategories = async (req, res) => {
     // parameters  (array,limit,page,request)
     const { results, next, prev } = paginated(categories, LIMIT_PAGE, +page, req);
 
+    
     if (results.length === 0) {
       return res.status(204).json({
         ok: false,
@@ -101,9 +102,37 @@ const getCategoryById = async (req, res) => {
   }
 };
 
+const deleteCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const categoryDeleted = await db.Category.destroy({
+      where: {
+        id,
+      },
+    });
+    if (categoryDeleted === 1) {
+      res.status(200).json({
+        del: true,
+        message: `category with id ${id}, was deleted successfully`,
+      });
+    } else {
+      res.status(404).json({
+        del: false,
+        message: `the id ${id} does not correspond to any category`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      del: false,
+      data: error,
+    });
+  }
+};
+
 module.exports = {
   createCategory,
   getAllCategories,
   updateCategoryById,
   getCategoryById,
+  deleteCategory,
 };

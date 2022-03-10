@@ -1,6 +1,6 @@
 const { validationResult } = require('express-validator');
 const { validationsActivities } = require('./activity.validations');
-const { checkRole } = require('./check.role');
+const { checkAdminRole } = require('./check.admin.role');
 const { checkTokenAuthorization } = require('./check.tokenAuthorization');
 
 const indexValidation = (req, res, next) => {
@@ -29,6 +29,6 @@ const indexValidation = (req, res, next) => {
 module.exports = {
   validationsActivities,
   indexValidation,
-  checkRole,
+  checkAdminRole,
   checkTokenAuthorization,
 };

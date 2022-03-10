@@ -3,15 +3,35 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
 
+const {
+  verifyToken,
+  checkAdminRole,
+  checkOwnership, // TODO: Borrar. No es requerimiento por ahora (es solo para probar el middleware)
+  validateErrors,
+} = require('../middlewares');
+
 /* GET users listing. */
-router.get('/', (req, res) => {
-  res.send('respond with a resource');
-});
+router.get(
+  '/',
+  verifyToken,
+  checkAdminRole,
+  validateErrors,
+  userController.list,
+);
 
 /* PATCH user */
-router.patch('/:id', userController.update);
+router.patch(
+  '/:id',
+  verifyToken,
+  checkOwnership, // TODO: Borrar esta linea (es solo para probar el middleware)
+  validateErrors,
+  userController.update,
+);
 
 // delete user
-router.delete('/:id', userController.deleteUser);
+router.delete(
+  '/:id',
+  userController.deleteUser,
+);
 
 module.exports = router;

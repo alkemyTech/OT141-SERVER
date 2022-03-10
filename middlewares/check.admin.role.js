@@ -1,14 +1,9 @@
-const { verify } = require('jsonwebtoken');
 const { ROLE_ADMIN } = require('../constants/user.constants');
 
-const checkRole = async (req, res, next) => {
-  const token = req.header('Authorization');
-
+const checkAdminRole = async (req, res, next) => {
+  const { roleId } = req.user.user;
   try {
-    // Decrypt el token
-    const { roleId } = await verify(token, process.env.SECRETORPRIVATEKEY);
     // In the database the number 1 represents the administrator role
-
     if (roleId !== ROLE_ADMIN) {
       return res.status(401).json({
         meta: {
@@ -30,4 +25,4 @@ const checkRole = async (req, res, next) => {
   }
 };
 
-module.exports = { checkRole };
+module.exports = { checkAdminRole };
