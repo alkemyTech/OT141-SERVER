@@ -1,13 +1,15 @@
-const validateErrors = require('./validateErrors');
+const checkAdminRole = require('./check.admin.role');
 const validationAuth = require('./auth');
 const validationsCategories = require('./categories');
+const validateErrors = require('./validateErrors');
+const validationRoles = require('./roles');
 const verifyToken = require('./authJWT');
-const checkRole = require('./check.role');
 
 module.exports = {
-  ...validateErrors,
+  ...checkAdminRole,
   ...validationAuth,
   ...validationsCategories,
-  verifyToken,
-  ...checkRole,
+  ...validateErrors,
+  ...validationRoles,
+  ...verifyToken,
 };

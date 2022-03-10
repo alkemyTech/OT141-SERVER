@@ -3,15 +3,29 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
 
+const {
+  verifyToken,
+  checkAdminRole,
+} = require('../middlewares');
+
 /* GET users listing. */
-router.get('/', (req, res) => {
-  res.send('respond with a resource');
-});
+router.get(
+  '/',
+  verifyToken,
+  checkAdminRole,
+  userController.list,
+);
 
 /* PATCH user */
-router.patch('/:id', userController.update);
+router.patch(
+  '/:id',
+  userController.update,
+);
 
 // delete user
-router.delete('/:id', userController.deleteUser);
+router.delete(
+  '/:id',
+  userController.deleteUser,
+);
 
 module.exports = router;
