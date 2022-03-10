@@ -1,11 +1,10 @@
 const router = require('express').Router();
-const { checkRole } = require('../middlewares');
-
 // Middleware validations required
 const {
   validationsActivities,
   indexValidation,
 } = require('../middlewares/index.validations');
+const { checkAdminRole, verifyToken } = require('../middlewares');
 
 // Controller Api required
 const { store, update } = require('../controllers/activity.controller');
@@ -14,7 +13,8 @@ const { store, update } = require('../controllers/activity.controller');
 // Create activity
 router.post(
   '/',
-  checkRole,
+  verifyToken,
+  checkAdminRole,
   validationsActivities,
   indexValidation,
   store,
@@ -23,7 +23,8 @@ router.post(
 // Update activity
 router.put(
   '/:id',
-  checkRole,
+  verifyToken,
+  checkAdminRole,
   indexValidation,
   update,
 );

@@ -4,41 +4,57 @@ const {
   getAllCategories,
   updateCategoryById,
   getCategoryById,
-  deleteCategory
+  deleteCategory,
 } = require('../controllers/category');
 const {
   validateErrors,
   validationCreateCategory,
   verifyToken,
-  checkRole,
+  checkAdminRole,
 } = require('../middlewares');
 
 // Get all categories
 router.get(
   '/',
   verifyToken,
-  checkRole,
+  checkAdminRole,
   validateErrors,
   getAllCategories,
 );
 
 // Get category by id
-router.get('/:id', checkRole, getCategoryById);
+router.get(
+  '/:id',
+  verifyToken,
+  checkAdminRole,
+  getCategoryById,
+);
 
 // Create category
 router.post(
   '/',
   verifyToken,
-  checkRole,
+  checkAdminRole,
   validationCreateCategory,
   validateErrors,
   createCategory,
 );
 
 // Update category
-router.put('/:id', checkRole, updateCategoryById);
+router.put(
+  '/:id',
+  verifyToken,
+  checkAdminRole,
+  validateErrors,
+  updateCategoryById,
+);
 
 // Delete category
-router.delete('/:id', checkRole, deleteCategory)
+router.delete(
+  '/:id',
+  checkAdminRole,
+  validateErrors,
+  deleteCategory,
+);
 
 module.exports = router;
