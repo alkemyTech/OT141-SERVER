@@ -29,7 +29,7 @@ async function createDemoUsers (configUsers) {
         email: `${item.email}${i}@test.com`,
         password: await password.encrypt(`${item.email}${i}`),
         roleId: item.roleId,
-        image: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
+        photo: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
         createdAt: new Date(),
         updatedAt: new Date(),
       })
