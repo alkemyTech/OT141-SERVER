@@ -5,21 +5,27 @@ const userController = require('../controllers/user.controller');
 
 const {
   verifyToken,
-  checkRole,
+  checkAdminRole,
 } = require('../middlewares');
 
 /* GET users listing. */
 router.get(
   '/',
   verifyToken,
-  checkRole,
+  checkAdminRole,
   userController.list,
 );
 
 /* PATCH user */
-router.patch('/:id', userController.update);
+router.patch(
+  '/:id',
+  userController.update,
+);
 
 // delete user
-router.delete('/:id', userController.deleteUser);
+router.delete(
+  '/:id',
+  userController.deleteUser,
+);
 
 module.exports = router;
