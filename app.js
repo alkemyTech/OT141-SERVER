@@ -18,6 +18,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const activitiesRouter = require('./routes/activities');
 const authRouter = require('./routes/auth');
+const rolesRouter = require('./routes/roles');
 const categoriesRouter = require('./routes/categories');
 
 // view engine setup
@@ -36,7 +37,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/activities', activitiesRouter);
 app.use('/auth', authRouter);
-app.use('/api-doc', serve, setup(swaggerJSDocs));
+app.use('/api/docs', serve, setup(swaggerJSDocs));
+app.use('/roles', rolesRouter);
 app.use('/categories', categoriesRouter);
 
 // catch 404 and forward to error handler
