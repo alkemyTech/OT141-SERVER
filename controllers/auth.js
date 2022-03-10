@@ -74,7 +74,24 @@ const userLogin = async (req, res) => {
     return resError(err, res);
   }
 };
+
+const getUserAutenticated = async (req, res) => {
+  try {
+    const { id } = req.decoded;
+    const usuario = await db.user.findOne({
+      where: { id },
+      attributes: { exclude: ['password'] },
+    });
+    res.status(200).json(usuario);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   userLogin,
+  getUserAutenticated,
 };
