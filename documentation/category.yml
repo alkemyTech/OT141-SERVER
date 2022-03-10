@@ -1,43 +1,46 @@
 paths:
+  # GET
+
+  /categories.:
+    get:
+      tags:
+        - Categories
+      summary: "will return a list of existing categories"
+      description: "service to retrive all registered categories"
+      responses:
+        200:
+          $ref: "#/components/responses/getAllCategories"
+        204:
+          $ref: "#/components/responses/noCategoryFound"
+        500:
+          $ref: "#/components/responses/ServerError"
+
   # POST
+
   /categories:
     post:
       tags:
         - Categories
-      summary: "add a new category to DB"
+      summary: "will add a new category to DB"
+      description: "add a new category to DB"
       requestBody:
-        description: "a new category is created"
+        description: "request with values"
         required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/CategoryPost"
-        responses:
-          201:
-            $ref: "#/components/responses/categoryCreatedSuccessfully"
-
-          422:
-            $ref: "#/components/responses/categoryCreateValidationError"
-
-          500:
-            $ref: "#/components/responses/categoryServerError"
-  # GET
-  # dot is here because keys must be unique.
-  ./categories:
-    get:
-      tags:
-        - Categories
-      summary: "will return a list of existing categories"
-      description: "service to retrive all registered caterogies"
       responses:
-        200:
-          $ref: "#/components/responses/getAllCategories"
-        204:
-          $ref: "#/components/responses/categoryCreateValidationError"
+        201:
+          $ref: "#/components/responses/categoryCreatedSuccessfully"
+
+        422:
+          $ref: "#/components/responses/categoryCreatedValidationError"
+
         500:
-          $ref: "#/components/responses/categoryServerError"
-  # PUT
-  /categories/:id:
+          $ref: "#/components/responses/ServerError"
+    # PUT
+  /categories/{:id}:
     put:
       tags:
         - Categories
@@ -45,7 +48,7 @@ paths:
       description: "this endpoint is in charge of making an update of the selected category"
       parameters:
         - in: path
-          name: id
+          name: { id }
           description: "the id of the category that needs to be updated"
           required: true
           schema:
@@ -55,51 +58,43 @@ paths:
         description: "category update"
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
-              properties:
-                image:
-                  type: string
-                  format: base64
-
-            multipart/form-data:
-              schema:
-                type: object
-                $ref: "#/components/schemas/CategoryUpdate"
+              $ref: "#/components/schemas/CategoryUpdate"
       responses:
         200:
           $ref: "#/components/responses/updatedSuccessfully"
-
         404:
-          $ref: "#/components/responses/updateCategoryNotFound"
-
+          $ref: "#/components/responses/CategoryNotFound"
         500:
-          $ref: "#/components/responses/updateServerError"
-  # GET
-  /categories/{:id}:
+          $ref: "#/components/responses/ServerError"
+    # GET
+
+  /categories/{:Id}:
     get:
       tags:
         - Categories
       summary: "Returns the category that corresponds with the selected id"
       description: "This endpoing will return the category that corresponds with the choosen id"
       parameters:
-        name: id
-        description: "the id of the category you want to see"
-        required: true
-        schema:
-          type: integer
-          example: 3
+        - in: path
+          name: { id }
+          description: "the id of the category you want to see"
+          required: true
+          schema:
+            type: integer
+            example: 3
       responses:
         200:
           $ref: "#/components/responses/getCategoryById"
         404:
-          $ref: "#/components/responses/nonExistingCategoryById"
+          $ref: "#/components/responses/CategoryNotFound"
         500:
-          $ref: "#/components/responses/categoryByIdServerError"
-  # DELETE
-  # dot is here because keys must be unique.
-  ./categories/{:id}:
+          $ref: "#/components/responses/ServerError"
+    # DELETE
+    # dot is here because keys must be unique.
+  /categories/{:ID}:
     delete:
       tags:
         - Categories
@@ -113,22 +108,17 @@ paths:
           schema:
             type: integer
             example: 6
-
       responses:
         200:
           $ref: "#/components/responses/deletedSuccessfully"
-
         404:
-          $ref: "#/components/responses/deletedCategoryNotFound"
-
+          $ref: "#/components/responses/CategoryNotFound"
         500:
-          $ref: "#/components/responses/deletedServerError"
-
+          $ref: "#/components/responses/ServerError"
 components:
   # SCHEMAS
   schemas:
     CategoryPost:
-      type: object
       properties:
         name:
           description: "name of the category"
@@ -143,7 +133,6 @@ components:
           type: string
           example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-ecologiaverde-1.jpg"
     CategoryUpdate:
-      type: object
       properties:
         name:
           description: "name of the category"
@@ -158,8 +147,6 @@ components:
           type: string
           example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
     Category:
-      required: id
-      type: object
       properties:
         name:
           description: "name of the category"
@@ -167,39 +154,12 @@ components:
           example: "recreation"
         description:
           description: "category description"
+          example: "play games with kids"
           type: "string"
-          image: "https://ecologiahoy.net/wp-content/uploads/2020/02/paisajes-natutrales-ecologiaverde-1.jp"
-        deletedAt:
-          description: "date the category was deleted"
-          type: date
-          example: "2021-08-09"
-        createdAt:
-          description: "date the category was created"
-          type: date
-          example: "2020-10-10"
-        updatedAt:
-          description: "date the category was updated"
-          type: date
-          example: "2021-11-11"
-
-    # RequestError:
-    #   type: object
-    #   properties:
-    #     code:
-    #       description: "error code"
-    #       type: integer
-    #       example: "Validation Errors: Invalid id"
-    # ErrorDB:
-    #   type: object,
-    #   properties:
-    #     code:
-    #       description: "error code"
-    #       type: integer
-    #       example: 500
-    #     message:
-    #       description: "error message"
-    #       type: string
-    #       example: "Internal Server Error"
+        image:
+          description": image of the category
+          type: string
+          example: "https://ecologiahoy.net/wp-content/uploads/2020/02/paisajes-natutrales-ecologiaverde-1.jp"
 
   # Responses
 
@@ -207,83 +167,73 @@ components:
     # Verb POST ( Category - responses )
     categoryCreatedSuccessfully:
       description: "category created succesfully"
-      example:
-        $ref: "#/components/examples/categoryCreated"
       content:
         application/json:
           schema:
-            type: object
             properties:
-              message:
-                type: string
-                example: "Created recreation category"
-              category:
+              meta:
                 type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  ok:
+                    type: boolean
+                    example: true
+              data:
+                example:
+                  $ref: "#/components/examples/categoryCreatedSuccessfully"
 
-    categoryCreateValidationError:
+    categoryCreatedValidationError:
       description: "Validation errors"
-      example:
-        $ref: "#/components/examples/categoryCreateValidationError"
       content:
         application/json:
           schema:
             type: object
             properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 422
+                  ok:
+                    example: false
+              data:
+                example: null
               errors:
-                type: array
-                items:
-                  properties:
-                    value:
-                      type: string
-                      example: "12345"
+                type: object
+                properties:
+                  name:
+                    type: object
+                    properties:
+                      value:
+                        type: string
+                        example: "Tut"
+                      msg:
+                        type: string
+                        example: "String must be more than 4 characters"
+                  content:
                     msg:
                       type: string
-                      example: "The value should be type string"
-                    parameters:
-                      type: string
-                      example: "name"
-                    location:
-                      type: string
-                      example: "body"
+                      example: Input "required"
 
-    categoryServerError:
+    ServerError:
       description: "Server error"
-      example: { messege: ...error }
       content:
         application/json:
           schema:
             type: object
-            properties:
-              message:
-                type: string
-                example: "...error"
+            example:
+              {
+                meta: { status: 503, ok: "false" },
+                data: null,
+                errors: { msg: "Contact to administrator" },
+              }
 
-      # Verb get ( Category - responses )
-    getAllCategories:
-      description: "it shows a list with all the categories"
-      example:
-        $ref: "#/components/examples/getAllCategories"
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ok:
-                type: boolean
-                example: true
-              count:
-                type: integer
-                example: "3"
-              categories:
-                type: array
-                items:
-                  properties:
-                    name:
-                      type: string
-                      example: "recreation"
     # Verb put ( Category - responses )
     updatedSuccessfully:
-      description: updated succesfully
+      description: "updated succesfully"
       example:
         $ref: "#/components/examples/categoryUpdated"
       content:
@@ -309,115 +259,73 @@ components:
                   image:
                     type: string
                     example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
-    updateCategoryNotFound:
+    CategoryNotFound:
       description: "Category not found"
-      content:
-        application/json:
-          chema:
-            type: object
-            properties:
-              messege:
-                type: string
-                example: "Category not found"
-    updateServerError:
-      description: "Server error"
-      example: { messege: ...error }
       content:
         application/json:
           schema:
             type: object
             properties:
-              message:
+              messege:
                 type: string
-                example: "...error"
-    # Verb get ( CategorybyId - responses )
+                example: "Category not found"
+
+    getAllCategories:
+      description: "it shows a list with all the categories"
+      example:
+        $ref: "#/components/examples/getAllCategories"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: true
+              count:
+                type: integer
+                example: "3"
+              categories:
+                example: [{ "name": "recreation" }, { "name": "donations" }]
+    noCategoryFound:
+      description: "is not possible to return any category as there are no categories created"
+      content:
+        application/json::
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              messege:
+                type: string
+                example: "There are no categories created"
+
+    # Verb get ( CategoryById - responses )
     getCategoryById:
-      description: "an array with the chosen category"
+      description: "category chosen by id"
       content:
         application/json:
           schema:
             type: array
             items:
               $ref: "#/components/schemas/Category"
-
-    nonExistingCategoryById:
-      description: "error message in JSON"
-      content:
-        application/json:
-          schema:
-            type: object
-            $ref: "#/components/schemas/RequestError"
-
-    categoryByIdServerError:
-      description: "error message in JSON"
-      content:
-        application/json:
-          schema:
-            type: object
-            $ref: "#/components/schemas/ErrorDB"
-
-    # Verb DELETE ( Category deleted - responses )
+    # verb delete (Category delete - responses)
     deletedSuccessfully:
       description: "deleted succesfully"
-      example:
-        $ref: "#/components/examples/categoryDeleted"
       content:
         application/json:
           schema:
             type: object
-            example: "{del: true, messege: category with id 3, was deleted successfully}"
+            example:
+              {
+                "del": "true",
+                "messege": "category with id 3, was deleted successfully",
+              }
           properties:
             del:
               type: boolean
               example: true
             message:
               type: string
-              example: 6
-
-    deletedCategoryNotFound:
-      description: "category not found"
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              del:
-                type: boolean
-                example: false
-              messege: string
-              example: "the id 4 does not correspond to any category"
-    deletedServerError:
-      description: "category not found"
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              del:
-                type: boolean
-                example: false
-              data:
-                type: object
-
-    # Examples responses
-  examples:
-    categoryCreated: { "ok": "true", "msg": "Created recreation category" }
-    getAllCategories:
-      {
-        "ok": "true",
-        "count": "2",
-        "categories": [{ "name": "recreation" }, { "name": "donations" }],
-      }
-    categoryUpdated:
-      {
-        "messege": "Category updated",
-        "category":
-          {
-            "name": "art time",
-            "description": "collaborate with our art program",
-            "image": "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png ",
-          },
-      }
-    categoryDeleted:
-      { "del": "true", "message": "user with id 3 was deleted successfully" }
-    categoryCreateValidationError: { "hola": "hola" }
+              example: "activity with id 6 was deleted succesfully"
