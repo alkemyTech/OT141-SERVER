@@ -1,9 +1,9 @@
-const db = require("../models");
-const { check, validationResult } = require("express-validator");
+const { check, validationResult } = require('express-validator');
+const db = require('../models');
 
 async function isEmailValidDB(req, res, next) {
   try {
-    const email = req.body.email;
+    const { email } = req.body;
     const user = await db.User.findOne({
       where: {
         email,
@@ -11,32 +11,32 @@ async function isEmailValidDB(req, res, next) {
     });
     if (user) {
       return res.status(200).json({
-        message: "Email already in use",
+        message: 'Email already in use',
       });
     }
-    next();
+    return next();
   } catch (error) {
-    res.status(500).json({
-      message: "Error validating email",
+    return res.status(500).json({
+      message: 'Error validating email',
       error,
     });
   }
 }
 
-let validateInputsRegister = [
-  check("firstName")
+const validateInputsRegister = [
+  check('firstName')
     .isLength({ min: 5 })
-    .withMessage("FirstName must have more than 5 characters"),
-  check("lastName")
+    .withMessage('FirstName must have more than 5 characters'),
+  check('lastName')
     .isLength({ min: 5 })
-    .withMessage("LastName must have more than 5 characters"),
-  check("email").isEmail().withMessage("Email must be like:email@gmail.com"),
-  check("password")
+    .withMessage('LastName must have more than 5 characters'),
+  check('email').isEmail().withMessage('Email must be like:email@gmail.com'),
+  check('password')
     .matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,25}$/
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])([A-Za-z\d$@$!%*?&]|[^ ]){8,25}$/,
     )
     .withMessage(
-      "Password should be combination of one uppercase , one lower case, one special char, one digit and min 8 , max 20 char long"
+      'Password should be combination of one uppercase , one lower case, one special char, one digit and min 8 , max 20 char long',
     ),
 ];
 
@@ -45,18 +45,18 @@ function functionValidateInputsRegister(req, res, next) {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-  next();
+  return next();
 }
-let validationLogin = [
-    check('email', 'The value is required').not().isEmpty(),
-    check('password', 'The value is required').not().isEmpty(),
-    check('email', 'The value is invalid').isEmail(),
-    check('password', 'Requiered 8 min characters').isLength({ min: 8 })
-]
+const validationLogin = [
+  check('email', 'The value is required').not().isEmpty(),
+  check('password', 'The value is required').not().isEmpty(),
+  check('email', 'The value is invalid').isEmail(),
+  check('password', 'Requiered 8 min characters').isLength({ min: 8 }),
+];
 
 module.exports = {
   validateInputsRegister,
   functionValidateInputsRegister,
   isEmailValidDB,
-  validationLogin
+  validationLogin,
 };

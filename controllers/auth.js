@@ -1,11 +1,14 @@
-const db = require("../models");
-const bcrypt = require("bcryptjs");
-const { createJWT, resError } = require("../helpers");
+const bcrypt = require('bcryptjs');
+const db = require('../models');
+const { createJWT, resError } = require('../helpers');
+const { sendEmailTemplate } = require('../utils/sendEmail');
 
 const registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password: pass } = req.body;
-    //I did not destruct password because it told me that line 18 was duplicated
+    const {
+      firstName, lastName, email, password: pass,
+    } = req.body;
+    // I did not destruct password because it told me that line 18 was duplicated
     const salt = await bcrypt.genSalt(10);
     const respHash = await bcrypt.hash(pass, salt);
     const newUser = await db.User.create({
@@ -15,8 +18,16 @@ const registerUser = async (req, res) => {
       password: respHash,
     });
     const { password, ...rest } = newUser.dataValues;
+
+    // Sending a welcome email
+    const to = email;
+    const from = 'ong.somos.mas1@gmail.com';
+    const templateId = 'd-27e5f687bb4444628a0555643a9c9b5f';
+    const dynamic_template_data = { firstName }; // eslint-disable-line
+    sendEmailTemplate(to, from, templateId, dynamic_template_data);
+
     res.status(201).json({
-      message: "User created successfully",
+      message: 'User created successfully',
       user: rest,
     });
   } catch (error) {
@@ -46,20 +57,21 @@ const userLogin = async (req, res) => {
     if (!validPass) {
       return res.status(400).json({
         ok: false,
-        msg: "The passsword is wrong",
+        msg: 'The passsword is wrong',
       });
     }
 
-    //Create JWT
-    const token = await createJWT(user.email);
+    // Create JWT
+    const { roleId, id } = user;
+    const token = await createJWT({ roleId, email, id });
 
-    res.status(200).json({
+    return res.status(200).json({
       ok: true,
-      msg: "User logged in",
+      msg: 'User logged in',
       token,
     });
   } catch (err) {
-    resError(err, res);
+    return resError(err, res);
   }
 };
 module.exports = {
