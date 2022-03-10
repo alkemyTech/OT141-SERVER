@@ -17,6 +17,14 @@ const registerUser = async (req, res) => {
       email,
       password: respHash,
     });
+
+    // Create JWT
+    const token = await createJWT({
+      roleId: newUser.roleId,
+      email: newUser.email,
+      id: newUser.id,
+    });
+
     const { password, ...rest } = newUser.dataValues;
 
     // Sending a welcome email
@@ -29,6 +37,7 @@ const registerUser = async (req, res) => {
     res.status(201).json({
       message: 'User created successfully',
       user: rest,
+      token
     });
   } catch (error) {
     res.status(500).json({
