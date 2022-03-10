@@ -1,0 +1,463 @@
+paths:
+  # POST
+  /auth/register:
+    post:
+      description: Request to create a resource in the user database
+      tags:
+        - Authentication
+      requestBody:
+        description: User register
+        required: true
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/Register"
+      responses:
+        200:
+          $ref: "#/components/responses/registerValidationEmail"
+
+        201:
+          $ref: "#/components/responses/registerSuccessfully"
+
+        422:
+          $ref: "#/components/responses/registerValidationsErrors"
+
+        500:
+          $ref: "#/components/responses/registerServerError"
+
+  # POST
+  /auth/login:
+    post:
+      description: Request to obtain user authentication
+      tags:
+        - Authentication
+      requestBody:
+        description: User login
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+
+      responses:
+        200:
+          $ref: "#/components/responses/loginSuccessfully"
+
+        400:
+          $ref: "#/components/responses/loginPasswordError"
+
+        404:
+          $ref: "#/components/responses/loginUserNotFound"
+
+        500:
+          $ref: "#/components/responses/loginServerError"
+
+  # DELETE
+  /users/{id}:
+    delete:
+      tags:
+        - Authentication
+      description: User deletion
+      parameters:
+        - $ref: "#/components/parameters/userIdDelete"
+
+      responses:
+        200:
+          $ref: "#/components/responses/deletionSuccessfully"
+
+        404:
+          $ref: "#/components/responses/deleteUserNotFound"
+
+        500:
+          $ref: "#/components/responses/deleteServerError"
+
+  # PATCH
+  /users/{Id}:
+    patch:
+      tags:
+        - Authentication
+      parameters:
+        - $ref: "#/components/parameters/userIdPatch"
+
+      requestBody:
+        description: User updated
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
+
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/User-updated"
+
+      responses:
+        200:
+          $ref: "#/components/responses/patchUpdateSuccessfully"
+
+        404:
+          $ref: "#/components/responses/patchUserNotFound"
+
+        500:
+          $ref: "#/components/responses/patchServerError"
+
+  # COMPONENTS
+components:
+  # Schemas request body
+  schemas:
+
+    Register:
+      properties:
+        firstName:
+          type: string
+          description: Enter name
+          example: Emanuel
+        lastName:
+          description: Enter last name
+          type: string
+          example: Arroyo
+        email:
+          type: string
+          description: Enter email
+          example: email@email.com
+        password:
+          description: Enter password
+          type: string
+          example: 12345678Password$
+          format: password
+
+    Login:
+      properties:
+        email:
+          type: string
+          description: Enter email
+          example: email@email.com
+          format: email
+        password:
+          description: Enter password
+          type: string
+          example: "12345678Password$"
+          format: password
+
+    User-updated:
+      properties:
+        firstName:
+          type: string
+          example: Alberto
+
+        lastName:
+          type: string
+          example: Arroyo
+
+        email:
+          type: string
+          example: emanuel@email.com
+
+        password:
+          type: string
+          format: password
+          example: 12345678Password$
+
+
+  parameters:
+    # Verb DELETE ( User deleted - parameters )
+    userIdDelete:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+        example: 6
+
+    # Verb PATCH ( User updated - parameters )
+    userIdPatch:
+      in: path
+      name: Id
+      description: User id
+      required: true
+      schema:
+        type: integer
+        example: 5
+
+
+  responses:
+    # Verb POST ( Register - responses )
+    registerValidationEmail:
+      description: Email verification in database
+      content:
+        application/json:
+          schema:
+            type: object
+            example: { message: Email already in use }
+            properties:
+              message:
+                type: string
+
+    registerSuccessfully:
+      description: Successful registration
+
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              properties:
+                message:
+                  type: string
+                  example: User created successfully
+                user:
+                  type: object
+                  example:
+                    $ref: "#/components/examples/userCreated"
+
+    registerValidationsErrors:
+      description: Validation errors
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: array
+                items:
+                  properties:
+                    value:
+                      type: string
+                      example: ema
+                    msg:
+                      type: string
+                      example: FirstName must have more than 5 characters
+                    param:
+                      type: string
+                      example: firsName
+                    location:
+                      type: string
+                      example: body
+
+    registerServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            type: object
+            example: { message: server failure }
+            properties:
+              message:
+                type: string
+
+    # Verb POST ( Login - responses )
+    loginSuccessfully:
+      description: Successful login
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: true
+              msg:
+                type: string
+                example: User logged in
+              token:
+                type: string
+                format: base64
+                example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBydWViYTEyMzQ1QGdtYWlsLmNvbSIsImlhdCI6MTY0NTg3MjM3MCwiZXhwIjoxNjQ1ODg2NzcwfQ.A73ENdrNz0uJlIZI6SW5D6uvB1Za5YKfo_XQrBdNPCA
+
+    loginPasswordError:
+      description: Password is wrong
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              msg:
+                type: string
+                example: The password is wrong
+
+    loginUserNotFound:
+      description: User not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              msg:
+                type: string
+                example: The emanuel@gmail.com not exist
+
+    loginServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                example: Contact to administrator
+              error:
+                type: object
+                example: {}
+
+    # Verb DELETE ( User deleted - responses )
+    deletionSuccessfully:
+      description: Successful deletion
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              { del: true, message: "user with id 5 was deleted successfully" }
+            properties:
+              del:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: user with id 6 was deleted successfully
+
+    deleteUserNotFound:
+      description: User not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              del:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: The emanuel@gmail.com not exist
+
+    deleteServerError:
+      description: User not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              del:
+                type: boolean
+                example: false
+              data:
+                type: object
+
+    # Verb PATCH ( User updated - responses )
+    patchUpdateSuccessfully:
+      description: Updated successfully
+      example:
+        $ref: "#/components/examples/userUpdate"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: user updated successfully
+              user:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 5
+
+                  firstName:
+                    type: string
+                    example: Alberto
+
+                  lastName:
+                    type: string
+                    example: Arroyo
+
+                  email:
+                    type: integer
+                    example: emanuel@gmail.com
+
+                  image:
+                    type: integer
+                    format: byte
+
+                  roleId:
+                    type: integer
+                    example: 2
+
+                  deletedAt:
+                    type: string
+                    format: date
+                    example: "2022-02-26T09:10:52.000Z"
+
+                  createdAt:
+                    type: string
+                    format: date
+                    example: "2022-02-26T09:10:52.000Z"
+
+                  updatedAt:
+                    type: string
+                    format: date
+                    example: "2022-02-26T14:32:03.070Z"
+
+    patchUserNotFound:
+      description: User not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                example: "user not found"
+
+    patchServerError:
+      description: Server error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: internal server error
+
+  # Examples responses
+  examples:
+
+    userCreated:
+      {
+        "id": 5,
+        "firstName": Emanuel,
+        "lastName": Arroyo,
+        "email": ema@email.com,
+        "updatedAt": "2022-02-26T09:10:52.148Z",
+        "createdAt": "2022-02-26T09:10:52.148Z",
+      }
+
+    userUpdate:
+      {
+        message: user updated successfully,
+        user:
+          {
+            id: 5,
+            firstName: Alberto,
+            lastName: Arroyo,
+            email: emanuel@gmail.com,
+            image: default.jpg,
+            roleId: 2,
+            deletedAt: null,
+            createdAt: 2022-02-26T09:10:52.000Z,
+            updatedAt: 2022-02-26T14:32:03.070Z,
+          },
+      }

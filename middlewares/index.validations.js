@@ -1,5 +1,7 @@
-const { validationResult } = require("express-validator");
-const { validationsActivities } = require("./activity.validations");
+const { validationResult } = require('express-validator');
+const { validationsActivities } = require('./activity.validations');
+const { checkRole } = require('./check.role');
+const { checkTokenAuthorization } = require('./check.tokenAuthorization');
 
 const indexValidation = (req, res, next) => {
 // Constant variables
@@ -7,10 +9,9 @@ const indexValidation = (req, res, next) => {
   const errorsObjects = errors.mapped();
 
   if (!errors.isEmpty()) {
-
-    for (key in errorsObjects) {
-      delete errorsObjects[key].param;
-      delete errorsObjects[key].location;
+    for (key in errorsObjects) { // eslint-disable-line
+      delete errorsObjects[key].param; // eslint-disable-line
+      delete errorsObjects[key].location; // eslint-disable-line
     }
 
     return res.status(422).json({
@@ -22,10 +23,12 @@ const indexValidation = (req, res, next) => {
       errors: errorsObjects,
     });
   }
-  next();
+  return next();
 };
 
 module.exports = {
   validationsActivities,
   indexValidation,
+  checkRole,
+  checkTokenAuthorization,
 };

@@ -1,5 +1,6 @@
-'use strict';
-const {  Model} = require('sequelize');
+/* eslint-disable */
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Role extends Model {
     /**
@@ -10,15 +11,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  };
+  }
   Role.init({
     name: DataTypes.STRING,
     description: DataTypes.STRING,
-    deletedAt: DataTypes.DATE
+    deletedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Role',
-    paranoid: true
+    paranoid: true,
   });
   return Role;
 };
