@@ -5,7 +5,7 @@ const createCategory = async (req, res) => {
     const { name, description, image } = req.body;
     const nameUpperCase = name.toUpperCase();
 
-    const newCategory = await db.category.create({
+    const newCategory = await db.Category.create({
       name: nameUpperCase,
       description: description || null,
       image: image || null,
@@ -25,7 +25,7 @@ const createCategory = async (req, res) => {
 
 const getAllCategories = async (req, res) => {
   try {
-    const categories = await db.category.findAll({
+    const categories = await db.Category.findAll({
       attributes: ['name'],
     });
 
@@ -105,7 +105,7 @@ const getCategoryById = async (req, res) => {
 const deleteCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const categoryDeleted = await db.Categories.destroy({
+    const categoryDeleted = await db.Category.destroy({
       where: {
         id,
       },
@@ -127,12 +127,12 @@ const deleteCategory = async (req, res) => {
       data: error,
     });
   }
-}
+};
 
 module.exports = {
   createCategory,
   getAllCategories,
   updateCategoryById,
   getCategoryById,
-  deleteCategory
+  deleteCategory,
 };
