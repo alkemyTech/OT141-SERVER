@@ -3,14 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "dev": "cross-env NODE_ENV=development nodemon app.js",
+    "start": "node ./bin/www",
+    "dev": "cross-env NODE_ENV=development && nodemon ./bin/www",
+    "lint": "eslint . --ext .js",
+    "lint-fix": "eslint . --ext .js --fix",
+    "test:db:drop": "cross-env NODE_ENV=test npx sequelize-cli db:drop",
+    "test:db:create": "cross-env NODE_ENV=test npx sequelize-cli db:create",
     "test:db:migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate",
     "test:db:seed": "cross-env NODE_ENV=test npx sequelize-cli db:seed:all",
+    "test:db:connect":"cross-env NODE_ENV=test nodemon ./bin/www",
     "test": "cross-env NODE_ENV=test jest --verbose --silent",
-    "test:watch": "npm run test -- --watch",
-    "lint": "eslint . --ext .js",
-    "lint-fix": "eslint . --ext .js --fix"
+    "test:db:process":"npm run test:db:drop && npm run test:db:create && npm run test:db:migrate && npm run test:db:seed && npm run test:db:connect",
+    "test:watch": "npm run test -- --watch"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.1",

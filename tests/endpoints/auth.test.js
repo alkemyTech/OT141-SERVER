@@ -9,7 +9,7 @@ const db = require('../../models');
 
 const api = supertest(app);
 
-beforeEach(async () => {
+/* beforeEach(async () => {
   await db.User.destroy({
     truncate: true,
   });
@@ -22,7 +22,7 @@ beforeEach(async () => {
   };
 
   await createUser(user);
-});
+}); */
 
 describe('POST /auth/login', () => {
   test('The content-type of response should be aplication/json', async () => {
@@ -87,7 +87,7 @@ describe('POST /auth/login', () => {
     await api
       .post('/auth/login')
       .send(user)
-      .expect(400)
+      .expect(404)
       .expect('Content-type', /application\/json/);
   });
 
