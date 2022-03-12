@@ -14,7 +14,7 @@
     "test:db:connect":"cross-env NODE_ENV=test nodemon ./bin/www",
     "test": "cross-env NODE_ENV=test jest --verbose --silent",
     "test:db:process":"npm run test:db:drop && npm run test:db:create && npm run test:db:migrate && npm run test:db:seed && npm run test:db:connect",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch --detectOpenHandles"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.1",
