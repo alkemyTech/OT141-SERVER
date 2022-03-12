@@ -5,6 +5,7 @@ const validationsCategories = require('./categories');
 const validateErrors = require('./validateErrors');
 const validationRoles = require('./roles');
 const verifyToken = require('./authJWT');
+const checkAdminRoleOrUserIdFromComment = require('./check.admin.role.or.userId.from.comment');
 
 module.exports = {
   ...checkAdminRole,
@@ -14,4 +15,5 @@ module.exports = {
   ...validateErrors,
   ...validationRoles,
   ...verifyToken,
+  ...checkAdminRoleOrUserIdFromComment,
 };

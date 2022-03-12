@@ -33,7 +33,6 @@ const getAllCategories = async (req, res) => {
     // parameters  (array,limit,page,request)
     const { results, next, prev } = paginated(categories, LIMIT_PAGE, +page, req);
 
-    
     if (results.length === 0) {
       return res.status(204).json({
         ok: false,
