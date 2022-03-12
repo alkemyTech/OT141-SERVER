@@ -3,15 +3,15 @@ const router = require('express').Router();
 const { verifyToken, checkAdminRoleOrUserIdFromComment } = require('../middlewares');
 
 // Controller Api required
-const { update } = require('../controllers/comment.controller');
+const { remove } = require('../controllers/comment.controller');
 
 // Routes
 // Update comment
-router.put(
+router.delete(
   '/:id',
   verifyToken,
   checkAdminRoleOrUserIdFromComment,
-  update,
+  remove,
 );
 
 module.exports = router;
