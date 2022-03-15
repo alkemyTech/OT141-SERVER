@@ -42,6 +42,7 @@ app.use('/api/docs', serve, setup(swaggerJSDocs));
 app.use('/roles', rolesRouter);
 app.use('/categories', categoriesRouter);
 app.use('/comments', commentsRouter);
+app.use('/posts', commentsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

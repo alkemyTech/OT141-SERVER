@@ -23,4 +23,10 @@ router.post(
   commentController.create,
 );
 
+// Update comment
+router.get(
+  '/:id/comments',
+  commentController.listByPost,
+);
+
 module.exports = router;
