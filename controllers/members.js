@@ -3,10 +3,9 @@ const db = require('../models');
 const createMember = async (req, res) => {
   try {
     const { name, image } = req.body;
-    const nameUpperCase = name.toUpperCase();
 
     const newMember = await db.member.create({
-      name: nameUpperCase,
+      name,
       image,
     });
 
