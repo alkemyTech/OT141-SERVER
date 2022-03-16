@@ -4,7 +4,45 @@ const supertest = require("supertest");
 const server = app.listen(process.env.PORT_TEST);
 const api = supertest(app);
 
-const { USER_REGULAR, USER_ADMIN } = require("../constants");
+const USER_REGULAR = { email: "user1@test.com", password: "user1" };
+const OTHER_USER_REGULAR = { email: "user2@test.com", password: "user2" };
+const USER_ADMIN = { email: "admin1@test.com", password: "admin1" };
+
+const { createUsers } = require("../helpers");
+const db = require("../../models");
+
+let userRegularCreated;
+let otherUserRegularCreated ;
+let userAdminCreated;
+
+beforeEach(async () => {
+  await db.User.destroy({
+    truncate: true
+  });
+
+  const userRegular = {
+    firstName: "user",
+    lastName: "test",
+    roleId: 2,
+    ...USER_REGULAR
+  };
+  const otherUserRegular = {
+    firstName: "user",
+    lastName: "test",
+    roleId: 2,
+    ...OTHER_USER_REGULAR
+  };
+  const userAdmin = {
+    firstName: "admin",
+    lastName: "test",
+    roleId: 1,
+    ...USER_ADMIN
+  };
+
+  otherUserRegularCreated = await createUsers(otherUserRegular);
+  userRegularCreated = await createUsers(userRegular);
+  userAdminCreated = await createUsers(userAdmin);
+});
 
 describe("GET /users", () => {
   it("Response Not Found - example: /user", async () => {
@@ -48,20 +86,20 @@ describe("GET /users", () => {
 
   it("It should return that the token is required", async () => {
     const {
-      body: { error },
+      body
     } = await api.get("/users").expect(403).expect("Content-Type", /json/);
-    expect(error).toContain("A token is required for authentication");
+    expect(body).toContain("A token is required for authentication");
   });
 
   it("It should return that the token is invalid", async () => {
     const {
-      body: { error },
+      body
     } = await api
       .get("/users")
       .auth("Bearer send token invalid", { type: "bearer" })
       .expect(401)
       .expect("Content-Type", /json/);
-    expect(error).toContain("Invalid Token");
+    expect(body).toContain("Invalid Token");
   });
 });
 
@@ -93,12 +131,12 @@ describe("PATCH /users/:id", () => {
     const userPatch = {
       firstName: "adminName1",
       lastName: "adminLast1",
-      image: "default.png",
+      photo: "default.png",
     };
     const {
       body: { message, user },
     } = await api
-      .patch("/users/3")
+      .patch(`/users/${userAdminCreated.id}`)
       .auth(token, { type: "bearer" })
       .send(userPatch)
       .expect(200)
@@ -116,7 +154,7 @@ describe("PATCH /users/:id", () => {
     const {
       body: { ok, msg },
     } = await api
-      .patch("/users/3")
+      .patch(`/users/${userAdminCreated.id}`)
       .auth(token, { type: "bearer" })
       .expect(403)
       .expect("Content-Type", /json/);
@@ -139,7 +177,7 @@ describe("PATCH /users/:id", () => {
     const {
       body: { errors },
     } = await api
-      .patch("/users/3")
+      .patch(`/users/${userAdminCreated.id}`)
       .auth(token, { type: "bearer" })
       .send(userPatch)
       .expect(400)
@@ -177,7 +215,7 @@ describe("DELETE /users/:id", () => {
     const {
       body: { message, del },
     } = await api
-      .delete("/users/7")
+      .delete(`/users/${userRegularCreated.id}`)
       .auth(token, { type: "bearer" })
       .expect(200)
       .expect("Content-Type", /json/);
@@ -194,7 +232,7 @@ describe("DELETE /users/:id", () => {
     const {
       body: { ok, msg },
     } = await api
-      .delete("/users/8")
+      .delete(`/users/${otherUserRegularCreated.id}`)
       .auth(token, { type: "bearer" })
       .expect(403)
       .expect("Content-Type", /json/);
