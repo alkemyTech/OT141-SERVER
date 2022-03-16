@@ -30,14 +30,13 @@ const getAllCategories = async (req, res) => {
     const { page = 1 } = req.query;
 // parameters  (model,limit,page,request)
     const { results, next, prev } = await paginated(db.Category, LIMIT_PAGE, +page, req);
-
     if (results.length === 0) {
       return res.status(204).json({
         ok: false,
         msg: 'There are no categories created',
       });
     }
-    res.status(200).json({ prev, next, results });
+    return res.status(200).json({ prev, next, results });
   } catch (err) {
     return res.status(500).json({
       ok: false,
