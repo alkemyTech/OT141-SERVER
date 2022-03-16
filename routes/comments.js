@@ -1,6 +1,6 @@
 const router = require('express').Router();
 // Middleware validations required
-const { verifyToken, checkAdminRoleOrUserIdFromComment } = require('../middlewares');
+const { verifyToken } = require('../middlewares');
 
 // Controller Api required
 const { remove } = require('../controllers/comment.controller');
@@ -10,7 +10,6 @@ const { remove } = require('../controllers/comment.controller');
 router.delete(
   '/:id',
   verifyToken,
-  checkAdminRoleOrUserIdFromComment,
   remove,
 );
 
