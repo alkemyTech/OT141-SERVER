@@ -1,11 +1,22 @@
 const router = require('express').Router();
 const {
-    deleteMember
+  list,
+  deleteMember,
 } = require('../controllers/member');
-// delete member
-router.delete(
-    '/:id',
-    deleteMember
+const {
+  checkAdminRole,
+} = require('../middlewares');
+
+router.get(
+  '/',
+  checkAdminRole,
+  list,
 );
 
-module.exports = router; 
+// delete member
+router.delete(
+  '/:id',
+  deleteMember,
+);
+
+module.exports = router;
