@@ -23,7 +23,7 @@ router.post(
   commentController.create,
 );
 
-// Update comment
+// Get comments by post
 router.get(
   '/:id/comments',
   commentController.listByPost,
