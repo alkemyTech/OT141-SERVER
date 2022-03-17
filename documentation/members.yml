@@ -1,0 +1,409 @@
+paths:
+  # GET
+
+  /members.:
+    get:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Members
+      summary: "will return a list of existing members"
+      description: "service to retrive all members"
+      parameters:
+        - in: query
+          name: page
+          description: "the number of the member for page"
+          required: false
+          schema:
+            type: integer
+            example: 2
+      responses:
+        200:
+          $ref: "#/components/responses/getAllMembers"
+        204:
+          $ref: "#/components/responses/noMemberFound"
+
+        403:
+          $ref: "#/components/responses/UnauthorizedError"
+
+        500:
+          $ref: "#/components/responses/ServerError"
+
+  # POST
+
+  /members:
+    post:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Members
+      summary: "will add a new member to DB"
+      description: "add a new member to DB"
+      requestBody:
+        description: "request with values"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemberPost"
+      responses:
+        201:
+          $ref: "#/components/responses/memberCreatedSuccessfully"
+
+        422:
+          $ref: "#/components/responses/memberCreatedValidationError"
+
+        500:
+          $ref: "#/components/responses/ServerError"
+
+  # PUT
+  
+  /members/{:id}:
+    put:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Members
+      summary: "update an existing member by provinding the correct id"
+      description: "this endpoint is in charge of making an update of the selected member"
+      parameters:
+        - in: path
+          name: { id }
+          description: "the id of the member that needs to be updated"
+          required: true
+          schema:
+            type: integer
+            example: 5
+      requestBody:
+        description: "member update"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/MemberUpdate"
+      responses:
+        200:
+          $ref: "#/components/responses/updatedSuccessfully"
+        404:
+          $ref: "#/components/responses/MemberNotFound"
+        500:
+          $ref: "#/components/responses/ServerError"
+    # GET
+
+  # GET/Id
+
+  /members/{:Id}:
+    get:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Members
+      summary: "Returns the member that corresponds with the selected id"
+      description: "This endpoing will return the member that corresponds with the choosen id"
+      parameters:
+        - in: path
+          name: { id }
+          description: "the id of the member you want to see"
+          required: true
+          schema:
+            type: integer
+            example: 3
+      responses:
+        200:
+          $ref: "#/components/responses/getMemberById"
+        404:
+          $ref: "#/components/responses/MemberNotFound"
+        500:
+          $ref: "#/components/responses/ServerError"
+    # DELETE
+    # dot is here because keys must be unique.
+  
+  # DELETE
+
+  /members/{:ID}:
+    delete:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Members
+      summary: "Delete Member"
+      description: "This endpoing will delete the Member that corresponds with the choosen id"
+      parameters:
+        - in: path
+          name: :id
+          description: "the id of the Member you want to delete"
+          required: true
+          schema:
+            type: integer
+            example: 6
+      responses:
+        200:
+          $ref: "#/components/responses/deletedSuccessfully"
+        404:
+          $ref: "#/components/responses/MemberNotFound"
+        500:
+          $ref: "#/components/responses/ServerError"
+
+  # COMPONENTS
+
+components:
+  # SCHEMAS
+  schemas:
+    MemberPost:
+      properties:
+        name:
+          description: "name of the member"
+          type: string
+          example: "Member number 1"
+        facebookUrl:
+          description: "facebook of the member"
+          type: string
+          example: "https://www.facebook.com/member1"
+        instagramUrl:
+          description: "instagram of the member"
+          type: string
+          example: "https://www.instagram.com/member1"
+        linkedinUrl:
+          description: "linkedin of the member"
+          type: string
+          example: "https://www.linkedin.com/member1"        
+        image:
+          description: "image that represent the member"
+          type: string
+          example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-member-1.jpg"
+        description:
+          description: "descriptrion of the member"
+          type: string
+          example: "Member number 1 is a member of the team"
+    MemberUpdate:
+      properties:
+        name:
+          description: "name of the member"
+          type: string
+          example: "Member number 1"
+        facebookUrl:
+          description: "facebook of the member"
+          type: string
+          example: "https://www.facebook.com/member1"
+        instagramUrl:
+          description: "instagram of the member"
+          type: string
+          example: "https://www.instagram.com/member1"
+        linkedinUrl:
+          description: "linkedin of the member"
+          type: string
+          example: "https://www.linkedin.com/member1"        
+        image:
+          description: "image that represent the member"
+          type: string
+          example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-member-1.jpg"
+        description:
+          description: "descriptrion of the member"
+          type: string
+          example: "Member number 1 is a member of the team"
+    Member:
+      properties:
+        name:
+          description: "name of the member"
+          type: string
+          example: "Member number 1"
+        facebookUrl:
+          description: "facebook of the member"
+          type: string
+          example: "https://www.facebook.com/member1"
+        instagramUrl:
+          description: "instagram of the member"
+          type: string
+          example: "https://www.instagram.com/member1"
+        linkedinUrl:
+          description: "linkedin of the member"
+          type: string
+          example: "https://www.linkedin.com/member1"        
+        image:
+          description: "image that represent the member"
+          type: string
+          example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-member-1.jpg"
+        description:
+          description: "descriptrion of the member"
+          type: string
+          example: "Member number 1 is a member of the team"
+
+  # Responses
+
+  responses:
+    # Verb POST ( Member - responses )
+    memberCreatedSuccessfully:
+      description: "member created succesfully"
+      content:
+        application/json:
+          schema:
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  ok:
+                    type: boolean
+                    example: true
+              data:
+                example:
+                  $ref: "#/components/examples/memberCreatedSuccessfully"
+
+    memberCreatedValidationError:
+      description: "Validation errors"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 422
+                  ok:
+                    example: false
+              data:
+                example: null
+              errors:
+                type: object
+                properties:
+                  name:
+                    type: object
+                    properties:
+                      value:
+                        type: string
+                        example: "Tut"
+                      msg:
+                        type: string
+                        example: "String must be more than 4 characters"
+                  content:
+                    msg:
+                      type: string
+                      example: Input "required"
+
+    ServerError:
+      description: "Server error"
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              {
+                meta: { status: 503, ok: "false" },
+                data: null,
+                errors: { msg: "Contact to administrator" },
+              }
+
+    # Verb put ( Member - responses )
+    updatedSuccessfully:
+      description: "updated succesfully"
+      example:
+        $ref: "#/components/examples/MemberUpdated"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Member updated"
+              Member:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 5
+                  name:
+                    type: string
+                    example: "recreation"
+                  description:
+                    type: string
+                    example: "come and play with the kids"
+                  image:
+                    type: string
+                    example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+    MemberNotFound:
+      description: "Member not found"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              messege:
+                type: string
+                example: "Member not found"
+
+    getAllMembers:
+      description: "it shows a list with all the members"
+      example:
+        $ref: "#/components/examples/getAllMembers"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: true
+              count:
+                type: integer
+                example: "1"
+              members:
+                example: [{ "name": "recreation" }, { "name": "donations" }]
+                
+
+    noMemberFound:
+      description: "is not possible to return any member as there are no member created"
+      content:
+        application/json::
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              messege:
+                type: string
+                example: "There are no member created"
+
+    UnauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            example: A token is required for authentication
+
+
+    # Verb get ( MemberById - responses )
+    getMemberById:
+      description: "member chosen by id"
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/Member"
+    # verb delete (Member delete - responses)
+    deletedSuccessfully:
+      description: "deleted succesfully"
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              {
+                "del": "true",
+                "messege": "member with id 3, was deleted successfully",
+              }
+          properties:
+            del:
+              type: boolean
+              example: true
+            message:
+              type: string
+              example: "activity with id 6 was deleted succesfully"
