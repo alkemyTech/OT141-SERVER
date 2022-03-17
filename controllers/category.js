@@ -28,11 +28,8 @@ const createCategory = async (req, res) => {
 const getAllCategories = async (req, res) => {
   try {
     const { page = 1 } = req.query;
-    const categories = await db.category.findAll();
-
-    // parameters  (array,limit,page,request)
-    const { results, next, prev } = paginated(categories, LIMIT_PAGE, +page, req);
-
+// parameters  (model,limit,page,request)
+    const { results, next, prev } = await paginated(db.Category, LIMIT_PAGE, +page, req);
     if (results.length === 0) {
       return res.status(204).json({
         ok: false,
