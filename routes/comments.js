@@ -29,4 +29,11 @@ router.get(
   commentController.listByPost,
 );
 
+// Update comment
+router.delete(
+  '/:id',
+  verifyToken,
+  commentController.remove,
+);
+
 module.exports = router;
