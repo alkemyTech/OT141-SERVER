@@ -30,6 +30,13 @@ router.get(
 );
 
 // Update comment
+router.put(
+  '/:id',
+  verifyToken,
+  commentController.update,
+);
+
+// Delete comment
 router.delete(
   '/:id',
   verifyToken,
