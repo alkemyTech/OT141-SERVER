@@ -8,7 +8,7 @@ const {
 } = require('../middlewares');
 
 // update testimony
-router.post(
+router.put(
   '/:id',
   verifyToken,
   checkAdminRole,

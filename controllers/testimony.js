@@ -3,7 +3,7 @@ const db = require('../models');
 const updateTestimony = async (req, res) => {
   const { name, content, image } = req.body;
   const { id } = req.params;
-  const testimonyDb = await db.Testimony.findbyPk(id);
+  const testimonyDb = await db.Testimony.findByPk(id);
 
   if (!testimonyDb) {
     return res.status(404).json({
