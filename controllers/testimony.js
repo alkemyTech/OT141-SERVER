@@ -22,7 +22,7 @@ const updateTestimony = async (req, res) => {
       testimonyDb,
     });
   } catch (error) {
-    res.status(503).json({
+    return res.status(503).json({
       meta: {
         status: 503,
         ok: false,
