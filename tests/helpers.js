@@ -23,5 +23,4 @@ const createUser = async ({
 
 module.exports = {
   createUser,
-  createUsers
 };
