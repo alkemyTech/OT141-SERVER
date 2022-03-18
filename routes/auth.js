@@ -1,13 +1,16 @@
 const express = require('express');
 
 const router = express.Router();
-const { registerUser, userLogin } = require('../controllers/auth');
+const { registerUser, userLogin, getUserAutenticated } = require('../controllers/auth');
+const { verifyToken } = require('../middlewares/authJWT');
 const {
   validationLogin,
   isEmailValidDB,
   validateInputsRegister,
   functionValidateInputsRegister,
 } = require('../middlewares/auth');
+
+router.get('/me', verifyToken, getUserAutenticated);
 
 router
   .post(

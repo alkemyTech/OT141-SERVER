@@ -6,6 +6,7 @@ const validationsCreateTestimony = require('./testimony.validations');
 const validateErrors = require('./validateErrors');
 const validationRoles = require('./roles');
 const verifyToken = require('./authJWT');
+const membersvalidations = require('./members');
 
 module.exports = {
   ...checkAdminRole,
@@ -16,4 +17,5 @@ module.exports = {
   ...validateErrors,
   ...validationRoles,
   ...verifyToken,
+  ...membersvalidations,
 };
