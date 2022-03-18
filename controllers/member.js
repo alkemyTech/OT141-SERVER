@@ -66,7 +66,7 @@ module.exports = {
       });
     }
   },
-  pdateMember: async (req, res) => {
+  updateMember: async (req, res) => {
         const { id } = req.params;
         const { name, image } = req.body;
         try {
