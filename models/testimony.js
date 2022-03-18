@@ -1,9 +1,8 @@
-const {
-  Model,
-} = require('sequelize');
+/* eslint-disable */
+const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Category extends Model {
+  class Testimony extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,15 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Category.init({
+  Testimony.init({
     name: DataTypes.STRING,
-    description: DataTypes.STRING,
     image: DataTypes.STRING,
+    content: DataTypes.TEXT,
   }, {
     sequelize,
-    modelName: 'Category',
-    timestamps: true,
-    paranoid: true,
+    modelName: 'Testimony',
+    tableName: 'Testimonials'
   });
-  return Category;
+  return Testimony;
 };
