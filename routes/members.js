@@ -3,6 +3,7 @@ const {
   list,
   createMember,
   deleteMember,
+  updateMember
 } = require('../controllers/member');
 const {
   checkAdminRole,
@@ -29,5 +30,11 @@ router.delete(
   '/:id',
   deleteMember,
 );
+// Update member
+router.put(
+    '/:id',
+    updateMember,
+);
 
 module.exports = router;
+
