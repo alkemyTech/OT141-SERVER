@@ -36,4 +36,4 @@ router.delete(
   removeTestimony,
 );
 
-module.exports = router
+module.exports = router;
