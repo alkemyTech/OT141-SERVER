@@ -24,6 +24,7 @@ const testimonialsRouter = require('./routes/testimony');
 const commentsRouter = require('./routes/comments');
 const membersRouter = require('./routes/members');
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -47,7 +48,6 @@ app.use('/members', membersRouter);
 app.use('/posts', commentsRouter);
 app.use('/roles', rolesRouter);
 app.use('/users', usersRouter);
-
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

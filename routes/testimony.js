@@ -1,5 +1,6 @@
 const router = require('express').Router();
-const { createTestimony } = require('../controllers/testimony');
+const { createTestimony, updateTestimony } = require('../controllers/testimony');
+
 const {
   verifyToken,
   checkAdminRole,
@@ -17,15 +18,14 @@ router.post(
   createTestimony,
 );
 
-
-
-
-
-
-
-
-
-
+// update testimony
+router.put(
+  '/:id',
+  verifyToken,
+  checkAdminRole,
+  validationsTestimony,
+  validateErrors,
+  updateTestimony,
+);
 
 module.exports = router;
-
