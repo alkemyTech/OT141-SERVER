@@ -38,7 +38,9 @@ beforeEach(async () => {
 
 describe('POST /activities', () => {
   it('It should return 403, token is required', async () => {
-    const { text: message } = await api.post('/activities').expect(403);
+    const { text: message } = await api.post('/activities')
+      .expect(403)
+      .expect("Content-Type", /application\/json/);
     expect(message).toContain('A token is required for authentication');
   });
 
@@ -57,6 +59,7 @@ describe('POST /activities', () => {
       .send(activity)
       .auth(token, { type: "bearer" })
       .expect(401)
+      .expect("Content-Type", /application\/json/);
   });
 
   it('It should return 422 when validations fail', async () => {
@@ -73,6 +76,7 @@ describe('POST /activities', () => {
       .send(activity)
       .auth(token, { type: "bearer" })
       .expect(422)
+      .expect("Content-Type", /application\/json/);
   });
 
   it('It should return 201 when activity successfully created', async () => {
@@ -81,16 +85,18 @@ describe('POST /activities', () => {
       password: 'admin1',
     };
     const { body: {token} } = await api.post('/auth/login').send(user);
-    const activity = {
+    const newActivity = {
       name: 'Activity',
       content: 'Activity Content'
     }
-    await api
+    const { body } = await await api
       .post("/activities")
-      .send(activity)
+      .send(newActivity)
       .auth(token, { type: "bearer" })
       .expect(201)
-      .expect("Content-Type", /json/);
+      .expect("Content-Type", /application\/json/);
+    expect(body.data.name).toBe(newActivity.name)
+    expect(body.data.content).toBe(newActivity.content)
   });
 });
 
@@ -115,6 +121,7 @@ describe('PUT /activities/:id', () => {
       .send(newActivityData)
       .auth(token, { type: "bearer" })
       .expect(404)
+      .expect("Content-Type", /application\/json/);
   });
 
   it('It should return 401 when updating an activity as regular user', async () => {
@@ -132,6 +139,7 @@ describe('PUT /activities/:id', () => {
       .send(newActivityData)
       .auth(token, { type: "bearer" })
       .expect(401)
+      .expect("Content-Type", /application\/json/);
   });
 
   it('It should return 200 when updating an activity successfully', async () => {
@@ -149,6 +157,7 @@ describe('PUT /activities/:id', () => {
       .send(newActivityData)
       .auth(token, { type: "bearer" })
       .expect(200)
+      .expect("Content-Type", /application\/json/);
     expect(body.data.name).toBe(newActivityData.name)
   });
 });
