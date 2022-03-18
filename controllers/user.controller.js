@@ -25,7 +25,7 @@ module.exports = {
       const { password: pass, ...rest } = user.dataValues;
 
       return res.status(200).json({
-        message: 'user updated succesfully',
+        message: 'user updated successfully',
         user: rest,
       });
     } catch (error) {
