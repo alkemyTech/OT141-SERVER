@@ -43,24 +43,25 @@ module.exports = {
     try {
       const activityFound = await db.Activity.findByPk(id);
       if (!activityFound) {
-        res.status(404).json({
+        return res.status(404).json({
           msg: 'there is no activity matching the specified id',
         });
-      } else {
-        await db.Activity.update({
-          name,
-          image,
-          content,
-        }, {
-          where: { id },
-        });
-        res.status(200).json({
-          msg: 'activity updated successfully',
-          data: activityFound,
-        });
       }
+      await db.Activity.update({
+        name,
+        image,
+        content,
+      }, {
+        where: { id },
+      });
+      return res.status(200).json({
+        msg: 'activity updated successfully',
+        data: {
+          ...activityFound, name, image, content,
+        },
+      });
     } catch (error) {
-      res.status(500).json({
+      return res.status(500).json({
         msg: 'an error occurred',
         data: error,
       });
