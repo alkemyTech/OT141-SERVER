@@ -20,10 +20,10 @@ const activitiesRouter = require('./routes/activities');
 const authRouter = require('./routes/auth');
 const rolesRouter = require('./routes/roles');
 const categoriesRouter = require('./routes/categories');
+
 const testimonialsRouter = require('./routes/testimony');
 const commentsRouter = require('./routes/comments');
 const membersRouter = require('./routes/members');
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,6 +42,7 @@ app.use('/activities', activitiesRouter);
 app.use('/api/docs', serve, setup(swaggerJSDocs));
 app.use('/auth', authRouter);
 app.use('/categories', categoriesRouter);
+
 app.use('/testimonials', testimonialsRouter);
 app.use('/comments', commentsRouter);
 app.use('/members', membersRouter);
