@@ -3,14 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www",
-    "dev": "cross-env NODE_ENV=development nodemon app.js",
-    "test:db:migrate": "cross-env NODE_ENV=test npx sequelize-cli db:migrate",
-    "test:db:seed": "cross-env NODE_ENV=test npx sequelize-cli db:seed:all",
-    "test": "cross-env NODE_ENV=test jest --verbose --silent",
-    "test:watch": "npm run test -- --watch",
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
     "lint": "eslint . --ext .js",
-    "lint-fix": "eslint . --ext .js --fix"
+    "lint-fix": "eslint . --ext .js --fix",
+    "test": "cross-env NODE_ENV=test jest --verbose --silent",
+    "test:watch": "npm run test -- --watch --detectOpenHandles"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.1",

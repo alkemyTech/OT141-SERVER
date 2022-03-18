@@ -3,7 +3,7 @@ const bcryptjs = require('bcryptjs');
 const db = require('../models');
 
 const createUser = async ({
-  firstName, lastName, email, password,
+  firstName, lastName, email, password,roleId
 }) => {
   const salt = bcryptjs.genSaltSync();
   const passHashed = bcryptjs.hashSync(password, salt);
@@ -13,11 +13,12 @@ const createUser = async ({
     lastName,
     email,
     password: passHashed,
-    roleId: 2,
+    roleId,
     image: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
     createdAT: new Date(),
     updatedAT: new Date(),
   });
+  return newUser
 };
 
 module.exports = {

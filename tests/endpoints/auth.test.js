@@ -19,6 +19,7 @@ beforeEach(async () => {
     lastName: 'test',
     email: 'usertest@test.com',
     password: 'Test123**',
+    roleId:2,
   };
 
   await createUser(user);
@@ -87,7 +88,7 @@ describe('POST /auth/login', () => {
     await api
       .post('/auth/login')
       .send(user)
-      .expect(400)
+      .expect(404)
       .expect('Content-type', /application\/json/);
   });
 
