@@ -63,7 +63,7 @@ describe("GET /users", () => {
       .expect(200);
 
     expect(message).toContain("list of users");
-    expect(users).toBeInstanceOf(Array);
+    expect(users).toHaveLength(3);
   });
 
   it("It should return a response that you do not have permission to this resource", async () => {
@@ -143,7 +143,7 @@ describe("PATCH /users/:id", () => {
       .expect("Content-Type", /json/);
 
     expect(message).toContain("user updated successfully");
-    expect(user).toBeInstanceOf(Object);
+    expect(user.firstName).toContain(userPatch.firstName);
   });
 
   it("A regular user should be prevented from updating information", async () => {
