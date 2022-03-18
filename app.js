@@ -20,6 +20,7 @@ const activitiesRouter = require('./routes/activities');
 const authRouter = require('./routes/auth');
 const rolesRouter = require('./routes/roles');
 const categoriesRouter = require('./routes/categories');
+const newsRouter = require('./routes/news');
 
 const testimonialsRouter = require('./routes/testimony');
 const commentsRouter = require('./routes/comments');
@@ -49,6 +50,7 @@ app.use('/members', membersRouter);
 app.use('/posts', commentsRouter);
 app.use('/roles', rolesRouter);
 app.use('/users', usersRouter);
+app.use('/news', newsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
