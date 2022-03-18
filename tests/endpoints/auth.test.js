@@ -19,6 +19,7 @@ beforeEach(async () => {
     lastName: 'test',
     email: 'usertest@test.com',
     password: 'Test123**',
+    roleId:2,
   };
 
   await createUser(user);

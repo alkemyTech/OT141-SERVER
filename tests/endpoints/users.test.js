@@ -8,7 +8,7 @@ const USER_REGULAR = { email: "user1@test.com", password: "user1" };
 const OTHER_USER_REGULAR = { email: "user2@test.com", password: "user2" };
 const USER_ADMIN = { email: "admin1@test.com", password: "admin1" };
 
-const { createUsers } = require("../helpers");
+const { createUser } = require("../helpers");
 const db = require("../../models");
 
 let userRegularCreated;
@@ -39,9 +39,9 @@ beforeEach(async () => {
     ...USER_ADMIN
   };
 
-  otherUserRegularCreated = await createUsers(otherUserRegular);
-  userRegularCreated = await createUsers(userRegular);
-  userAdminCreated = await createUsers(userAdmin);
+  otherUserRegularCreated = await createUser(otherUserRegular);
+  userRegularCreated = await createUser(userRegular);
+  userAdminCreated = await createUser(userAdmin);
 });
 
 describe("GET /users", () => {
