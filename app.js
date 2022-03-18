@@ -20,6 +20,7 @@ const activitiesRouter = require('./routes/activities');
 const authRouter = require('./routes/auth');
 const rolesRouter = require('./routes/roles');
 const categoriesRouter = require('./routes/categories');
+const testimonialsRouter = require('./routes/testimonials');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,6 +41,7 @@ app.use('/auth', authRouter);
 app.use('/api/docs', serve, setup(swaggerJSDocs));
 app.use('/roles', rolesRouter);
 app.use('/categories', categoriesRouter);
+app.use('/testimonials', testimonialsRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
