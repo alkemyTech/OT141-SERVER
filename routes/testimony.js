@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { createTestimony, updateTestimony } = require('../controllers/testimony');
+const { createTestimony, updateTestimony, getTestimonials } = require('../controllers/testimony');
 
 const {
   verifyToken,
@@ -7,6 +7,12 @@ const {
   validationsTestimony,
   validateErrors,
 } = require('../middlewares');
+
+router.get(
+  '/',
+  verifyToken,
+  getTestimonials,
+);
 
 // Create testimony
 router.post(
