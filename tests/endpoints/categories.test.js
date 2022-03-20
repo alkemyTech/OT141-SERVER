@@ -59,7 +59,8 @@ const categoriesToCreate = [
 let categoryOneCreated;
 
 beforeEach(async () => {
-  await db.User.destroy({
+  try {
+      await db.User.destroy({
     truncate: true,
   });
  await db.Category.destroy({
@@ -69,6 +70,10 @@ beforeEach(async () => {
   await createCategory(categoriesToCreate[1]);
   await createUser(userAdmin);
   await createUser(userRegular);
+  } catch (error) {
+    console.log(error)
+  }
+
 });
 
 describe("GET /categories", () => {
