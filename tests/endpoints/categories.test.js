@@ -1,10 +1,11 @@
 /* eslint-disable */
 const supertest = require("supertest");
 const app = require("../../app");
-const db = require("../../db");
 
 const server = app.listen(process.env.PORT_TEST);
 const api = supertest(app);
+
+const db = require('../../models');
 
 const { ROLE_ADMIN, ROLE_USER } = require("../../constants/user.constants");
 const { createUser, createCategory } = require("../categories.test.helpers");
@@ -28,6 +29,7 @@ const userAdmin = {
   ...USER_ADMIN,
 };
 
+// Categories Info
 const categoriesToCreate = [
   {
     name: "categoryTest1",
@@ -54,17 +56,15 @@ const categoriesToCreate = [
     updatedAt: new Date(),
   },
 ];
-
 let categoryOneCreated;
+
 beforeEach(async () => {
   await db.User.destroy({
     truncate: true,
   });
-
-  await db.Category.destroy({
+ await db.Category.destroy({
     truncate: true,
-  });
-
+  }); 
   categoryOneCreated = await createCategory(categoriesToCreate[0]);
   await createCategory(categoriesToCreate[1]);
   await createUser(userAdmin);
@@ -286,7 +286,7 @@ describe("POST /categories", () => {
   });
 });
 
-describe("PUT /activities/:id", () => {
+describe("PUT /categories/:id", () => {
   it("Response Not Found - example: /category/2", async () => {
     await api
       .put("/category/2")

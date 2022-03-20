@@ -18,6 +18,9 @@ module.exports = {
       image: {
         type: Sequelize.STRING
       },
+      deletedAt: {
+        type: Sequelize.DATE,
+      },
       createdAt: {
         allowNull: true,
         type: Sequelize.DATE
@@ -25,7 +28,7 @@ module.exports = {
       updatedAt: {
         allowNull: true,
         type: Sequelize.DATE
-      }
+      },
     });
   },
   async down(queryInterface, Sequelize) {
