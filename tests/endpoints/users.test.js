@@ -4,49 +4,54 @@ const supertest = require("supertest");
 const server = app.listen(process.env.PORT_TEST);
 const api = supertest(app);
 
-const USER_REGULAR = { email: "user1@test.com", password: "user1" };
-const OTHER_USER_REGULAR = { email: "user2@test.com", password: "user2" };
-const USER_ADMIN = { email: "admin1@test.com", password: "admin1" };
+const USER_REGULAR = { email: "user1-test@test.com", password: "user1" };
+const OTHER_USER_REGULAR = { email: "user2-test@test.com", password: "user2" };
+const USER_ADMIN = { email: "admin1-test@test.com", password: "admin1" };
 
 const { createUser } = require("../helpers");
 const db = require("../../models");
+const { ROLE_ADMIN, ROLE_USER } = require("../../constants/user.constants");
 
 let userRegularCreated;
 let otherUserRegularCreated;
 let userAdminCreated;
 
-beforeEach(async () => {
-  await db.User.destroy({
-    truncate: true
+beforeAll(async () => {
+  try {
+    await db.User.destroy({
+    truncate: true,
   });
 
   const userRegular = {
     firstName: "user",
     lastName: "test",
-    roleId: 2,
-    ...USER_REGULAR
+    roleId: ROLE_USER,
+    ...USER_REGULAR,
   };
   const otherUserRegular = {
     firstName: "user",
     lastName: "test",
-    roleId: 2,
-    ...OTHER_USER_REGULAR
+    roleId: ROLE_USER,
+    ...OTHER_USER_REGULAR,
   };
   const userAdmin = {
     firstName: "admin",
     lastName: "test",
-    roleId: 1,
-    ...USER_ADMIN
+    roleId: ROLE_ADMIN,
+    ...USER_ADMIN,
   };
 
-  otherUserRegularCreated = await createUser(otherUserRegular);
   userRegularCreated = await createUser(userRegular);
+  otherUserRegularCreated = await createUser(otherUserRegular);
   userAdminCreated = await createUser(userAdmin);
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 describe("GET /users", () => {
   it("Response Not Found - example: /user", async () => {
-    await api.get("/user").send().expect(404);
+    await api.get("/user").send().expect(404).expect("Content-Type", /json/);
   });
 
   it("It should return a successful response with all users", async () => {
@@ -86,14 +91,14 @@ describe("GET /users", () => {
 
   it("It should return that the token is required", async () => {
     const {
-      body:{error}
+      body: { error },
     } = await api.get("/users").expect(403).expect("Content-Type", /json/);
     expect(error).toContain("A token is required for authentication");
   });
 
   it("It should return that the token is invalid", async () => {
     const {
-      body : {error}
+      body: { error },
     } = await api
       .get("/users")
       .auth("Bearer send token invalid", { type: "bearer" })
@@ -105,7 +110,7 @@ describe("GET /users", () => {
 
 describe("PATCH /users/:id", () => {
   it("Response Not Found - example: /api/users", async () => {
-    await api.patch("/api/users").expect(404);
+    await api.patch("/api/users").expect(404).expect("Content-Type", /json/);
   });
 
   it("Response User Not Found", async () => {
@@ -131,7 +136,7 @@ describe("PATCH /users/:id", () => {
     const userPatch = {
       firstName: "adminName1",
       lastName: "adminLast1",
-      photo: "default.png",
+      photo: "https://www.researchgate.net/profile/Maria-Monreal/publication/315108532/figure/fig1/AS:472492935520261@1489662502634/Figura-2-Avatar-que-aparece-por-defecto-en-Facebook.png",
     };
     const {
       body: { message, user },
@@ -163,7 +168,7 @@ describe("PATCH /users/:id", () => {
     expect(msg).toContain("Access Forbidden");
   });
 
-  it("You should get errors for sending numeric values", async () => {
+  it("It should return 422 when validations fail", async () => {
     const {
       body: { token },
     } = await api.post("/auth/login").send(USER_ADMIN);
@@ -180,7 +185,7 @@ describe("PATCH /users/:id", () => {
       .patch(`/users/${userAdminCreated.id}`)
       .auth(token, { type: "bearer" })
       .send(userPatch)
-      .expect(400)
+      .expect(422)
       .expect("Content-Type", /json/);
     expect(errors).toBeInstanceOf(Object || Array);
   });
@@ -188,7 +193,7 @@ describe("PATCH /users/:id", () => {
 
 describe("DELETE /users/:id", () => {
   it("Response Not Found - example : /users", async () => {
-    await api.delete("/users").expect(404);
+    await api.delete("/users").expect(404).expect("Content-Type", /json/);
   });
 
   it("Response User Not Found", async () => {
@@ -205,6 +210,23 @@ describe("DELETE /users/:id", () => {
       .expect("Content-Type", /json/);
     expect(message).toMatch(/no longer available in database/);
     expect(del).toBeFalsy();
+  });
+
+  it("A regular user should be prevented from deleting information", async () => {
+    const {
+      body: { token },
+    } = await api.post("/auth/login").send(USER_REGULAR);
+
+    const {
+      body: { ok, msg },
+    } = await api
+      .delete(`/users/${otherUserRegularCreated.id}`)
+      .auth(token, { type: "bearer" })
+      .expect(403)
+      .expect("Content-Type", /json/);
+
+    expect(ok).toBeFalsy();
+    expect(msg).toContain("Access Forbidden");
   });
 
   it("User deleted successful", async () => {
@@ -224,22 +246,7 @@ describe("DELETE /users/:id", () => {
     expect(del).toBeTruthy();
   });
 
-  it("A regular user should be prevented from deleting information", async () => {
-    const {
-      body: { token },
-    } = await api.post("/auth/login").send(USER_REGULAR);
-
-    const {
-      body: { ok, msg },
-    } = await api
-      .delete(`/users/${otherUserRegularCreated.id}`)
-      .auth(token, { type: "bearer" })
-      .expect(403)
-      .expect("Content-Type", /json/);
-
-    expect(ok).toBeFalsy();
-    expect(msg).toContain("Access Forbidden");
-  });
+  
 });
 
 afterAll(() => {
