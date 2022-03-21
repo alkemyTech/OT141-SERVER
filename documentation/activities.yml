@@ -29,28 +29,9 @@ paths:
         503:
           $ref: "#/components/responses/createActivityServerError"
 
-  # DELETE
-  /activities/{id}:
-    delete:
-      security:
-      - bearerAuth: []  
-      tags:
-        - Activities
-      description: Activity deletion
-      parameters:
-        $ref: "#/components/parameters/activityIdDelete"
-
-      responses:
-        200:
-          $ref: "#/components/responses/activityDeletionSuccessfully"
-
-        404:
-          $ref: "#/components/responses/deleteActivityNotFound"
-
-        500:
-          $ref: "#/components/responses/deleteActivityServerError"
-
   # PUT 
+
+  /activities/{id}:
     put:
       security:
       - bearerAuth: []  
@@ -121,16 +102,6 @@ components:
       bearerFormat: JWT
 
   parameters:
-    # Verb DELETE ( Activity deleted - parameters )
-    activityIdDelete:
-        in: path
-        name: id
-        description: activity id
-        required: true
-        schema:
-          type: integer
-          example: 5
-
     # Verb PUT ( Activity updated - parameters )
     activityIdPut:
       in: path
@@ -226,50 +197,7 @@ components:
                 errors: { msg: 'Server failure' },
               }
 
-    # Verb DELETE ( Activity deleted - responses )
-    activityDeletionSuccessfully:
-      description: Successful deletion
-      content:
-        application/json:
-          schema:
-            type: object
-            example:
-              { del: true, message: "activity with id 6 was deleted successfully" }
-            properties:
-              del:
-                type: boolean
-                example: true
-              message:
-                type: string
-                example: activity with id 6 was deleted successfully
-
-    deleteActivityNotFound:
-      description: Activity not Found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              del:
-                type: boolean
-                example: false
-              message:
-                type: string
-                example: activity with id 6 not exists
-
-    deleteActivityServerError:
-      description: Server Error
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              msg:
-                type: string
-                example: an error occurred
-              data:
-                type: object
-
+  
     # Verb PUT ( Activity updated - responses )
     putActivityUpdateSuccessfully:
       description: Updated successfully
