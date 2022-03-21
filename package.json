@@ -8,7 +8,9 @@
     "lint": "eslint . --ext .js",
     "lint-fix": "eslint . --ext .js --fix",
     "test": "cross-env NODE_ENV=test jest --verbose --silent",
-    "test:watch": "npm run test -- --watch --detectOpenHandles"
+    "test:watch": "npm run test -- --watch --detectOpenHandles",
+    "db:prepare:production": "npx sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all",
+    "db:prepare:test": "cross-env NODE_ENV=test npx sequelize-cli db:drop && cross-env NODE_ENV=test npx sequelize-cli db:create && cross-env NODE_ENV=test npx sequelize-cli db:migrate && cross-env NODE_ENV=test sequelize-cli db:seed:all"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.6.1",
