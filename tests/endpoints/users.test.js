@@ -12,7 +12,7 @@ const { createUser } = require("../helpers");
 const db = require("../../models");
 
 let userRegularCreated;
-let otherUserRegularCreated ;
+let otherUserRegularCreated;
 let userAdminCreated;
 
 beforeEach(async () => {
@@ -86,20 +86,20 @@ describe("GET /users", () => {
 
   it("It should return that the token is required", async () => {
     const {
-      body
+      body:{error}
     } = await api.get("/users").expect(403).expect("Content-Type", /json/);
-    expect(body).toContain("A token is required for authentication");
+    expect(error).toContain("A token is required for authentication");
   });
 
   it("It should return that the token is invalid", async () => {
     const {
-      body
+      body : {error}
     } = await api
       .get("/users")
       .auth("Bearer send token invalid", { type: "bearer" })
       .expect(401)
       .expect("Content-Type", /json/);
-    expect(body).toContain("Invalid Token");
+    expect(error).toContain("Invalid Token");
   });
 });
 
