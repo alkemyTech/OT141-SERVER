@@ -7,6 +7,7 @@ const validateErrors = require('./validateErrors');
 const validationRoles = require('./roles');
 const verifyToken = require('./authJWT');
 const membersvalidations = require('./members');
+const validationUpdateUser = require('./user.validations');
 
 module.exports = {
   ...checkAdminRole,
@@ -18,4 +19,5 @@ module.exports = {
   ...validationRoles,
   ...verifyToken,
   ...membersvalidations,
+  ...validationUpdateUser,
 };

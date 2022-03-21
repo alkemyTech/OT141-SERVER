@@ -30,6 +30,7 @@ paths:
           $ref: "#/components/responses/createActivityServerError"
 
   # PUT 
+
   /activities/{id}:
     put:
       security:

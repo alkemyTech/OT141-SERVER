@@ -9,6 +9,7 @@ const {
 const {
   validateErrors,
   validationCreateCategory,
+  validationUpdateCategory,
   verifyToken,
   checkAdminRole,
 } = require('../middlewares');
@@ -45,6 +46,7 @@ router.put(
   '/:id',
   verifyToken,
   checkAdminRole,
+  validationUpdateCategory,
   validateErrors,
   updateCategoryById,
 );

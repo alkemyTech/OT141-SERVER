@@ -49,6 +49,9 @@ app.use('/members', membersRouter);
 app.use('/posts', commentsRouter);
 app.use('/roles', rolesRouter);
 app.use('/users', usersRouter);
+app.use('/*', (req, res) => {
+  res.status(404).json({ error: 'Page not found' });
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

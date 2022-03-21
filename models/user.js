@@ -1,6 +1,7 @@
 const {
   Model,
 } = require('sequelize');
+const { ROLE_USER } = require('../constants/user.constants');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -20,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     email: { type: DataTypes.STRING, unique: true },
     photo: DataTypes.STRING,
     password: DataTypes.STRING,
-    roleId: DataTypes.INTEGER,
+    roleId: { type: DataTypes.INTEGER, defaultValue: ROLE_USER },
     deletedAt: DataTypes.DATE,
   }, {
     sequelize,

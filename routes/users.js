@@ -8,6 +8,7 @@ const {
   checkAdminRole,
   checkOwnership, // TODO: Borrar. No es requerimiento por ahora (es solo para probar el middleware)
   validateErrors,
+  validationUpdateUser,
 } = require('../middlewares');
 
 /* GET users listing. */
@@ -24,6 +25,7 @@ router.patch(
   '/:id',
   verifyToken,
   checkOwnership, // TODO: Borrar esta linea (es solo para probar el middleware)
+  validationUpdateUser,
   validateErrors,
   userController.update,
 );
@@ -31,6 +33,8 @@ router.patch(
 // delete user
 router.delete(
   '/:id',
+  verifyToken,
+  checkOwnership,
   userController.deleteUser,
 );
 
