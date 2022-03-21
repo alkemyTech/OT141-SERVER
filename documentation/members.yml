@@ -1,7 +1,7 @@
 paths:
   # GET
 
-  /members.:
+  /members:
     get:
       security:
       - bearerAuth: []  
@@ -29,9 +29,6 @@ paths:
         500:
           $ref: "#/components/responses/ServerError"
 
-  # POST
-
-  /members:
     post:
       security:
       - bearerAuth: []  
@@ -58,7 +55,7 @@ paths:
 
   # PUT
   
-  /members/{:id}:
+  /members/{id}:
     put:
       security:
       - bearerAuth: []  
@@ -68,7 +65,7 @@ paths:
       description: "this endpoint is in charge of making an update of the selected member"
       parameters:
         - in: path
-          name: { id }
+          name: id
           description: "the id of the member that needs to be updated"
           required: true
           schema:
@@ -89,11 +86,7 @@ paths:
           $ref: "#/components/responses/MemberNotFound"
         500:
           $ref: "#/components/responses/ServerError"
-    # GET
 
-  # GET/Id
-
-  /members/{:Id}:
     get:
       security:
       - bearerAuth: []  
@@ -103,7 +96,7 @@ paths:
       description: "This endpoing will return the member that corresponds with the choosen id"
       parameters:
         - in: path
-          name: { id }
+          name: id
           description: "the id of the member you want to see"
           required: true
           schema:
@@ -116,12 +109,7 @@ paths:
           $ref: "#/components/responses/MemberNotFound"
         500:
           $ref: "#/components/responses/ServerError"
-    # DELETE
-    # dot is here because keys must be unique.
-  
-  # DELETE
 
-  /members/{:ID}:
     delete:
       security:
       - bearerAuth: []  
@@ -131,7 +119,7 @@ paths:
       description: "This endpoing will delete the Member that corresponds with the choosen id"
       parameters:
         - in: path
-          name: :id
+          name: id
           description: "the id of the Member you want to delete"
           required: true
           schema:
@@ -148,6 +136,7 @@ paths:
   # COMPONENTS
 
 components:
+
   # SCHEMAS
   schemas:
     MemberPost:
