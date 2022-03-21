@@ -1,14 +1,13 @@
 paths:
   # GET
-
   /categories:
     get:
       security:
         - bearerAuth: []
+      description: "service to retrive all registered categories"
       tags:
         - Categories
       summary: "will return a list of existing categories"
-      description: "service to retrive all registered categories"
       responses:
         200:
           $ref: "#/components/responses/getAllCategories"
@@ -19,6 +18,8 @@ paths:
 
     # POST
     post:
+      security:
+        - bearerAuth: []
       tags:
         - Categories
       summary: "will add a new category to DB"
@@ -40,15 +41,17 @@ paths:
         500:
           $ref: "#/components/responses/ServerError"
     # PUT
-  /categories/{:id}:
+  /categories/{id}:
     put:
+      security:
+        - bearerAuth: []
       tags:
         - Categories
       summary: "update an existing category by provinding the correct id"
       description: "this endpoint is in charge of making an update of the selected category"
       parameters:
         - in: path
-          name: { id }
+          name: id
           description: "the id of the category that needs to be updated"
           required: true
           schema:
@@ -64,22 +67,22 @@ paths:
               $ref: "#/components/schemas/CategoryUpdate"
       responses:
         200:
-          $ref: "#/components/responses/updatedSuccessfully"
+          $ref: "#/components/responses/UpdatedSuccessfully"
         404:
           $ref: "#/components/responses/CategoryNotFound"
         500:
           $ref: "#/components/responses/ServerError"
     # GET
-
-  /categories/{:Id}:
     get:
+      security:
+        - bearerAuth: []
       tags:
         - Categories
       summary: "Returns the category that corresponds with the selected id"
       description: "This endpoing will return the category that corresponds with the choosen id"
       parameters:
         - in: path
-          name: { id }
+          name: id
           description: "the id of the category you want to see"
           required: true
           schema:
@@ -93,16 +96,16 @@ paths:
         500:
           $ref: "#/components/responses/ServerError"
     # DELETE
-    # dot is here because keys must be unique.
-  /categories/{:ID}:
     delete:
+      security:
+        - bearerAuth: []
       tags:
         - Categories
       summary: "Delete category"
       description: "This endpoing will delete the category that corresponds with the choosen id"
       parameters:
         - in: path
-          name: :id
+          name: id
           description: "the id of the category you want to delete"
           required: true
           schema:
@@ -133,11 +136,13 @@ components:
           type: string
           example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-ecologiaverde-1.jpg"
     CategoryUpdate:
+      required: id
+      type: object
       properties:
         name:
           description: "name of the category"
           type: string
-          example: category one
+          example: "category one"
         description:
           description: "description of the category"
           type: string
@@ -182,7 +187,7 @@ components:
                     example: true
               data:
                 example:
-                  $ref: "#/components/examples/categoryCreatedSuccessfully"
+                  $ref: "#/components/schemas/categoryCreatedSuccessfully"
 
     categoryCreatedValidationError:
       description: "Validation errors"
@@ -232,7 +237,7 @@ components:
               }
 
     # Verb put ( Category - responses )
-    updatedSuccessfully:
+    UpdatedSuccessfully:
       description: "updated succesfully"
       example:
         $ref: "#/components/examples/categoryUpdated"
