@@ -16,7 +16,7 @@ let userRegularCreated;
 let otherUserRegularCreated;
 let userAdminCreated;
 
-beforeAll(async () => {
+beforeEach(async () => {
   try {
     await db.User.destroy({
     truncate: true,
