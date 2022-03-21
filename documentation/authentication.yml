@@ -55,6 +55,8 @@ paths:
   # DELETE
   /users/{id}:
     delete:
+      security:
+      - bearerAuth: [] 
       tags:
         - Authentication
       description: User deletion
@@ -72,8 +74,9 @@ paths:
           $ref: "#/components/responses/deleteServerError"
 
   # PATCH
-  /users/{Id}:
     patch:
+      security:
+      - bearerAuth: [] 
       tags:
         - Authentication
       parameters:
@@ -163,6 +166,11 @@ components:
           format: password
           example: 12345678Password$
 
+  securitySchemes:
+    bearerAuth:   
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
 
   parameters:
     # Verb DELETE ( User deleted - parameters )
@@ -177,7 +185,7 @@ components:
     # Verb PATCH ( User updated - parameters )
     userIdPatch:
       in: path
-      name: Id
+      name: id
       description: User id
       required: true
       schema:

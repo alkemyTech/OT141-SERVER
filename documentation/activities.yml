@@ -51,7 +51,6 @@ paths:
           $ref: "#/components/responses/deleteActivityServerError"
 
   # PUT 
-  /activities/{Id}:
     put:
       security:
       - bearerAuth: []  
@@ -125,7 +124,7 @@ components:
     # Verb DELETE ( Activity deleted - parameters )
     activityIdDelete:
         in: path
-        name: Id
+        name: id
         description: activity id
         required: true
         schema:
@@ -135,7 +134,7 @@ components:
     # Verb PUT ( Activity updated - parameters )
     activityIdPut:
       in: path
-      name: Id
+      name: id
       description: activity id
       required: true
       schema:
