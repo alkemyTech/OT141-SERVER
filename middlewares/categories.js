@@ -9,6 +9,14 @@ const validationCreateCategory = [
   check('name').custom(isExistCategory),
 ];
 
+const validationUpdateCategory = [
+  check('name', 'The value is required').not().isEmpty(),
+  check('name', 'The value should be type string').isString(),
+  check('description', 'The value not is a string').if(check('description').exists()).isString(),
+  check('image', 'The value not is a string').if(check('image').exists()).isString(),
+];
+
 module.exports = {
   validationCreateCategory,
+  validationUpdateCategory,
 };
