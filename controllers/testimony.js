@@ -34,6 +34,11 @@ const updateTestimony = async (req, res) => {
   const { id } = req.params;
   try {
     const testimonyDb = await db.Testimony.findByPk(id);
+    if (!testimonyDb) {
+      return res.status(404).json({
+        message: 'Testimony not found',
+      });
+    }
     await testimonyDb.update(
       {
         name,
@@ -41,17 +46,9 @@ const updateTestimony = async (req, res) => {
         image,
       },
     );
-    if (!testimonyDb) {
-      return res.status(404).json({
-        message: 'Testimony not found',
-      });
-    }
-
     return res.status(200).json({
       message: 'Testimony updated successfully',
-      data: {
-        ...testimonyDb, name, image, content,
-      },
+      testimony: testimonyDb,
     });
   } catch (error) {
     return res.status(503).json({
