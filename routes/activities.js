@@ -7,7 +7,7 @@ const {
 const { checkAdminRole, verifyToken } = require('../middlewares');
 
 // Controller Api required
-const { store, update } = require('../controllers/activity.controller');
+const { store, update } = require('../controllers/activity');
 
 // Routes
 // Create activity
