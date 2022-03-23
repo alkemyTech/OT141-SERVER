@@ -32,6 +32,11 @@ describe('POST/auth/register', () => {
     expect(result.body.token).toBeDefined();
     expect(result.body.user).toBeDefined();
     expect(result.body.message).toBeDefined();
+    expect(result.body.message).toEqual('User created successfully');
+    expect(result.body.user.firstName).toEqual('user1');
+    expect(result.body.user.firstName).toEqual('user1');
+    expect(result.body.user.lastName).toEqual('test1');
+    expect(result.body.user.email).toEqual('usertest@test.com');   
   });
 
   test('The content-type of response should be aplication/json', async () => {
@@ -74,6 +79,7 @@ describe('POST/auth/register', () => {
     .expect(200);
 
     expect(result.body.message).toBeDefined();
+    expect(result.body.message).toEqual('Email already in use');
   })
 });
 
@@ -125,6 +131,7 @@ describe('POST/auth/login', () => {
       .expect(400);
 
     expect(result.body.msg).toBeDefined();
+    expect(result.body.msg).toEqual('The passsword is wrong');
   });
 
   test('should return 400 status code an msg if is empty password', async () => {
@@ -141,6 +148,7 @@ describe('POST/auth/login', () => {
       .expect(400);
 
     expect(result.body.msg).toBeDefined();
+    expect(result.body.msg).toEqual('The passsword is wrong');
   });
 
   test('should return 404 status code if not exist email', async () => {
@@ -155,6 +163,7 @@ describe('POST/auth/login', () => {
       .expect(404);
 
     expect(result.body.msg).toBeDefined();
+    expect(result.body.msg).toEqual('The usernotexist@test.com not exist');
   });
 
   test('should return 404 status code if email is empty', async () => {
@@ -169,6 +178,7 @@ describe('POST/auth/login', () => {
       .expect(404);
 
     expect(result.body.msg).toBeDefined();
+    expect(result.body.msg).toEqual('The  not exist');
   });
   
   test('should return 404 status code if email is empty and password', async () => {
@@ -183,6 +193,7 @@ describe('POST/auth/login', () => {
       .expect(404);
 
     expect(result.body.msg).toBeDefined();
+    expect(result.body.msg).toEqual('The  not exist');
   });
 });
 
@@ -194,6 +205,8 @@ describe('GET/auth/me', () => {
       .get('/auth/me')
       .expect(403)
       .expect('Content-type', /application\/json/);
+
+    expect(result.body.error).toContain('A token is required for authentication');
   });
 
   test('should return 200 status code and usuario', async () => { 
@@ -213,6 +226,7 @@ describe('GET/auth/me', () => {
       .expect(200);
     
     expect(result.body.usuario).toBeDefined();
+    expect(result.body.usuario.email).toEqual('usertest@test.com');
   });
 });
 
