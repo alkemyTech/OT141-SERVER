@@ -28,10 +28,9 @@ const createCategory = async (req, res) => {
 const getAllCategories = async (req, res) => {
   try {
     const { page = 1 } = req.query;
-// parameters  (model,limit,page,request)
     const { results, next, prev } = await paginated(db.Category, LIMIT_PAGE, +page, req);
     if (results.length === 0) {
-      return res.status(204).json({
+      return res.status(200).json({
         ok: false,
         msg: 'There are no categories created',
       });
@@ -61,15 +60,18 @@ const updateCategoryById = async (req, res) => {
     );
     if (!category[0]) {
       return res.status(404).json({
-        message: 'Category not found',
+        msg: 'Category not found',
       });
     }
     return res.status(200).json({
-      message: 'Category updated',
+      msg: 'Category updated',
+      data: {
+        ...category.dataValues, name, description, image,
+      },
     });
   } catch (error) {
     return res.status(500).json({
-      message: error.message,
+      msg: error.message,
     });
   }
 };
