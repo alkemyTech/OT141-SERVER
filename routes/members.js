@@ -3,9 +3,10 @@ const {
   list,
   createMember,
   deleteMember,
-  updateMember
+  updateMember,
 } = require('../controllers/member');
 const {
+  verifyToken,
   checkAdminRole,
   newMemberValidations,
   validateErrors,
@@ -13,6 +14,7 @@ const {
 
 router.get(
   '/',
+  verifyToken,
   checkAdminRole,
   list,
 );
@@ -20,6 +22,8 @@ router.get(
 // Create member
 router.post(
   '/',
+  verifyToken,
+  checkAdminRole,
   newMemberValidations,
   validateErrors,
   createMember,
@@ -28,13 +32,16 @@ router.post(
 // delete member
 router.delete(
   '/:id',
+  verifyToken,
+  checkAdminRole,
   deleteMember,
 );
 // Update member
 router.put(
-    '/:id',
-    updateMember,
+  '/:id',
+  verifyToken,
+  checkAdminRole,
+  updateMember,
 );
 
 module.exports = router;
-

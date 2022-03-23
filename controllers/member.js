@@ -6,10 +6,9 @@ module.exports = {
   list: async (req, res) => {
     try {
       const { page = 1 } = req.query;
-      const members = await db.Member.findAll();
-      const { results, next, prev } = await paginated(members, LIMIT_PAGE, +page, req);
+      const { results, next, prev } = await paginated(db.Member, LIMIT_PAGE, +page, req);
       if (results.length === 0) {
-        return res.status(204).json({
+        return res.status(200).json({
           ok: false,
           msg: 'There are no members created',
         });
@@ -51,7 +50,7 @@ module.exports = {
   createMember: async (req, res) => {
     try {
       const { name, image } = req.body;
-      const newMember = await db.member.create({
+      const newMember = await db.Member.create({
         name,
         image,
       });
@@ -67,33 +66,31 @@ module.exports = {
     }
   },
   updateMember: async (req, res) => {
-        const { id } = req.params;
-        const { name, image } = req.body;
-        try {
-            let member = await db.Member.update({
-                name,
-                image,
-            }, {
-                where: { id },
-            });
+    const { id } = req.params;
+    const { name, image } = req.body;
+    try {
+      const member = await db.Member.update({
+        name,
+        image,
+      }, {
+        where: { id },
+      });
 
-            if (!member[0]) {
-                return res.status(404).json({
-                    ok: false,
-                    msg: 'there is no member matching the specified id',
-                });
-
-            }
-            res.status(200).json({
-                ok: true,
-                msg: 'member updated successfully',
-            });
-
-        } catch (error) {
-            res.status(500).json({
-                msg: 'an error occurred',
-                data: error,
-            });
-        }
+      if (!member[0]) {
+        return res.status(404).json({
+          ok: false,
+          msg: 'there is no member matching the specified id',
+        });
+      }
+      return res.status(200).json({
+        ok: true,
+        msg: 'member updated successfully',
+      });
+    } catch (error) {
+      return res.status(500).json({
+        msg: 'an error occurred',
+        data: error,
+      });
     }
+  },
 };
