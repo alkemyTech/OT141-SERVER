@@ -139,12 +139,12 @@ components:
         email:
           type: string
           description: Enter email
-          example: email@email.com
+          example: admin1@test.com
           format: email
         password:
           description: Enter password
           type: string
-          example: "12345678Password$"
+          example: "admin1"
           format: password
 
     User-updated:
