@@ -57,7 +57,7 @@ module.exports = {
       return res.status(200).json({
         msg: 'activity updated successfully',
         data: {
-          ...activityFound, name, image, content,
+          ...activityFound.dataValues, name, image, content,
         },
       });
     } catch (error) {
