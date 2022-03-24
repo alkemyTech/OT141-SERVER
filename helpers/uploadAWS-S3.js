@@ -14,10 +14,16 @@ const storage = new S3({
   secretAccessKey,
 });
 
-const uploadInBucket = (fileName, body) => storage.upload({
-  Bucket: bucketName, // Bucket Name
-  Key: fileName, // The Key is the value with which it is saved in the Bucket
-  Body: body, // The Body receives the binary information from the file
-}).promise(); // return as promise
+const uploadInBucket = async (file) => {
+  try {
+    return await storage.upload({
+      Bucket: bucketName, // Bucket Name
+      Key: file.name, // The Key is the value with which it is saved in the Bucket
+      Body: file.data, // The Body receives the binary information from the file
+    }).promise(); // return as promise
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 module.exports = { uploadInBucket };
