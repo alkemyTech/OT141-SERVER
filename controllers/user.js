@@ -9,7 +9,7 @@ module.exports = {
       firstName, lastName, email, password,
     } = req.body;
     try {
-      const { Location: fileURL } = await uploadInBucket(req.files?.image);
+      const { Location: fileURL } = await uploadInBucket(req.files?.photo);
       const user = await db.User.findByPk(id);
       if (!user) {
         return res.status(404).json({
@@ -21,7 +21,7 @@ module.exports = {
       user.lastName = lastName || user.lastName;
       user.email = email || user.email;
       user.password = password ? await passwordHelper.encrypt(password) : user.password;
-      user.image = fileURL || user.image;
+      user.photo = fileURL || user.photo;
 
       await user.save();
       const { password: pass, ...rest } = user.dataValues;
