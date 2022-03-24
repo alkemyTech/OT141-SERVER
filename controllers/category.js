@@ -6,7 +6,11 @@ const db = require('../models');
 const createCategory = async (req, res) => {
   try {
     const { name, description } = req.body;
-    const { Location: fileURL } = await uploadInBucket(req.files?.image);
+    let fileURL;
+    if (req.files?.image) {
+      const { Location } = await uploadInBucket(req.files.image);
+      fileURL = Location;
+    }
     const nameUpperCase = name.toUpperCase();
 
     const newCategory = await db.Category.create({
@@ -49,8 +53,12 @@ const getAllCategories = async (req, res) => {
 const updateCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { Location: fileURL } = await uploadInBucket(req.files?.image);
     const { name, description } = req.body;
+    let fileURL;
+    if (req.files?.image) {
+      const { Location } = await uploadInBucket(req.files.image);
+      fileURL = Location;
+    }
     const category = await db.Category.update(
       {
         name,
@@ -69,7 +77,7 @@ const updateCategoryById = async (req, res) => {
     return res.status(200).json({
       msg: 'Category updated',
       data: {
-        ...category.dataValues, name, description, fileURL,
+        ...category.dataValues, name, description, image: fileURL,
       },
     });
   } catch (error) {
