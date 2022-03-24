@@ -48,7 +48,9 @@ const updateTestimony = async (req, res) => {
     );
     return res.status(200).json({
       message: 'Testimony updated successfully',
-      testimony: testimonyDb,
+      data: {
+        ...testimonyDb, name, image, content,
+      },
     });
   } catch (error) {
     return res.status(503).json({
