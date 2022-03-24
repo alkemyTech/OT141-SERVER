@@ -51,10 +51,14 @@ module.exports = {
   createMember: async (req, res) => {
     try {
       const { name } = req.body;
-      const { Location: fileURL } = await uploadInBucket(req.files?.image);
+      let fileURL;
+      if (req.files?.image) {
+        const { Location } = await uploadInBucket(req.files.image);
+        fileURL = Location;
+      }
       const newMember = await db.Member.create({
         name,
-        image: fileURL || null,
+        image: fileURL || 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       });
       return res.status(201).json({
         ok: true,
@@ -70,8 +74,12 @@ module.exports = {
   updateMember: async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
+    let fileURL;
     try {
-      const { Location: fileURL } = await uploadInBucket(req.files?.image);
+      if (req.files?.image) {
+        const { Location } = await uploadInBucket(req.files.image);
+        fileURL = Location;
+      }
       const member = await db.Member.update({
         name,
         image: fileURL && fileURL,
