@@ -1,5 +1,6 @@
 const { LIMIT_PAGE } = require('../constants/limit-page.constants');
 const { paginated } = require('../helpers/paginated');
+const { uploadInBucket } = require('../helpers/uploadAWS-S3');
 const db = require('../models');
 
 module.exports = {
@@ -49,10 +50,11 @@ module.exports = {
   },
   createMember: async (req, res) => {
     try {
-      const { name, image } = req.body;
+      const { name } = req.body;
+      const { Location: fileURL } = await uploadInBucket(req.files?.image);
       const newMember = await db.Member.create({
         name,
-        image,
+        image: fileURL || null,
       });
       return res.status(201).json({
         ok: true,
@@ -67,11 +69,12 @@ module.exports = {
   },
   updateMember: async (req, res) => {
     const { id } = req.params;
-    const { name, image } = req.body;
+    const { name } = req.body;
     try {
+      const { Location: fileURL } = await uploadInBucket(req.files?.image);
       const member = await db.Member.update({
         name,
-        image,
+        image: fileURL && fileURL,
       }, {
         where: { id },
       });

@@ -1,16 +1,18 @@
 const { LIMIT_PAGE } = require('../constants/limit-page.constants');
 const { paginated } = require('../helpers/paginated');
+const { uploadInBucket } = require('../helpers/uploadAWS-S3');
 const db = require('../models');
 
 const createCategory = async (req, res) => {
   try {
-    const { name, description, image } = req.body;
+    const { name, description } = req.body;
+    const { Location: fileURL } = await uploadInBucket(req.files?.image);
     const nameUpperCase = name.toUpperCase();
 
     const newCategory = await db.Category.create({
       name: nameUpperCase,
       description: description || null,
-      image: image || null,
+      image: fileURL || 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
     });
 
     return res.status(201).json({
@@ -47,12 +49,13 @@ const getAllCategories = async (req, res) => {
 const updateCategoryById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, image } = req.body;
+    const { Location: fileURL } = await uploadInBucket(req.files?.image);
+    const { name, description } = req.body;
     const category = await db.Category.update(
       {
         name,
         description,
-        image,
+        image: fileURL && fileURL,
       },
       {
         where: { id },
@@ -66,7 +69,7 @@ const updateCategoryById = async (req, res) => {
     return res.status(200).json({
       msg: 'Category updated',
       data: {
-        ...category.dataValues, name, description, image,
+        ...category.dataValues, name, description, fileURL,
       },
     });
   } catch (error) {
