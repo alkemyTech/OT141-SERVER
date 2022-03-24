@@ -6,6 +6,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
+
 require('dotenv').config();
 
 // Documentation Swagger Interface
@@ -35,6 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
+app.use(fileUpload());
 
 // routes
 app.use('/', indexRouter);
