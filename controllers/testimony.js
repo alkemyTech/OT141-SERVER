@@ -1,13 +1,15 @@
+const { uploadInBucket } = require('../helpers/uploadAWS-S3');
 const db = require('../models');
 
 const createTestimony = async (req, res) => {
-  const { name, content, image } = req.body;
+  const { name, content } = req.body;
 
   try {
+    const { Location: fileURL } = await uploadInBucket(req.files?.image);
     const testimonyCreated = await db.Testimony.create({
       name,
       content,
-      image,
+      image: fileURL || 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
     });
     res.status(201).json({
       meta: {
@@ -33,11 +35,12 @@ const updateTestimony = async (req, res) => {
   const { name, content, image } = req.body;
   const { id } = req.params;
   try {
+    const { Location: fileURL } = await uploadInBucket(req.files?.image);
     const testimonyDb = await db.Testimony.update(
       {
         name,
         content,
-        image,
+        image: fileURL && fileURL,
       },
       {
         where: { id },
