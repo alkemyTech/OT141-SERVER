@@ -2,7 +2,7 @@
 const supertest = require('supertest');
 const app = require('../../app');
 const db = require('../../models');
-const activitieHelper = require('../activities.test.helpers');
+const testimonyHelper = require('../testimonials.test.helpers');
 const { ROLE_ADMIN, ROLE_USER } = require('../../constants/user.constants');
 
 const server = app.listen(process.env.PORT_TEST);
@@ -29,11 +29,11 @@ beforeEach(async () => {
   await db.User.destroy({
     truncate: true,
   });
-  await db.Activity.destroy({
+  await db.Testimony.destroy({
     truncate: true,
   });
-  await activitieHelper.createUsers(configUsers);
-  await activitieHelper.createActivities();
+  await testimonyHelper.createUsers(configUsers);
+  await testimonyHelper.createTestimonials();
 });
 
 describe('POST /testimonials', () => {
