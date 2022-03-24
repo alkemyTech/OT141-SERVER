@@ -8,7 +8,7 @@ const {
 const {
   verifyToken,
   checkAdminRole,
-  newMemberValidations,
+  memberValidations,
   validateErrors,
 } = require('../middlewares');
 
@@ -24,7 +24,7 @@ router.post(
   '/',
   verifyToken,
   checkAdminRole,
-  newMemberValidations,
+  memberValidations,
   validateErrors,
   createMember,
 );
@@ -41,6 +41,8 @@ router.put(
   '/:id',
   verifyToken,
   checkAdminRole,
+  memberValidations,
+  validateErrors,
   updateMember,
 );
 

@@ -8,7 +8,7 @@ const USER_REGULAR = { email: "user1-test@test.com", password: "user1" };
 const OTHER_USER_REGULAR = { email: "user2-test@test.com", password: "user2" };
 const USER_ADMIN = { email: "admin1-test@test.com", password: "admin1" };
 
-const { createUser } = require("../helpers");
+const { createUser } = require("../auth.test.helpers");
 const db = require("../../models");
 const { ROLE_ADMIN, ROLE_USER } = require("../../constants/user.constants");
 

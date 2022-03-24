@@ -1,7 +1,6 @@
 /* eslint-disable */
 const supertest = require('supertest');
-const bcryptjs = require('bcryptjs');
-const { createUser } = require('../helpers');
+const { createUser } = require('../auth.test.helpers');
 const app = require('../../app');
 
 const server = app.listen(process.env.PORT_TEST);

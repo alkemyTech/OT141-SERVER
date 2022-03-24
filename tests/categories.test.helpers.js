@@ -1,6 +1,6 @@
 /* eslint-disable */
 const db = require("../models");
-const { createUser } = require("./helpers");
+const { createUser } = require("./auth.test.helpers");
 
 module.exports = {
   createUser,
