@@ -1,0 +1,349 @@
+paths:
+  # GET
+
+  /testimonials:
+    get:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Testimonials
+      summary: "will return a list of existing testimonials"
+      description: "service to retrive all testimonials"
+      responses:
+        200:
+          $ref: "#/components/responses/getAllTestimonials"
+        204:
+          $ref: "#/components/responses/noTestimonyFound"
+        403:
+          $ref: "#/components/responses/unauthorizedError"
+        500:
+          $ref: "#/components/responses/ServerError"
+    
+    post:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Testimonials
+      summary: "will add a new testimony to DB"
+      description: "add a new testimony to DB"
+      requestBody:
+        description: "request with values"
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/testimonyPost"
+      responses:
+        201:
+          $ref: "#/components/responses/testimonyCreatedSuccessfully"
+        422:
+          $ref: "#/components/responses/createdValidationError"
+        500:
+          $ref: "#/components/responses/ServerError"
+
+  # PUT
+  
+  /testimonials/{id}:
+    put:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Testimonials
+      summary: "update an existing testimony by provinding the correct id"
+      description: "this endpoint is in charge of making an update of the selected testimony"
+      parameters:
+        - in: path
+          name: id
+          description: "the id of the testimony that needs to be updated"
+          required: true
+          schema:
+            type: integer
+            example: 5
+      requestBody:
+        description: "testimony update"
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/testimonyUpdate"
+      responses:
+        200:
+          $ref: "#/components/responses/updatedSuccessfully"
+        404:
+          $ref: "#/components/responses/testimonyNotFound"
+        500:
+          $ref: "#/components/responses/ServerError"
+
+    get:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Testimonials
+      summary: "Returns the testimony that corresponds with the selected id"
+      description: "This endpoing will return the testimony that corresponds with the choosen id"
+      parameters:
+        - in: path
+          name: id
+          description: "the id of the testimony you want to see"
+          required: true
+          schema:
+            type: integer
+            example: 3
+      responses:
+        200:
+          $ref: "#/components/responses/getTestimonyById"
+        404:
+          $ref: "#/components/responses/testimonyNotFound"
+        500:
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      security:
+      - bearerAuth: []  
+      tags:
+        - Testimonials
+      summary: "Delete testimony"
+      description: "This endpoing will delete the testimony that corresponds with the choosen id"
+      parameters:
+        - in: path
+          name: id
+          description: "the id of the testimony you want to delete"
+          required: true
+          schema:
+            type: integer
+            example: 6
+      responses:
+        200:
+          $ref: "#/components/responses/deletedSuccessfully"
+        404:
+          $ref: "#/components/responses/testimonyNotFound"
+        500:
+          $ref: "#/components/responses/ServerError"
+
+  # COMPONENTS
+
+components:
+
+  # SCHEMAS
+  schemas:
+    testimonyPost:
+      properties:
+        name:
+          description: "name of the testimony"
+          type: string
+          example: "The social media"                    
+        content:
+          description: "Content of the testimony"
+          type: string
+          example: "Social proof is a natural part of life and one that marketers have been able to utilize far more since the internet and smartphones took over how we do everything from communication to making decisions on where to eat."
+        image:
+          type: string
+          example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+
+    testimonyUpdate:
+      properties:
+        name:
+          description: "name of the testimony"
+          type: string
+          example: "We help to others"        
+        content:
+          description: "Content of the testimony"
+          type: string
+          example: "I am a people pleaser. My mission in life was to try to fit in and belong. For example, at school, Idesperately wanted to be accepted by my classmates, so I would try to say the right things and do the right things so that they would like me."
+        image:
+          type: string
+          example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+
+    testimony:
+      properties:
+        name:
+          description: "name of the testimony"
+          type: string
+          example: "We help to others"        
+        content:
+          description: "Content of the testimony"
+          type: string
+          example: "I am a people pleaser. My mission in life was to try to fit in and belong. For example, at school, Idesperately wanted to be accepted by my classmates, so I would try to say the right things and do the right things so that they would like me."
+        image:
+          type: string
+          example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+
+  # Responses
+
+  responses:
+    # Verb POST ( testimony - responses )
+    testimonyCreatedSuccessfully:
+      description: "Testimony created succesfully"
+      content:
+        application/json:
+          schema:
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 201
+                  ok:
+                    type: boolean
+                    example: true
+              data:
+                example:
+                  $ref: "#/components/examples/testimonyCreatedSuccessfully"
+
+    createdValidationError:
+      description: "Validation errors"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              meta:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    example: 422
+                  ok:
+                    example: false
+              data:
+                example: null
+              errors:
+                type: object
+                properties:
+                  name:
+                    type: object
+                    properties:
+                      value:
+                        type: string
+                        example: "Tut"
+                      msg:
+                        type: string
+                        example: "String must be more than 4 characters"
+                  content:
+                    msg:
+                      type: string
+                      example: Input "required"
+
+    ServerError:
+      description: "Server error"
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              {
+                meta: { status: 503, ok: "false" },
+                data: null,
+                errors: { msg: "Server no disponible" },
+              }
+
+    # Verb put ( Member - responses )
+    updatedSuccessfully:
+      description: "Updated succesfully"
+      example:
+        $ref: "#/components/examples/testimonyUpdated"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Testimony updated"
+              testimony:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 5
+                  name:
+                    type: string
+                    example: "recreation"
+                  content:
+                    type: string
+                    example: "Come and play with the kids"
+                  image:
+                    type: string
+                    example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+    
+    testimonyNotFound:
+      description: "Testimony not found"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              messege:
+                type: string
+                example: "Testimony not found"
+
+    getAllTestimonials:
+      description: "It shows a list with all the testimonials"
+      example:
+        $ref: "#/components/examples/getAllTestimonials"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: true
+              count:
+                type: integer
+                example: 1
+              members:
+                example: [ { "name": "The best testimony", "content": "I am a people pleaser. My mission in life was to try to fit in and belong. For example, at school, I desperately wanted to be accepted by my classmates...", "image": "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png" } ]
+                
+    noTestimonyFound:
+      description: "Is not possible to return any testimony as there are no testimony created"
+      content:
+        application/json::
+          schema:
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              messege:
+                type: string
+                example: "Testimony not found"
+
+    unauthorizedError:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          schema:
+            example: "A token is required for authentication."
+
+
+    # Verb get ( MemberById - responses )
+    getTestimonyById:
+      description: "Testimony chosen by id"
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/testimony"
+    # verb delete (Member delete - responses)
+    deletedSuccessfully:
+      description: "Deleted succesfully"
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              {
+                "del": "true",
+                "messege": "Testimony deleted",
+              }
+          properties:
+            del:
+              type: boolean
+              example: true
+            message:
+              type: string
+              example: "Testimony deleted"
