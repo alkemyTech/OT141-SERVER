@@ -218,7 +218,6 @@ describe("POST /categories", () => {
       body: { error },
     } = await api
       .post("/categories")
-      .send(categoriesToCreate[2])
       .expect(403)
       .expect("Content-Type", /json/);
     expect(error).toContain("A token is required for authentication");
@@ -230,7 +229,6 @@ describe("POST /categories", () => {
     } = await api
       .post("/categories")
       .auth("Bearer send token invalid", { type: "bearer" })
-      .send(categoriesToCreate[2])
       .expect(401)
       .expect("Content-Type", /json/);
     expect(error).toContain("Invalid Token");
@@ -248,7 +246,6 @@ describe("POST /categories", () => {
     } = await api
       .post("/categories")
       .auth(token, { type: "bearer" })
-      .send(categoriesToCreate[2])
       .expect(401)
       .expect("Content-Type", /json/);
     expect(msg).toContain("You do not have permissions for this resource");
