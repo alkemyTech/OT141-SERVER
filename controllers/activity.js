@@ -6,7 +6,11 @@ module.exports = {
     // constant variables
     const { name, content } = req.body;
     try {
-      const { Location: fileURL } = await uploadInBucket(req.files?.image);
+      let fileURL;
+      if (req.files?.image) {
+        const { Location } = await uploadInBucket(req.files.image);
+        fileURL = Location;
+      }
       const data = await db.Activity.create({
         name,
         content,
@@ -43,7 +47,11 @@ module.exports = {
     const { name, content } = req.body;
     try {
       const activityFound = await db.Activity.findByPk(id);
-      const { Location: fileURL } = await uploadInBucket(req.files?.image);
+      let fileURL;
+      if (req.files?.image) {
+        const { Location } = await uploadInBucket(req.files.image);
+        fileURL = Location;
+      }
 
       if (!activityFound) {
         return res.status(404).json({
@@ -60,7 +68,7 @@ module.exports = {
       return res.status(200).json({
         msg: 'activity updated successfully',
         data: {
-          ...activityFound.dataValues, name, image, content,
+          ...activityFound.dataValues, name, content, image: activityFound.image,
         },
       });
     } catch (error) {
