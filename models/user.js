@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     email: { type: DataTypes.STRING, unique: true },
-    photo: DataTypes.STRING,
+    photo: { type: DataTypes.STRING, defaultValue: 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png'},
     password: DataTypes.STRING,
     roleId: { type: DataTypes.INTEGER, defaultValue: ROLE_USER },
     deletedAt: DataTypes.DATE,

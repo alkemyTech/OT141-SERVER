@@ -3,9 +3,12 @@ const db = require('../models');
 
 const createTestimony = async (req, res) => {
   const { name, content } = req.body;
-
+  let fileURL;
   try {
-    const { Location: fileURL } = await uploadInBucket(req.files?.image);
+    if (req.files?.image) {
+      const { Location } = await uploadInBucket(req.files.image);
+      fileURL = Location;
+    }
     const testimonyCreated = await db.Testimony.create({
       name,
       content,
@@ -32,15 +35,20 @@ const createTestimony = async (req, res) => {
 };
 
 const updateTestimony = async (req, res) => {
-  const { name, content, image } = req.body;
+  const { name, content } = req.body;
   const { id } = req.params;
+  const testimony = db.Testimony.findOne({ id });
+  let fileURL = testimony.image;
   try {
-    const { Location: fileURL } = await uploadInBucket(req.files?.image);
+    if (req.files?.image) {
+      const { Location } = await uploadInBucket(req.files.image);
+      fileURL = Location;
+    }
     const testimonyDb = await db.Testimony.update(
       {
         name,
         content,
-        image: fileURL && fileURL,
+        image: fileURL,
       },
       {
         where: { id },
@@ -54,7 +62,6 @@ const updateTestimony = async (req, res) => {
     }
     return res.status(200).json({
       message: 'Testimony updated',
-      testimonyDb,
     });
   } catch (error) {
     res.status(503).json({

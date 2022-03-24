@@ -8,8 +8,12 @@ module.exports = {
     const {
       firstName, lastName, email, password,
     } = req.body;
+    let fileURL;
     try {
-      const { Location: fileURL } = await uploadInBucket(req.files?.photo);
+      if (req.files?.photo) {
+        const { Location } = await uploadInBucket(req.files.photo);
+        fileURL = Location;
+      }
       const user = await db.User.findByPk(id);
       if (!user) {
         return res.status(404).json({
