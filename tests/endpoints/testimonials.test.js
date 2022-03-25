@@ -62,7 +62,7 @@ describe('POST /testimonials', () => {
       .expect("Content-Type", /application\/json/);
   });
 
-  it('It should return 400 when validations fail', async () => {
+  it('It should return 422 when validations fail', async () => {
     const user = {
       email: 'admin1@test.com',
       password: 'admin1',
@@ -75,7 +75,7 @@ describe('POST /testimonials', () => {
       .post("/testimonials")
       .send(testimony)
       .auth(token, { type: "bearer" })
-      .expect(400)
+      .expect(422)
       .expect("Content-Type", /application\/json/);
   });
 
