@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { createTestimony, updateTestimony } = require('../controllers/testimony');
+const { createTestimony, updateTestimony, removeTestimony } = require('../controllers/testimony');
 
 const {
   verifyToken,
@@ -26,6 +26,14 @@ router.put(
   validationsTestimony,
   validateErrors,
   updateTestimony,
+);
+
+// delete testimony
+router.delete(
+  '/:id',
+  verifyToken,
+  checkAdminRole,
+  removeTestimony,
 );
 
 module.exports = router;
