@@ -1,3 +1,5 @@
+const { LIMIT_PAGE } = require('../constants/limit-page.constants');
+const { paginated } = require('../helpers/paginated');
 const db = require('../models');
 
 const createTestimony = async (req, res) => {
@@ -92,8 +94,35 @@ const removeTestimony = async (req, res) => {
   }
 };
 
+const getTestimonials = async (req, res) => {
+  try {
+    const { page = 1 } = req.query;
+    const { results, next, prev } = await paginated(db.Testimony, LIMIT_PAGE, +page, req);
+    if (results.length === 0) {
+      return res.status(200).json({
+        message: 'There are no testimonies',
+      });
+    }
+    return res.status(200).json({
+      prev,
+      next,
+      results,
+    });
+  } catch (err) {
+    return res.status(503).json({
+      meta: {
+        status: 503,
+        ok: false,
+      },
+      data: null,
+      errors: { msg: 'Server not available' },
+    });
+  }
+};
+
 module.exports = {
   createTestimony,
   updateTestimony,
   removeTestimony,
+  getTestimonials,
 };

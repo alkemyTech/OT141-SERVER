@@ -1,5 +1,10 @@
 const router = require('express').Router();
-const { createTestimony, updateTestimony, removeTestimony } = require('../controllers/testimony');
+const {
+  createTestimony,
+  updateTestimony,
+  removeTestimony,
+  getTestimonials,
+} = require('../controllers/testimony');
 
 const {
   verifyToken,
@@ -7,6 +12,8 @@ const {
   validationsTestimony,
   validateErrors,
 } = require('../middlewares');
+
+router.get('/', verifyToken, checkAdminRole, getTestimonials);
 
 // Create testimony
 router.post(
@@ -29,11 +36,6 @@ router.put(
 );
 
 // delete testimony
-router.delete(
-  '/:id',
-  verifyToken,
-  checkAdminRole,
-  removeTestimony,
-);
+router.delete('/:id', verifyToken, checkAdminRole, removeTestimony);
 
 module.exports = router;
