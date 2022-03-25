@@ -53,7 +53,7 @@ const categoriesToCreate = [
   },
 ];
 let categoryOneCreated;
-beforeAll(async () => {
+ beforeAll(async () => {
   try {
     await db.User.destroy({
       truncate: true,
@@ -63,14 +63,13 @@ beforeAll(async () => {
   } catch (error) {
     console.log(error);
   }
-});
+}); 
 
 beforeEach(async () => {
   try {
     await db.Category.destroy({
       truncate: true,
     });
-
     categoryOneCreated = await createCategory(categoriesToCreate[0]);
     await createCategory(categoriesToCreate[1]);
     await createCategory(categoriesToCreate[2]);
@@ -351,14 +350,14 @@ describe("PUT /categories/:id", () => {
     };
 
     const {
-      body: { message },
+      body: { msg },
     } = await api
       .put("/categories/100000")
       .auth(token, { type: "bearer" })
       .send(categoryToUpdate)
       .expect(404)
       .expect("Content-Type", /json/);
-    expect(message).toContain("Category not found");
+    expect(msg).toContain("Category not found");
   });
 
   it("It should return 422 when validations fail", async () => {
@@ -391,14 +390,14 @@ describe("PUT /categories/:id", () => {
     };
 
     const {
-      body: { message },
+      body: { msg },
     } = await api
       .put(`/categories/${categoryOneCreated.id}`)
       .send(categoryToUpdate)
       .auth(token, { type: "bearer" })
       .expect(200)
       .expect("Content-Type", /json/);
-    expect(message).toContain("Category updated");
+    expect(msg).toContain("Category updated");
   });
 });
 
