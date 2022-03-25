@@ -1,15 +1,20 @@
 const { LIMIT_PAGE } = require('../constants/limit-page.constants');
 const { paginated } = require('../helpers/paginated');
+const { uploadInBucket } = require('../helpers/uploadAWS-S3');
 const db = require('../models');
 
 const createTestimony = async (req, res) => {
-  const { name, content, image } = req.body;
-
+  const { name, content } = req.body;
+  let fileURL;
   try {
+    if (req.files?.image) {
+      const { Location } = await uploadInBucket(req.files.image);
+      fileURL = Location;
+    }
     const testimonyCreated = await db.Testimony.create({
       name,
       content,
-      image,
+      image: fileURL || 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
     });
     res.status(201).json({
       meta: {
@@ -32,27 +37,33 @@ const createTestimony = async (req, res) => {
 };
 
 const updateTestimony = async (req, res) => {
-  const { name, content, image } = req.body;
+  const { name, content } = req.body;
   const { id } = req.params;
   try {
-    const testimonyDb = await db.Testimony.findByPk(id);
-    if (!testimonyDb) {
-      return res.status(404).json({
-        message: 'Testimony not found',
+    let fileURL;
+    if (req.files?.image) {
+      const { Location } = await uploadInBucket(req.files.image);
+      fileURL = Location;
+    }
+    const isUpdate = await db.Testimony.update({
+      name,
+      content,
+      image: fileURL && fileURL,
+    }, {
+      where: {
+        id,
+      },
+    });
+    if (isUpdate[0]) {
+      return res.status(200).json({
+        message: 'Testimony updated successfully',
+        data: {
+          name, image: fileURL, content,
+        },
       });
     }
-    await testimonyDb.update(
-      {
-        name,
-        content,
-        image,
-      },
-    );
-    return res.status(200).json({
-      message: 'Testimony updated successfully',
-      data: {
-        ...testimonyDb, name, image, content,
-      },
+    res.status(404).json({
+      message: 'Testimony not found',
     });
   } catch (error) {
     return res.status(503).json({

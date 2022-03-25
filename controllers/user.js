@@ -1,13 +1,19 @@
 const db = require('../models');
 const passwordHelper = require('../helpers/password');
+const { uploadInBucket } = require('../helpers/uploadAWS-S3');
 
 module.exports = {
   update: async (req, res) => {
     const { id } = req.params;
     const {
-      firstName, lastName, email, password, image,
+      firstName, lastName, email, password,
     } = req.body;
+    let fileURL;
     try {
+      if (req.files?.photo) {
+        const { Location } = await uploadInBucket(req.files.photo);
+        fileURL = Location;
+      }
       const user = await db.User.findByPk(id);
       if (!user) {
         return res.status(404).json({
@@ -19,7 +25,7 @@ module.exports = {
       user.lastName = lastName || user.lastName;
       user.email = email || user.email;
       user.password = password ? await passwordHelper.encrypt(password) : user.password;
-      user.image = image || user.image;
+      user.photo = fileURL || user.photo;
 
       await user.save();
       const { password: pass, ...rest } = user.dataValues;

@@ -1,5 +1,6 @@
 const { LIMIT_PAGE } = require('../constants/limit-page.constants');
 const { paginated } = require('../helpers/paginated');
+const { uploadInBucket } = require('../helpers/uploadAWS-S3');
 const db = require('../models');
 
 module.exports = {
@@ -49,10 +50,15 @@ module.exports = {
   },
   createMember: async (req, res) => {
     try {
-      const { name, image } = req.body;
+      const { name } = req.body;
+      let fileURL;
+      if (req.files?.image) {
+        const { Location } = await uploadInBucket(req.files.image);
+        fileURL = Location;
+      }
       const newMember = await db.Member.create({
         name,
-        image,
+        image: fileURL || 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       });
       return res.status(201).json({
         ok: true,
@@ -67,11 +73,16 @@ module.exports = {
   },
   updateMember: async (req, res) => {
     const { id } = req.params;
-    const { name, image } = req.body;
+    const { name } = req.body;
+    let fileURL;
     try {
+      if (req.files?.image) {
+        const { Location } = await uploadInBucket(req.files.image);
+        fileURL = Location;
+      }
       const member = await db.Member.update({
         name,
-        image,
+        image: fileURL && fileURL,
       }, {
         where: { id },
       });

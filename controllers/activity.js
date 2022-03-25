@@ -1,15 +1,20 @@
+const { uploadInBucket } = require('../helpers/uploadAWS-S3');
 const db = require('../models');
 
 module.exports = {
   store: async (req, res) => {
     // constant variables
-    const { name, content, image } = req.body;
-
+    const { name, content } = req.body;
     try {
+      let fileURL;
+      if (req.files?.image) {
+        const { Location } = await uploadInBucket(req.files.image);
+        fileURL = Location;
+      }
       const data = await db.Activity.create({
         name,
         content,
-        image,
+        image: fileURL || 'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
       });
         // I loop through the object and remove unnecessary properties
       for (key in data) { // eslint-disable-line
@@ -39,9 +44,15 @@ module.exports = {
   update: async (req, res) => {
     // const variables
     const { id } = req.params;
-    const { name, content, image } = req.body;
+    const { name, content } = req.body;
     try {
       const activityFound = await db.Activity.findByPk(id);
+      let fileURL;
+      if (req.files?.image) {
+        const { Location } = await uploadInBucket(req.files.image);
+        fileURL = Location;
+      }
+
       if (!activityFound) {
         return res.status(404).json({
           msg: 'there is no activity matching the specified id',
@@ -49,7 +60,7 @@ module.exports = {
       }
       await db.Activity.update({
         name,
-        image,
+        image: fileURL || activityFound.image,
         content,
       }, {
         where: { id },
@@ -57,7 +68,7 @@ module.exports = {
       return res.status(200).json({
         msg: 'activity updated successfully',
         data: {
-          ...activityFound.dataValues, name, image, content,
+          ...activityFound.dataValues, name, content, image: activityFound.image,
         },
       });
     } catch (error) {
