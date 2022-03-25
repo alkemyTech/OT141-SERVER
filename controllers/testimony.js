@@ -75,16 +75,16 @@ const removeTestimony = async (req, res) => {
       },
     });
     if (TestimonialDeleted) {
-      res.status(200).json({
+     return res.status(200).json({
         ok: true,
         message: 'The testimony deleted successfully.',
       });
-    } else {
+    }
       res.status(404).json({
         ok: false,
         message: 'The testimony does not exist.',
       });
-    }
+    
   } catch (error) {
     res.status(500).json({
       ok: false,
