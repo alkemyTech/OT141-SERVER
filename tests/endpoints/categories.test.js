@@ -351,14 +351,14 @@ describe("PUT /categories/:id", () => {
     };
 
     const {
-      body: { message },
+      body: { msg },
     } = await api
       .put("/categories/100000")
       .auth(token, { type: "bearer" })
       .send(categoryToUpdate)
       .expect(404)
       .expect("Content-Type", /json/);
-    expect(message).toContain("Category not found");
+    expect(msg).toContain("Category not found");
   });
 
   it("It should return 422 when validations fail", async () => {
@@ -391,14 +391,14 @@ describe("PUT /categories/:id", () => {
     };
 
     const {
-      body: { message },
+      body: { msg },
     } = await api
       .put(`/categories/${categoryOneCreated.id}`)
       .send(categoryToUpdate)
       .auth(token, { type: "bearer" })
       .expect(200)
       .expect("Content-Type", /json/);
-    expect(message).toContain("Category updated");
+    expect(msg).toContain("Category updated");
   });
 });
 
