@@ -36,6 +36,11 @@ router.put(
 );
 
 // delete testimony
-router.delete('/:id', verifyToken, checkAdminRole, removeTestimony);
+router.delete(
+  '/:id',
+  verifyToken,
+  checkAdminRole,
+  removeTestimony,
+);
 
 module.exports = router;
