@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const commentController = require('../controllers/comment');
-const { createCommentValidation } = require('../middlewares/comment.validations');
+const { createCommentValidation } = require('../middlewares/comment');
 const {
   validateErrors,
   verifyToken,

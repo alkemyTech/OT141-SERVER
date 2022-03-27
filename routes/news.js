@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { getNewById, createNew, updateNew } = require('../controllers/new.controller');
+const { getNewById, createNew, updateNew } = require('../controllers/new');
 const { verifyToken, checkAdminRole } = require('../middlewares');
 
 // Get all news

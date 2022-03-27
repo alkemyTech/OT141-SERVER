@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { validationsActivities } = require('./activity.validations');
+const { validationsActivities } = require('./activity');
 const { checkAdminRole } = require('./check.admin.role');
 const { checkTokenAuthorization } = require('./check.tokenAuthorization');
 

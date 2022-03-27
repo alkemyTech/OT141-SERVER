@@ -1,44 +1,44 @@
-const router = require("express").Router()
+const router = require('express').Router();
 const {
-    createTestimony,
-    updateTestimony,
-    removeTestimony,
-    getTestimonials,
-    getTestimonyById,
-} = require("../controllers/testimony")
+  createTestimony,
+  updateTestimony,
+  removeTestimony,
+  getTestimonials,
+  getTestimonyById,
+} = require('../controllers/testimony');
 
 const {
-    verifyToken,
-    checkAdminRole,
-    validationsTestimony,
-    validateErrors,
-} = require("../middlewares")
+  verifyToken,
+  checkAdminRole,
+  validationsTestimony,
+  validateErrors,
+} = require('../middlewares');
 
-router.get("/", verifyToken, checkAdminRole, getTestimonials)
+router.get('/', verifyToken, checkAdminRole, getTestimonials);
 
-router.get("/:id", verifyToken, checkAdminRole, getTestimonyById)
+router.get('/:id', verifyToken, checkAdminRole, getTestimonyById);
 
 // Create testimony
 router.post(
-    "/",
-    verifyToken,
-    checkAdminRole,
-    validationsTestimony,
-    validateErrors,
-    createTestimony
-)
+  '/',
+  verifyToken,
+  checkAdminRole,
+  validationsTestimony,
+  validateErrors,
+  createTestimony,
+);
 
 // update testimony
 router.put(
-    "/:id",
-    verifyToken,
-    checkAdminRole,
-    validationsTestimony,
-    validateErrors,
-    updateTestimony
-)
+  '/:id',
+  verifyToken,
+  checkAdminRole,
+  validationsTestimony,
+  validateErrors,
+  updateTestimony,
+);
 
 // delete testimony
-router.delete("/:id", verifyToken, checkAdminRole, removeTestimony)
+router.delete('/:id', verifyToken, checkAdminRole, removeTestimony);
 
-module.exports = router
+module.exports = router;
