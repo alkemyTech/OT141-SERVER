@@ -202,9 +202,7 @@ components:
                   ok:
                     type: boolean
                     example: true
-              data:
-                example:
-                  $ref: "#/components/examples/testimonyCreatedSuccessfully"
+              data: {}
 
     createdValidationError:
       description: "Validation errors"
@@ -256,8 +254,6 @@ components:
     # Verb put ( Member - responses )
     updatedSuccessfully:
       description: "Updated succesfully"
-      example:
-        $ref: "#/components/examples/testimonyUpdated"
       content:
         application/json:
           schema:
@@ -295,8 +291,6 @@ components:
 
     getAllTestimonials:
       description: "It shows a list with all the testimonials"
-      example:
-        $ref: "#/components/examples/getAllTestimonials"
       content:
         application/json:
           schema:
