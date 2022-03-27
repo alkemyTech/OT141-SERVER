@@ -183,7 +183,6 @@ components:
           example: "https://ecologiahoy.net/wp-content/uploads/2020/02/paisajes-natutrales-ecologiaverde-1.jp"
 
   # Responses
-
   responses:
     # Verb POST ( Category - responses )
     categoryCreatedSuccessfully:
