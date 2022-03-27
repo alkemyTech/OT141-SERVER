@@ -27,7 +27,7 @@ paths:
 
         500:
           $ref: "#/components/responses/ServerError"
-
+    # POST
     post:
       security:
       - bearerAuth: []  
@@ -41,11 +41,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: base64
+              $ref: "#/components/schemas/Member-formdata"
           application/json:
             schema:
               $ref: "#/components/schemas/MemberPost"
@@ -82,45 +78,20 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: base64
+              $ref: "#/components/schemas/Member-formdata"
+      
           application/json:
             schema:
               type: object
               $ref: "#/components/schemas/MemberUpdate"
       responses:
         200:
-          $ref: "#/components/responses/updatedSuccessfully"
+          $ref: "#/components/responses/MemberUpdatedSuccessfully"
         404:
           $ref: "#/components/responses/MemberNotFound"
         500:
           $ref: "#/components/responses/ServerError"
-    # POST
-    get:
-      security:
-      - bearerAuth: []  
-      tags:
-        - Members
-      summary: "Returns the member that corresponds with the selected id"
-      description: "This endpoing will return the member that corresponds with the choosen id"
-      parameters:
-        - in: path
-          name: id
-          description: "the id of the member you want to see"
-          required: true
-          schema:
-            type: integer
-            example: 3
-      responses:
-        200:
-          $ref: "#/components/responses/getMemberById"
-        404:
-          $ref: "#/components/responses/MemberNotFound"
-        500:
-          $ref: "#/components/responses/ServerError"
+
     # DELETE
     delete:
       security:
@@ -155,74 +126,39 @@ components:
           description: "name of the member"
           type: string
           example: "Member number 1"
-        facebookUrl:
-          description: "facebook of the member"
-          type: string
-          example: "https://www.facebook.com/member1"
-        instagramUrl:
-          description: "instagram of the member"
-          type: string
-          example: "https://www.instagram.com/member1"
-        linkedinUrl:
-          description: "linkedin of the member"
-          type: string
-          example: "https://www.linkedin.com/member1"        
-        image:
-          description: "image that represent the member"
-          type: string
-          example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-member-1.jpg"
         description:
           description: "descriptrion of the member"
           type: string
           example: "Member number 1 is a member of the team"
+    
     MemberUpdate:
       properties:
         name:
           description: "name of the member"
           type: string
           example: "Member number 1"
-        facebookUrl:
-          description: "facebook of the member"
-          type: string
-          example: "https://www.facebook.com/member1"
-        instagramUrl:
-          description: "instagram of the member"
-          type: string
-          example: "https://www.instagram.com/member1"
-        linkedinUrl:
-          description: "linkedin of the member"
-          type: string
-          example: "https://www.linkedin.com/member1"        
-        image:
-          description: "image that represent the member"
-          type: string
-          example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-member-1.jpg"
         description:
           description: "descriptrion of the member"
           type: string
           example: "Member number 1 is a member of the team"
+    
+    Member-formdata:
+      type: object
+      properties:
+        name:
+          type: string     
+        description:
+          type: string
+        image:
+          type: string
+          format: base64
+
     Member:
       properties:
         name:
           description: "name of the member"
           type: string
-          example: "Member number 1"
-        facebookUrl:
-          description: "facebook of the member"
-          type: string
-          example: "https://www.facebook.com/member1"
-        instagramUrl:
-          description: "instagram of the member"
-          type: string
-          example: "https://www.instagram.com/member1"
-        linkedinUrl:
-          description: "linkedin of the member"
-          type: string
-          example: "https://www.linkedin.com/member1"        
-        image:
-          description: "image that represent the member"
-          type: string
-          example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-member-1.jpg"
+          example: "Member number 1"       
         description:
           description: "descriptrion of the member"
           type: string
@@ -256,32 +192,15 @@ components:
           schema:
             type: object
             properties:
-              meta:
-                type: object
-                properties:
-                  status:
-                    type: number
-                    example: 422
-                  ok:
-                    example: false
-              data:
-                example: null
               errors:
                 type: object
                 properties:
                   name:
                     type: object
                     properties:
-                      value:
-                        type: string
-                        example: "Tut"
                       msg:
                         type: string
                         example: "String must be more than 4 characters"
-                  content:
-                    msg:
-                      type: string
-                      example: Input "required"
 
     ServerError:
       description: "Server error"
@@ -297,31 +216,20 @@ components:
               }
 
     # Verb put ( Member - responses )
-    updatedSuccessfully:
+    MemberUpdatedSuccessfully:
       description: "updated successfully"
       content:
         application/json:
           schema:
             type: object
             properties:
-              message:
+              ok:
+                type: boolean
+                example: true
+              msg: 
                 type: string
-                example: "Member updated"
-              Member:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 5
-                  name:
-                    type: string
-                    example: "recreation"
-                  description:
-                    type: string
-                    example: "come and play with the kids"
-                  image:
-                    type: string
-                    example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+                example: member updated successfully
+
     MemberNotFound:
       description: "Member not found"
       content:
@@ -371,15 +279,6 @@ components:
             example: A token is required for authentication
 
 
-    # Verb get ( MemberById - responses )
-    getMemberById:
-      description: "member chosen by id"
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              $ref: "#/components/schemas/Member"
     # verb delete (Member delete - responses)
     deletedSuccessfully:
       description: "deleted succesfully"

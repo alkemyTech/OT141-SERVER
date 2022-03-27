@@ -4,6 +4,7 @@ const { isImageValid } = require('../helpers/validateImage');
 const memberValidations = [
   check('name', 'The value is required').not().isEmpty().bail(),
   check('name', 'The value should be type string').not().isNumeric(),
+  check('description', 'The value should be type string').optional({ nullable: true }).not().isNumeric(),
   body('image')
     .custom((_, { req }) => isImageValid(req, 'image')),
 ];
