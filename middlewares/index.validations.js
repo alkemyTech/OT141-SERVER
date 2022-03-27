@@ -12,6 +12,7 @@ const indexValidation = (req, res, next) => {
     for (key in errorsObjects) { // eslint-disable-line
       delete errorsObjects[key].param; // eslint-disable-line
       delete errorsObjects[key].location; // eslint-disable-line
+      delete errorsObjects[key].value; // eslint-disable-line
     }
 
     return res.status(422).json({

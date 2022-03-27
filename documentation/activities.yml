@@ -1,6 +1,5 @@
 paths:
   # POST
-
   /activities:
     post:
       security:
@@ -33,7 +32,6 @@ paths:
           $ref: "#/components/responses/createActivityServerError"
 
   # PUT 
-
   /activities/{id}:
     put:
       security:
@@ -113,6 +111,7 @@ components:
           type: string
         content:
           type: string 
+  
   securitySchemes:
     bearerAuth:   
       type: http
@@ -129,6 +128,7 @@ components:
       schema:
         type: integer
         example: 5
+  
   responses:
     # Verb POST ( create activity - responses )
     activityDbValidation:
@@ -139,7 +139,6 @@ components:
             type: object
             example:
               $ref: "#/components/examples/activityCreated"
-
 
     createActivitySuccessfully:
       description: Activity created Successfully

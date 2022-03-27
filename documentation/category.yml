@@ -30,11 +30,8 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: base64
+              $ref: "#/components/schemas/Category-formdata"
+              
           application/json:
             schema:
               $ref: "#/components/schemas/CategoryPost"
@@ -47,6 +44,7 @@ paths:
 
         500:
           $ref: "#/components/responses/ServerError"
+   
     # PUT
   /categories/{id}:
     put:
@@ -70,11 +68,8 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: base64
+              $ref: "#/components/schemas/Category-formdata"
+
           application/json:
             schema:
               type: object
@@ -93,7 +88,7 @@ paths:
       tags:
         - Categories
       summary: "Returns the category that corresponds with the selected id"
-      description: "This endpoing will return the category that corresponds with the choosen id"
+      description: "This endpoint will return the category that corresponds with the choosen id"
       parameters:
         - in: path
           name: id
@@ -109,6 +104,7 @@ paths:
           $ref: "#/components/responses/CategoryNotFound"
         500:
           $ref: "#/components/responses/ServerError"
+
     # DELETE
     delete:
       security:
@@ -133,8 +129,6 @@ paths:
         500:
           $ref: "#/components/responses/ServerError"
 
-
-
 components:
   # SCHEMAS
   schemas:
@@ -148,10 +142,18 @@ components:
           description: "description of the category"
           type: string
           example: "playing games at the park"
-        image:
-          description: "image that represent the category"
+
+    Category-formdata:
+      type: object
+      properties:
+        name:
           type: string
-          example: "https://ecologiahoy.net/wp-conte/uploads/2020/02/paisajes-natutrales-ecologiaverde-1.jpg"
+        description:
+          type: string
+        image:
+          type: string
+          format: base64
+
     CategoryUpdate:
       required: id
       type: object
@@ -164,10 +166,7 @@ components:
           description: "description of the category"
           type: string
           example: "help others by teaching what you know"
-        image:
-          description: "image that represent the category"
-          type: string
-          example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+
     Category:
       properties:
         name:
@@ -204,7 +203,7 @@ components:
                     example: true
               data:
                 example:
-                  $ref: "#/components/schemas/categoryCreatedSuccessfully"
+                  {}
 
     categoryCreatedValidationError:
       description: "Validation errors"
@@ -256,8 +255,6 @@ components:
     # Verb put ( Category - responses )
     UpdatedSuccessfully:
       description: "updated successfully"
-      example:
-        $ref: "#/components/examples/categoryUpdated"
       content:
         application/json:
           schema:
@@ -281,6 +278,7 @@ components:
                   image:
                     type: string
                     example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+   
     CategoryNotFound:
       description: "Category not found"
       content:
@@ -294,8 +292,6 @@ components:
 
     getAllCategories:
       description: "it shows a list with all the categories"
-      example:
-        $ref: "#/components/examples/getAllCategories"
       content:
         application/json:
           schema:
@@ -309,6 +305,7 @@ components:
                 example: "3"
               categories:
                 example: [{ "name": "recreation" }, { "name": "donations" }]
+    
     noCategoryFound:
       description: "is not possible to return any category as there are no categories created"
       content:

@@ -9,9 +9,12 @@ paths:
         description: User register
         required: true
         content:
-          "application/json":
+          application/json:
             schema:
               $ref: "#/components/schemas/Register"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/User-formdata"
       responses:
         200:
           $ref: "#/components/responses/registerValidationEmail"
@@ -51,9 +54,41 @@ paths:
 
         500:
           $ref: "#/components/responses/loginServerError"
+ 
+ # PATCH
+  /users/{id}:
+    patch:
+      security:
+      - bearerAuth: [] 
+      tags:
+        - Authentication
+      parameters:
+        - $ref: "#/components/parameters/userIdPatch"
+
+      requestBody:
+        description: User updated
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/User-updated"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/User-formdata"
+              
+
+      responses:
+        200:
+          $ref: "#/components/responses/patchUpdateSuccessfully"
+
+        404:
+          $ref: "#/components/responses/patchUserNotFound"
+
+        500:
+          $ref: "#/components/responses/patchServerError"
 
   # DELETE
-  /users/{id}:
     delete:
       security:
       - bearerAuth: [] 
@@ -73,47 +108,11 @@ paths:
         500:
           $ref: "#/components/responses/deleteServerError"
 
-  # PATCH
-    patch:
-      security:
-      - bearerAuth: [] 
-      tags:
-        - Authentication
-      parameters:
-        - $ref: "#/components/parameters/userIdPatch"
-
-      requestBody:
-        description: User updated
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                photo:
-                  type: string
-                  format: base64
-
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/User-updated"
-
-      responses:
-        200:
-          $ref: "#/components/responses/patchUpdateSuccessfully"
-
-        404:
-          $ref: "#/components/responses/patchUserNotFound"
-
-        500:
-          $ref: "#/components/responses/patchServerError"
-
+ 
   # COMPONENTS
 components:
   # Schemas request body
   schemas:
-
     Register:
       properties:
         firstName:
@@ -166,6 +165,22 @@ components:
           format: password
           example: 12345678Password$
 
+    User-formdata:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+          format: password
+        photo:
+          type: string
+          format: base64
+  
   securitySchemes:
     bearerAuth:   
       type: http

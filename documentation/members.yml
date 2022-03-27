@@ -1,7 +1,6 @@
 paths:
-  # GET
-
   /members:
+    # GET
     get:
       security:
       - bearerAuth: []  
@@ -60,9 +59,8 @@ paths:
         500:
           $ref: "#/components/responses/ServerError"
 
-  # PUT
-  
   /members/{id}:
+    # PUT
     put:
       security:
       - bearerAuth: []  
@@ -100,7 +98,7 @@ paths:
           $ref: "#/components/responses/MemberNotFound"
         500:
           $ref: "#/components/responses/ServerError"
-
+    # POST
     get:
       security:
       - bearerAuth: []  
@@ -123,7 +121,7 @@ paths:
           $ref: "#/components/responses/MemberNotFound"
         500:
           $ref: "#/components/responses/ServerError"
-
+    # DELETE
     delete:
       security:
       - bearerAuth: []  
@@ -148,9 +146,7 @@ paths:
           $ref: "#/components/responses/ServerError"
 
   # COMPONENTS
-
 components:
-
   # SCHEMAS
   schemas:
     MemberPost:
@@ -233,7 +229,6 @@ components:
           example: "Member number 1 is a member of the team"
 
   # Responses
-
   responses:
     # Verb POST ( Member - responses )
     memberCreatedSuccessfully:
@@ -252,8 +247,7 @@ components:
                     type: boolean
                     example: true
               data:
-                example:
-                  $ref: "#/components/examples/memberCreatedSuccessfully"
+                example: {}
 
     memberCreatedValidationError:
       description: "Validation errors"
@@ -304,9 +298,7 @@ components:
 
     # Verb put ( Member - responses )
     updatedSuccessfully:
-      description: "updated succesfully"
-      example:
-        $ref: "#/components/examples/MemberUpdated"
+      description: "updated successfully"
       content:
         application/json:
           schema:
@@ -343,8 +335,6 @@ components:
 
     getAllMembers:
       description: "it shows a list with all the members"
-      example:
-        $ref: "#/components/examples/getAllMembers"
       content:
         application/json:
           schema:
@@ -359,7 +349,6 @@ components:
               members:
                 example: [{ "name": "recreation" }, { "name": "donations" }]
                 
-
     noMemberFound:
       description: "is not possible to return any member as there are no member created"
       content:
