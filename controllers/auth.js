@@ -86,7 +86,7 @@ const userLogin = async (req, res) => {
 
 const getUserAutenticated = async (req, res) => {
   try {
-    const { id } = req.decoded;
+    const { id } = req.user.user;
     const usuario = await db.User.findOne({
       where: { id },
       attributes: { exclude: ['password'] },
