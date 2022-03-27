@@ -1,11 +1,9 @@
 /* eslint-disable */
-const supertest = require('supertest');
 const request = require('supertest');
 const app = require('../../app');
 const db = require('../../models');
-const { ROLE_ADMIN, ROLE_USER } = require('../../constants/user.constants');
-const { body } = require('express-validator');
-const testimonialsTestHelpers = require('../testimonials.test.helpers');
+const { ROLE_USER } = require('../../constants/user.constants');
+
 
 const server = app.listen(process.env.PORT_TEST);
 
@@ -91,7 +89,7 @@ describe('POST/auth/login', () => {
     password: 'Test123**',
   };
 
-  test('The content-type of response should be aplication/json', async () => {
+  test('The content-type of response should be application/json', async () => {
     await request(server)
       .post('/auth/register')
       .send(user);
