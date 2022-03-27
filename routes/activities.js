@@ -25,6 +25,7 @@ router.put(
   '/:id',
   verifyToken,
   checkAdminRole,
+  validationsActivities,
   indexValidation,
   update,
 );

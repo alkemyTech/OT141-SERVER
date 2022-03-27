@@ -90,7 +90,7 @@ paths:
             schema:
               type: object
               properties:
-                image:
+                photo:
                   type: string
                   format: base64
 

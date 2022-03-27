@@ -28,6 +28,13 @@ paths:
         description: "request with values"
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
           application/json:
             schema:
               $ref: "#/components/schemas/CategoryPost"
@@ -61,6 +68,13 @@ paths:
         description: "category update"
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
           application/json:
             schema:
               type: object
@@ -102,7 +116,7 @@ paths:
       tags:
         - Categories
       summary: "Delete category"
-      description: "This endpoing will delete the category that corresponds with the choosen id"
+      description: "This endpoint will delete the category that corresponds with the choosen id"
       parameters:
         - in: path
           name: id
@@ -118,6 +132,9 @@ paths:
           $ref: "#/components/responses/CategoryNotFound"
         500:
           $ref: "#/components/responses/ServerError"
+
+
+
 components:
   # SCHEMAS
   schemas:
@@ -238,7 +255,7 @@ components:
 
     # Verb put ( Category - responses )
     UpdatedSuccessfully:
-      description: "updated succesfully"
+      description: "updated successfully"
       example:
         $ref: "#/components/examples/categoryUpdated"
       content:

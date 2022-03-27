@@ -30,6 +30,13 @@ paths:
         description: "request with values"
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
           application/json:
             schema:
               $ref: "#/components/schemas/testimonyPost"
@@ -63,6 +70,13 @@ paths:
         description: "testimony update"
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
           application/json:
             schema:
               type: object

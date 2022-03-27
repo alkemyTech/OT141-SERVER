@@ -40,6 +40,13 @@ paths:
         description: "request with values"
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
           application/json:
             schema:
               $ref: "#/components/schemas/MemberPost"
@@ -75,6 +82,13 @@ paths:
         description: "member update"
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: base64
           application/json:
             schema:
               type: object
