@@ -1,4 +1,5 @@
-const { check, validationResult } = require('express-validator');
+const { check, body, validationResult } = require('express-validator');
+const { isImageValid } = require('../helpers/validateImage');
 const db = require('../models');
 
 async function isEmailValidDB(req, res, next) {
@@ -25,9 +26,11 @@ async function isEmailValidDB(req, res, next) {
 
 const validateInputsRegister = [
   check('firstName')
+    .optional({ nullable: true })
     .isLength({ min: 5 })
     .withMessage('FirstName must have more than 5 characters'),
   check('lastName')
+    .optional({ nullable: true })
     .isLength({ min: 5 })
     .withMessage('LastName must have more than 5 characters'),
   check('email').isEmail().withMessage('Email must be like:email@gmail.com'),
@@ -38,6 +41,8 @@ const validateInputsRegister = [
     .withMessage(
       'Password should be combination of one uppercase , one lower case, one special char, one digit and min 8 , max 20 char long',
     ),
+  body('photo')
+    .custom((_, { req }) => isImageValid(req, 'photo')),
 ];
 
 function functionValidateInputsRegister(req, res, next) {

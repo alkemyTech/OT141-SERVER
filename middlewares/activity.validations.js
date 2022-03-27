@@ -1,4 +1,5 @@
 const { body } = require('express-validator');
+const { isImageValid } = require('../helpers/validateImage');
 const db = require('../models');
 
 const validationsActivities = [
@@ -28,6 +29,9 @@ const validationsActivities = [
     .not()
     .isNumeric() // Valid that it is a string (I place the .not())
     .withMessage('The value cannot be numeric.'),
+
+  body('image')
+    .custom((_, { req }) => isImageValid(req, 'image')),
 ];
 
 module.exports = { validationsActivities };

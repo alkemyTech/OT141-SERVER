@@ -1,11 +1,11 @@
-const { check } = require('express-validator');
+const { check, body } = require('express-validator');
+const { isImageValid } = require('../helpers/validateImage');
 
 const memberValidations = [
   check('name', 'The value is required').not().isEmpty().bail(),
   check('name', 'The value should be type string').not().isNumeric(),
-  check('image', 'Image url invalid')
-    .if(check('image').exists())
-    .matches(/^https?:\/\/[\w\-]+(\.[\w\-]+)+[/#?]?.*$/),
+  body('image')
+    .custom((_, { req }) => isImageValid(req, 'image')),
 ];
 
 module.exports = {
