@@ -62,7 +62,7 @@ const updateTestimony = async (req, res) => {
         },
       });
     }
-    res.status(404).json({
+    return res.status(404).json({
       message: 'Testimony not found',
     });
   } catch (error) {
@@ -81,7 +81,7 @@ const removeTestimony = async (req, res) => {
   try {
     const { id } = req.params;
     // As paranoid at model is setted to true, destroy method will make a soft delete;
-    const TestimonialDeleted = await db.Testimonial.destroy({
+    const TestimonialDeleted = await db.Testimony.destroy({
       where: {
         id,
       },
@@ -92,12 +92,12 @@ const removeTestimony = async (req, res) => {
         message: 'The testimony deleted successfully.',
       });
     }
-    res.status(404).json({
+    return res.status(404).json({
       ok: false,
       message: 'The testimony does not exist.',
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       ok: false,
       message: error.message,
     });
@@ -130,9 +130,33 @@ const getTestimonials = async (req, res) => {
   }
 };
 
+const getTestimonyById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const category = await db.Testimony.findOne({
+      where: { id },
+    });
+    if (!category) {
+      return res.status(404).json({
+        ok: false,
+        msg: 'The testimonial does not exist',
+      });
+    }
+    return res.status(200).json({
+      message: 'Testimonial found',
+      data: category,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createTestimony,
   updateTestimony,
   removeTestimony,
   getTestimonials,
+  getTestimonyById,
 };
