@@ -13,7 +13,7 @@ const sendEmailTemplate = async (to, from, templateId, dynamic_template_data) =>
   try {
     await sgMail.send(msg);
   } catch (error) {
-    throw new Error({ 'send-grid-error: ': error });
+    return { 'send-grid-error: ': error.message };
   }
 };
 

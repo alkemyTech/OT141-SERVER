@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const { registerUser, userLogin, getUserAutenticated } = require('../controllers/auth');
+const { registerUser, userLogin, getUserAuthenticated } = require('../controllers/auth');
 const { verifyToken } = require('../middlewares/authJWT');
 const {
   validationLogin,
@@ -10,7 +10,7 @@ const {
   functionValidateInputsRegister,
 } = require('../middlewares/auth');
 
-router.get('/me', verifyToken, getUserAutenticated);
+router.get('/me', verifyToken, getUserAuthenticated);
 
 router
   .post(

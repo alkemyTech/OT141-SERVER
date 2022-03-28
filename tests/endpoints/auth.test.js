@@ -3,15 +3,8 @@ const request = require('supertest');
 const app = require('../../app');
 const db = require('../../models');
 const { ROLE_USER } = require('../../constants/user.constants');
-
-
 const server = app.listen(process.env.PORT_TEST);
 
-beforeEach(async () => {
-  await db.User.destroy({
-    truncate: true,
-  });
-});
 
 const user = {
   firstName: 'username',
@@ -20,6 +13,17 @@ const user = {
   password: 'Test123**',
   roleId: ROLE_USER,
 };
+
+ beforeAll(async () => {
+  try {
+      await db.User.destroy({
+      truncate: true,
+    });
+  } catch (error) {
+    console.log(error)
+  }
+}); 
+
 
 describe('POST/auth/register', () => {
 
@@ -39,7 +43,7 @@ describe('POST/auth/register', () => {
     expect(result.body.user.email).toEqual('usertest@test.com');   
   });
 
-  test('The content-type of response should be aplication/json', async () => {
+  test('The content-type of response should be application/json', async () => {
 
     await request(server)
       .post('/auth/register')
@@ -199,7 +203,7 @@ describe('POST/auth/login', () => {
 
 describe('GET/auth/me', () => {
 
-  test('should return 403 code and should be aplication/json if not exist token', async () => {
+  test('should return 403 code and should be application/json if not exist token', async () => {
     const result = await request(server)
       .get('/auth/me')
       .expect(403)
@@ -208,22 +212,23 @@ describe('GET/auth/me', () => {
     expect(result.body.error).toContain('A token is required for authentication');
   });
 
-  test('should return 200 status code and usuario', async () => {
+  test('should return 200 status code and user', async () => {
 
     const userLogin = {
       email: 'usertest@test.com',
       password: 'Test123**'
     };
-    const { body: { token } } = await request(server)
+    const { body }  = await request(server)
       .post('/auth/login')
       .send(userLogin);
-
+    console.log(body.token)
     const result = await request(server)
       .get('/auth/me')
-      .auth(token, { type: "bearer" })
+      .auth(body.token, { type: "bearer" })
       .expect(200);
-    expect(result.body.usuario).toBeDefined();
-    expect(result.body.usuario.email).toEqual('usertest@test.com');
+      console.log(result)
+    //expect(result.body.user).toBeDefined();
+    expect(result.body.user.email).toEqual('usertest@test.com');
   });
 });
 

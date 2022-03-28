@@ -84,14 +84,14 @@ const userLogin = async (req, res) => {
   }
 };
 
-const getUserAutenticated = async (req, res) => {
+const getUserAuthenticated = async (req, res) => {
   try {
     const { id } = req.user.user;
-    const usuario = await db.User.findOne({
+    const user = await db.User.findOne({
       where: { id },
       attributes: { exclude: ['password'] },
     });
-    res.status(200).json(usuario);
+    res.status(200).json({ user: user.dataValues });
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -102,5 +102,5 @@ const getUserAutenticated = async (req, res) => {
 module.exports = {
   registerUser,
   userLogin,
-  getUserAutenticated,
+  getUserAuthenticated,
 };

@@ -21,8 +21,6 @@ const createUser = async ({
   return newUser
 };
 
-
-
 module.exports = {
   createUser,
 };

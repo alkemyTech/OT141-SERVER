@@ -51,7 +51,7 @@ beforeEach(async () => {
 
 describe("GET /users", () => {
   it("Response Not Found - example: /user", async () => {
-    await api.get("/user").send().expect(404).expect("Content-Type", /json/);
+    await api.get("/user").expect(404).expect("Content-Type", /json/);
   });
 
   it("It should return a successful response with all users", async () => {
