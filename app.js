@@ -16,17 +16,17 @@ const { configSwagger } = require('./documentation/config.swagger');
 const swaggerJSDocs = require('swagger-jsdoc')(configSwagger);  // eslint-disable-line
 
 // routers
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const activitiesRouter = require('./routes/activities');
-const authRouter = require('./routes/auth');
-const rolesRouter = require('./routes/roles');
-const categoriesRouter = require('./routes/categories');
-const newsRouter = require('./routes/news');
+const indexRouter = require('./routes/index.routes');
+const usersRouter = require('./routes/users.routes');
+const activitiesRouter = require('./routes/activities.routes');
+const authRouter = require('./routes/auth.routes');
+const rolesRouter = require('./routes/roles.routes');
+const categoriesRouter = require('./routes/categories.routes');
+const newsRouter = require('./routes/news.routes');
 
-const testimonialsRouter = require('./routes/testimony');
-const commentsRouter = require('./routes/comments');
-const membersRouter = require('./routes/members');
+const testimonialsRouter = require('./routes/testimony.routes');
+const commentsRouter = require('./routes/comments.routes');
+const membersRouter = require('./routes/members.routes');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
