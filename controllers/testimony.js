@@ -63,6 +63,7 @@ const updateTestimony = async (req, res) => {
       });
     }
     return res.status(404).json({
+      ok: false,
       message: 'Testimony not found',
     });
   } catch (error) {
@@ -89,12 +90,12 @@ const removeTestimony = async (req, res) => {
     if (TestimonialDeleted) {
       return res.status(200).json({
         ok: true,
-        message: 'The testimony deleted successfully.',
+        message: 'Testimony deleted successfully.',
       });
     }
     return res.status(404).json({
       ok: false,
-      message: 'The testimony does not exist.',
+      message: 'Testimony not found',
     });
   } catch (error) {
     return res.status(500).json({
@@ -110,6 +111,7 @@ const getTestimonials = async (req, res) => {
     const { results, next, prev } = await paginated(db.Testimony, LIMIT_PAGE, +page, req);
     if (results.length === 0) {
       return res.status(200).json({
+        ok: false,
         message: 'There are no testimonies',
       });
     }

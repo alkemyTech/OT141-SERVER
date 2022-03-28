@@ -32,14 +32,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: base64
-          application/json:
-            schema:
-              $ref: "#/components/schemas/testimonyPost"
+              $ref: "#/components/schemas/Testimony-formdata"  
       responses:
         201:
           $ref: "#/components/responses/testimonyCreatedSuccessfully"
@@ -67,20 +60,12 @@ paths:
             type: integer
             example: 5
       requestBody:
-        description: "testimony update"
+        description: "request with values"
         required: true
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                image:
-                  type: string
-                  format: base64
-          application/json:
-            schema:
-              type: object
-              $ref: "#/components/schemas/testimonyUpdate"
+              $ref: "#/components/schemas/Testimony-formdata"  
       responses:
         200:
           $ref: "#/components/responses/updatedSuccessfully"
@@ -129,7 +114,7 @@ paths:
             example: 6
       responses:
         200:
-          $ref: "#/components/responses/deletedSuccessfully"
+          $ref: "#/components/responses/testimonyDeletedSuccessfully"
         404:
           $ref: "#/components/responses/testimonyNotFound"
         500:
@@ -141,33 +126,20 @@ components:
 
   # SCHEMAS
   schemas:
-    testimonyPost:
+  
+    Testimony-formdata:
+      type: object
       properties:
         name:
-          description: "name of the testimony"
           type: string
-          example: "The social media"                    
         content:
-          description: "Content of the testimony"
           type: string
-          example: "Social proof is a natural part of life and one that marketers have been able to utilize far more since the internet and smartphones took over how we do everything from communication to making decisions on where to eat."
         image:
           type: string
-          example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
-
-    testimonyUpdate:
-      properties:
-        name:
-          description: "name of the testimony"
-          type: string
-          example: "We help to others"        
-        content:
-          description: "Content of the testimony"
-          type: string
-          example: "I am a people pleaser. My mission in life was to try to fit in and belong. For example, at school, Idesperately wanted to be accepted by my classmates, so I would try to say the right things and do the right things so that they would like me."
-        image:
-          type: string
-          example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
+          format: base64
+      # required:
+      #   - name
+      #   - content
 
     testimony:
       properties:
@@ -202,7 +174,27 @@ components:
                   ok:
                     type: boolean
                     example: true
-              data: {}
+              data:
+                type: object
+                properties:
+                  id: 
+                    type: integer
+                    example: 23
+                  name: 
+                    type: string
+                    example: Testimony name
+                  content: 
+                    type: string
+                    example: contenido del testimonio
+                  image: 
+                    type: string
+                    example: https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png
+                  updatedAt: 
+                    type: string
+                    example: 2022-03-28T00:05:14.010Z
+                  createdAt: 
+                    type: string
+                    example: 2022-03-28T00:05:14.010Z
 
     createdValidationError:
       description: "Validation errors"
@@ -261,22 +253,19 @@ components:
             properties:
               message:
                 type: string
-                example: "Testimony updated"
-              testimony:
+                example: "Testimony updated successfully"
+              data:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    example: 5
                   name:
                     type: string
                     example: "recreation"
+                  image:
+                    type: string
+                    example: "https://s3.sa-east-1.amazonaws.com/ong.somos.mas/166090082-testimony-symbol-white-circles-with-the-word-testimony-beautiful-wooden-background-business-testimon%20%281%29.webp"
                   content:
                     type: string
                     example: "Come and play with the kids"
-                  image:
-                    type: string
-                    example: "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png"
     
     testimonyNotFound:
       description: "Testimony not found"
@@ -285,25 +274,30 @@ components:
           schema:
             type: object
             properties:
-              messege:
+              ok:
+                type: boolean
+                example: false
+              message:
                 type: string
                 example: "Testimony not found"
 
     getAllTestimonials:
       description: "It shows a list with all the testimonials"
+      # example:
+      #   $ref: "#/components/examples/getAllTestimonials"
       content:
         application/json:
           schema:
             type: object
             properties:
-              ok:
-                type: boolean
-                example: true
-              count:
-                type: integer
-                example: 1
-              members:
-                example: [ { "name": "The best testimony", "content": "I am a people pleaser. My mission in life was to try to fit in and belong. For example, at school, I desperately wanted to be accepted by my classmates...", "image": "https://www.lluiscodina.com/wp-content/uploads/2019/05/navegacion-taxonomias-sitio-web.png" } ]
+              prev:
+                type: string
+                example: null
+              next:
+                type: string
+                example: http://localhost:3000/testimonials?page=2
+              results:
+                example: [ { "id": 12, "name": "Testimony 1", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 13, "name": "Testimony 2", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 14, "name": "Testimony 3", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 15, "name": "Testimony 4", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 16, "name": "Testimony 5", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 17, "name": "Testimony 6", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 18, "name": "Testimony 7", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 19, "name": "Testimony 8", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 20, "name": "Testimony 9", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" }, { "id": 21, "name": "Testimony 10", "image": "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png", "content": "content example", "createdAt": "2022-03-27T22:55:48.000Z", "updatedAt": "2022-03-27T22:55:48.000Z" } ]
                 
     noTestimonyFound:
       description: "Is not possible to return any testimony as there are no testimony created"
@@ -324,8 +318,11 @@ components:
       content:
         application/json:
           schema:
-            example: "A token is required for authentication."
-
+            type: object
+            properties:
+              error:
+                type: string
+                example: A token is required for authentication
 
     # Verb get ( MemberById - responses )
     getTestimonyById:
@@ -337,21 +334,16 @@ components:
             items:
               $ref: "#/components/schemas/testimony"
     # verb delete (Member delete - responses)
-    deletedSuccessfully:
+    testimonyDeletedSuccessfully:
       description: "Deleted succesfully"
       content:
         application/json:
           schema:
             type: object
-            example:
-              {
-                "del": "true",
-                "messege": "Testimony deleted",
-              }
-          properties:
-            del:
-              type: boolean
-              example: true
-            message:
-              type: string
-              example: "Testimony deleted"
+            properties:
+              ok:
+                type: boolean
+                example: true
+              message:
+                type: string
+                example: "Testimony deleted successfully."
